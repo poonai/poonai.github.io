@@ -1,0 +1,21 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+defaultContentLanguage = "en"
+title = "Poonai's rant"
+theme = "hugo-vitae"
+
+[params]
+    homepage = false
+    description = "Poonai is an independent software developer(Indie Hustler)."
+    subtitle = "Poonai is an independent software developer(Indie Hustler). கல்வி-அன்பு நிறைய உடையவர்கள் மேலோர்."
+    avatar = "/img/avatar.jpg"
+
+[[params.social]]
+name = "Github"
+icon = "fab fa-github"
+url = "https://github.com/poonai" 
+
+[[params.social]]
+name = "Twitter"
+icon = "fab fa-twitter"
+url = "https://twitter.com/poonai_" 
