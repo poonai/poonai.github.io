@@ -1,7 +1,7 @@
 ---
 title: "Can Differntial Privacy protects our privacy?"
 date: 2021-03-29T14:27:16+05:30
-draft: true
+draft: false
 ---
 
 I'm a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I've contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.
