@@ -1,5 +1,5 @@
 ---
-title: "Can differential privacy protects our privacy?"
+title: "Can differential privacy protect our privacy?"
 date: 2021-03-29T14:27:16+05:30
 draft: false
 ---
