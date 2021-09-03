@@ -7,6 +7,7 @@ The general understanding is that a debugger makes debugging slow. But, I do use
 
 In this post, I'll be explaining how debuggers set a breakpoint on the program.
 
+## Problem statement
 Let's define the problem statement before coding. I have a sample golang program which prints random ints at every second. The goal which I want to achieve is that our debugger program should print `breakpoint hit` before our sample program prints the random integer. 
  
 Here is the sample program which prints random ints at every second.
@@ -29,6 +30,7 @@ Here is the sample program which prints random ints at every second.
 15. }
 16. 
 ```
+## Solution
 Now that we know what we want to achieve. Let's go step by step and solve the problem statement.
 
 The first step is to pause the sample program before it prints the random int. That means we have to set the breakpoint at line number 11. 
@@ -69,7 +71,9 @@ The next step is to pause the program at the address `0x498223`
 ## Trick to pause the program execution
 CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address `0x498223` with the data []byte{0xcc} to pause the program. 
 
-Does that mean we have to rewrite the binary at `0x498223`? No, we can write it using ptrace.  
+Does that mean we have to rewrite the binary at `0x498223`? No, we can write it using ptrace. 
+
+## Ptrace to rescue
 
 ptrace allows us to rewrite the registers and write the data at the given address. 
 
@@ -128,8 +132,7 @@ So, we want to tell the CPU to execute the instruction again at `0x498223`.
 The next instruction to be executed is stored at the instruction pointer. If you have studied microprocessors at school, you might strike the cord.
 
 ![dejavu](/img/dejavu.jfif)
-
-CPU registers can be manipulated using`PtraceGetRegs` and `PtraceSetRegs`. So, let's use these functions to set the instruction pointer at `0x498223`;
+So, that means if we set the instruction pointer to `0x498223` then the CPU will execute the instruction at `0x498223` again.CPU registers can be manipulated using`PtraceGetRegs` and `PtraceSetRegs`.
 
 ```go
 regs := &unix.PtraceRegs{}
@@ -190,9 +193,28 @@ for {
 }
 ```
 
+Phew, Finally we able to print `breakpoint hit` before our sample program prints random int.
+
+```txt
+breakpoint hit
+6129484611666145821
+breakpoint hit
+4037200794235010051
+breakpoint hit
+3916589616287113937
+breakpoint hit
+6334824724549167320
+breakpoint hit
+605394647632969758
+breakpoint hit
+1443635317331776148
+breakpoint hit
+894385949183117216
+```
+
 You can find the full soruce code at https://github.com/poonai/debugger-example
 
 That's all for now. Hope you folks learned something new. In the next post, I'll write how to extract values from the variables by reading DWARF info. You can follow me on [Twitter](https://twitter.com/poonai_) to get notified about part 2.
 
-
+# Plug
 Btw, I've built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to https://quicklog.dev or you can discuss on our discord server https://discord.gg/suk99uC5fa 
