@@ -3,9 +3,9 @@ title: "Part 1: How debuggers works? Example by go"
 date: 2021-09-02T14:27:16+05:30
 draft: false
 ---
-The general understanding is that a debugger makes debugging slow. But, I do use a debugger a lot to debug programs. Especially, when debugging test cases. So, I decided to learn the internal working of a debugger. 
+The first thing I do when I create a project is to create the debugger launch config at the `.vscode` folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve. 
 
-In this post, I'll be explaining how debuggers set a breakpoint on the program.
+In this post, I'll talk about my learning while demystifying the dark art of debugger.
 
 ## Problem statement
 Let's define the problem statement before coding. I have a sample golang program which prints random ints at every second. The goal which I want to achieve is that our debugger program should print `breakpoint hit` before our sample program prints the random integer. 
@@ -74,8 +74,9 @@ CPU will interrupt the program whenever it sees data int 3. So, we just have to 
 Does that mean we have to rewrite the binary at `0x498223`? No, we can write it using ptrace. 
 
 ## Ptrace to rescue
+>ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of "process trace") one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia
 
-ptrace allows us to rewrite the registers and write the data at the given address. 
+ptrace is syscall that allows us to rewrite the registers and write the data at the given address. 
 
 Now we know which address to pause and how to manipulate the memory of the sample program. So, let's put all this knowledge into action.
 
