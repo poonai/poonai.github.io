@@ -1,14 +1,15 @@
 ---
-title: "Part 1: How debuggers works? Example by go"
+title: "Part 1: How debuggers work? Example by go"
 date: 2021-09-02T14:27:16+05:30
 draft: false
 ---
+
 The first thing I do when I create a project is to create the debugger launch config at the `.vscode` folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve. 
 
 In this post, I'll talk about my learning while demystifying the dark art of debugger.
 
 ## Problem statement
-Let's define the problem statement before coding. I have a sample golang program which prints random ints at every second. The goal which I want to achieve is that our debugger program should print `breakpoint hit` before our sample program prints the random integer. 
+Let's define the problem statement before coding. I have a sample golang program that prints random ints every second. The goal which I want to achieve is that our debugger program should print `breakpoint hit` before our sample program prints the random integer. 
  
 Here is the sample program which prints random ints at every second.
 
@@ -16,17 +17,17 @@ Here is the sample program which prints random ints at every second.
 1. package main
 2. 
 3. import (
-4. 	"fmt"
-5. 	"math/rand"
-6. 	"time"
+4.  "fmt"
+5.  "math/rand"
+6.  "time"
 7. )
 8. 
 9. func main() {
-10. 	for {
-11. 		variableToTrace := rand.Int()
-12. 		fmt.Println(variableToTrace)
-13. 		time.Sleep(time.Second)
-14. 	}
+10.     for {
+11.         variableToTrace := rand.Int()
+12.         fmt.Println(variableToTrace)
+13.         time.Sleep(time.Second)
+14.     }
 15. }
 16. 
 ```
@@ -35,9 +36,20 @@ Now that we know what we want to achieve. Let's go step by step and solve the pr
 
 The first step is to pause the sample program before it prints the random int. That means we have to set the breakpoint at line number 11. 
 
-To set the breakpoint at line number 11, we must gather the address of line number 11. This can be obtained by the objdump tool.
+To set the breakpoint at line number 11, we must gather the address of instruction at line number 11. 
 
-The below command will output all the addresses of the program along with the file and line number.
+From high school, we all know that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language? 
+
+![cathow](/img/cathow.jpg)
+
+Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to mapping the assembly code to high-level language.
+For Linux binaries, debug information is usually encoded in the DWARF format. 
+
+> DWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: http://www.dwarfstd.org/
+
+DWARF format can be parsed using objdump tool. 
+
+The below command will output all the addresses of the instruction mapped to the line number and file name.
 
 ```shell
 objdump --dwarf=decodedline ./sample
@@ -64,7 +76,7 @@ sample.go                                      9            0x4982de
 sample.go                                      9            0x4982e0               x
 sample.go                                      9            0x4982e5               x
 ```
-The output tells that `0x498223` is the starting address of line number 11 for sample.go file. 
+The output clearly states that `0x498223` is the starting address of line number 11 for sample.go file. 
 
 The next step is to pause the program at the address `0x498223`
 
@@ -130,7 +142,7 @@ if _, err := unix.PtracePokeData(pid, addr, data); err != nil {
 Just reverting to original data doesn't run the program as usual. Because the instruction at `0x498223` is already executed when breakpoint hits. 
 So, we want to tell the CPU to execute the instruction again at `0x498223`.
 
-The next instruction to be executed is stored at the instruction pointer. If you have studied microprocessors at school, you might strike the cord.
+CPU executes the instruction that instruction pointer pointing to. If you have studied microprocessors at school, you might strike the cord.
 
 ![dejavu](/img/dejavu.jfif)
 So, that means if we set the instruction pointer to `0x498223` then the CPU will execute the instruction at `0x498223` again.CPU registers can be manipulated using`PtraceGetRegs` and `PtraceSetRegs`.
@@ -217,5 +229,5 @@ You can find the full soruce code at https://github.com/poonai/debugger-example
 
 That's all for now. Hope you folks learned something new. In the next post, I'll write how to extract values from the variables by reading DWARF info. You can follow me on [Twitter](https://twitter.com/poonai_) to get notified about part 2.
 
-# Plug
+
 Btw, I've built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to https://quicklog.dev or you can discuss on our discord server https://discord.gg/suk99uC5fa 
