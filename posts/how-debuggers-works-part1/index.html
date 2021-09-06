@@ -1,22 +1,18 @@
 <!doctype html><html lang=en><head>
-<meta name=generator content="Hugo 0.88.0">
+<meta name=generator content="Hugo 0.88.1">
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta property="og:title" content="Part 1: How debuggers works? Example by go">
-<meta name=description content="The general understanding is that a debugger makes debugging slow. But, I do use a debugger a lot to debug programs. Especially, when …"><meta property="og:title" content="Part 1: How debuggers works? Example by go">
-<meta property="og:description" content="The general understanding is that a debugger makes debugging slow. But, I do use a debugger a lot to debug programs. Especially, when debugging test cases. So, I decided to learn the internal working of a debugger.
-In this post, I&rsquo;ll be explaining how debuggers set a breakpoint on the program.
-Problem statement Let&rsquo;s define the problem statement before coding. I have a sample golang program which prints random ints at every second.">
+<meta name=description content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid …"><meta property="og:title" content="Part 1: How debuggers works? Example by go">
+<meta property="og:description" content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://poonai.github.io/posts/how-debuggers-works-part1/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2021-09-02T14:27:16+05:30">
 <meta property="article:modified_time" content="2021-09-02T14:27:16+05:30">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Part 1: How debuggers works? Example by go">
-<meta name=twitter:description content="The general understanding is that a debugger makes debugging slow. But, I do use a debugger a lot to debug programs. Especially, when debugging test cases. So, I decided to learn the internal working of a debugger.
-In this post, I&rsquo;ll be explaining how debuggers set a breakpoint on the program.
-Problem statement Let&rsquo;s define the problem statement before coding. I have a sample golang program which prints random ints at every second.">
+<meta name=twitter:description content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.">
 <link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
@@ -53,8 +49,8 @@ Problem statement Let&rsquo;s define the problem statement before coding. I have
 </div>
 </div>
 <div class=markdown>
-<p>The general understanding is that a debugger makes debugging slow. But, I do use a debugger a lot to debug programs. Especially, when debugging test cases. So, I decided to learn the internal working of a debugger.</p>
-<p>In this post, I&rsquo;ll be explaining how debuggers set a breakpoint on the program.</p>
+<p>The first thing I do when I create a project is to create the debugger launch config at the <code>.vscode</code> folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.</p>
+<p>In this post, I&rsquo;ll talk about my learning while demystifying the dark art of debugger.</p>
 <h2 id=problem-statement>Problem statement</h2>
 <p>Let&rsquo;s define the problem statement before coding. I have a sample golang program which prints random ints at every second. The goal which I want to achieve is that our debugger program should print <code>breakpoint hit</code> before our sample program prints the random integer.</p>
 <p>Here is the sample program which prints random ints at every second.</p>
@@ -105,7 +101,10 @@ sample.go                                      9            0x4982e5            
 <p>CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address <code>0x498223</code> with the data []byte{0xcc} to pause the program.</p>
 <p>Does that mean we have to rewrite the binary at <code>0x498223</code>? No, we can write it using ptrace.</p>
 <h2 id=ptrace-to-rescue>Ptrace to rescue</h2>
-<p>ptrace allows us to rewrite the registers and write the data at the given address.</p>
+<blockquote>
+<p>ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of &ldquo;process trace&rdquo;) one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia</p>
+</blockquote>
+<p>ptrace is syscall that allows us to rewrite the registers and write the data at the given address.</p>
 <p>Now we know which address to pause and how to manipulate the memory of the sample program. So, let&rsquo;s put all this knowledge into action.</p>
 <p>exec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#a6e22e>process</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>exec</span>.<span style=color:#a6e22e>Command</span>(<span style=color:#e6db74>&#34;./sample&#34;</span>)
