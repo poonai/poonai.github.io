@@ -4,7 +4,7 @@ date: 2021-09-02T14:27:16+05:30
 draft: false
 ---
 
-The first thing I do when I create a project is to create the debugger launch config at the `.vscode` folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve. 
+The first thing I do when I create a project is to create the debugger launch config at the `.vscode` folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of [delve](https://github.com/go-delve). 
 
 In this post, I'll talk about my learning while demystifying the dark art of debugger.
 
@@ -42,14 +42,14 @@ From high school, we all know that all high-level language is converted into ass
 
 ![cathow](/img/cathow.jpg)
 
-Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to mapping the assembly code to high-level language.
+Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to the mapping of assembly code to high-level language.
 For Linux binaries, debug information is usually encoded in the DWARF format. 
 
 > DWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: http://www.dwarfstd.org/
 
 DWARF format can be parsed using objdump tool. 
 
-The below command will output all the addresses of the instruction mapped to the line number and file name.
+The below command will output all the addresses of the instruction and it's mapping to the line number and file name.
 
 ```shell
 objdump --dwarf=decodedline ./sample
@@ -82,13 +82,14 @@ The next step is to pause the program at the address `0x498223`
 
 ## Trick to pause the program execution
 CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address `0x498223` with the data []byte{0xcc} to pause the program. 
+> In computing and operating systems, a trap, also known as an exception or a fault, is typically a type of synchronous interrupt caused by an exceptional condition (e.g., breakpoint, division by zero, invalid memory access). source: wikipedia
 
 Does that mean we have to rewrite the binary at `0x498223`? No, we can write it using ptrace. 
 
 ## Ptrace to rescue
 >ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of "process trace") one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia
 
-ptrace is syscall that allows us to rewrite the registers and write the data at the given address. 
+ptrace is a syscall that allows us to rewrite the registers and write the data at the given address. 
 
 Now we know which address to pause and how to manipulate the memory of the sample program. So, let's put all this knowledge into action.
 
@@ -142,7 +143,9 @@ if _, err := unix.PtracePokeData(pid, addr, data); err != nil {
 Just reverting to original data doesn't run the program as usual. Because the instruction at `0x498223` is already executed when breakpoint hits. 
 So, we want to tell the CPU to execute the instruction again at `0x498223`.
 
-CPU executes the instruction that instruction pointer pointing to. If you have studied microprocessors at school, you might strike the cord.
+![registers](/img/registersintro.png)
+
+CPU executes the instruction that the instruction pointer pointing to. If you have studied microprocessors at school, you might strike the cord.
 
 ![dejavu](/img/dejavu.jfif)
 So, that means if we set the instruction pointer to `0x498223` then the CPU will execute the instruction at `0x498223` again.CPU registers can be manipulated using`PtraceGetRegs` and `PtraceSetRegs`.
@@ -230,4 +233,5 @@ You can find the full soruce code at https://github.com/poonai/debugger-example
 That's all for now. Hope you folks learned something new. In the next post, I'll write how to extract values from the variables by reading DWARF info. You can follow me on [Twitter](https://twitter.com/poonai_) to get notified about part 2.
 
 
+## Plug
 Btw, I've built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to https://quicklog.dev or you can discuss on our discord server https://discord.gg/suk99uC5fa 
