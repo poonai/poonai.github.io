@@ -49,7 +49,7 @@
 </div>
 </div>
 <div class=markdown>
-<p>The first thing I do when I create a project is to create the debugger launch config at the <code>.vscode</code> folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.</p>
+<p>The first thing I do when I create a project is to create the debugger launch config at the <code>.vscode</code> folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of <a href=https://github.com/go-delve target=_blank>delve</a>.</p>
 <p>In this post, I&rsquo;ll talk about my learning while demystifying the dark art of debugger.</p>
 <h2 id=problem-statement>Problem statement</h2>
 <p>Let&rsquo;s define the problem statement before coding. I have a sample golang program that prints random ints every second. The goal which I want to achieve is that our debugger program should print <code>breakpoint hit</code> before our sample program prints the random integer.</p>
@@ -78,13 +78,13 @@
 <p><figure>
 <img src=/img/cathow.jpg alt=cathow>
 </figure></p>
-<p>Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to mapping the assembly code to high-level language.
+<p>Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to the mapping of assembly code to high-level language.
 For Linux binaries, debug information is usually encoded in the DWARF format.</p>
 <blockquote>
 <p>DWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: <a href=http://www.dwarfstd.org/ target=_blank>http://www.dwarfstd.org/</a></p>
 </blockquote>
 <p>DWARF format can be parsed using objdump tool.</p>
-<p>The below command will output all the addresses of the instruction mapped to the line number and file name.</p>
+<p>The below command will output all the addresses of the instruction and it&rsquo;s mapping to the line number and file name.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>objdump --dwarf<span style=color:#f92672>=</span>decodedline ./sample
 </code></pre></div><p>objdump command will output similar to this:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>File name                            Line number    Starting address    View    Stmt
@@ -109,12 +109,15 @@ sample.go                                      9            0x4982e5            
 <p>The next step is to pause the program at the address <code>0x498223</code></p>
 <h2 id=trick-to-pause-the-program-execution>Trick to pause the program execution</h2>
 <p>CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address <code>0x498223</code> with the data []byte{0xcc} to pause the program.</p>
+<blockquote>
+<p>In computing and operating systems, a trap, also known as an exception or a fault, is typically a type of synchronous interrupt caused by an exceptional condition (e.g., breakpoint, division by zero, invalid memory access). source: wikipedia</p>
+</blockquote>
 <p>Does that mean we have to rewrite the binary at <code>0x498223</code>? No, we can write it using ptrace.</p>
 <h2 id=ptrace-to-rescue>Ptrace to rescue</h2>
 <blockquote>
 <p>ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of &ldquo;process trace&rdquo;) one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia</p>
 </blockquote>
-<p>ptrace is syscall that allows us to rewrite the registers and write the data at the given address.</p>
+<p>ptrace is a syscall that allows us to rewrite the registers and write the data at the given address.</p>
 <p>Now we know which address to pause and how to manipulate the memory of the sample program. So, let&rsquo;s put all this knowledge into action.</p>
 <p>exec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#a6e22e>process</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>exec</span>.<span style=color:#a6e22e>Command</span>(<span style=color:#e6db74>&#34;./sample&#34;</span>)
@@ -153,7 +156,10 @@ sample.go                                      9            0x4982e5            
 }
 </code></pre></div><p>Just reverting to original data doesn&rsquo;t run the program as usual. Because the instruction at <code>0x498223</code> is already executed when breakpoint hits.
 So, we want to tell the CPU to execute the instruction again at <code>0x498223</code>.</p>
-<p>CPU executes the instruction that instruction pointer pointing to. If you have studied microprocessors at school, you might strike the cord.</p>
+<p><figure>
+<img src=/img/registersintro.png alt=registers>
+</figure></p>
+<p>CPU executes the instruction that the instruction pointer pointing to. If you have studied microprocessors at school, you might strike the cord.</p>
 <p><figure>
 <img src=/img/dejavu.jfif alt=dejavu>
 </figure>
@@ -225,6 +231,7 @@ breakpoint hit
 894385949183117216
 </code></pre></div><p>You can find the full soruce code at <a href=https://github.com/poonai/debugger-example target=_blank>https://github.com/poonai/debugger-example</a></p>
 <p>That&rsquo;s all for now. Hope you folks learned something new. In the next post, I&rsquo;ll write how to extract values from the variables by reading DWARF info. You can follow me on <a href=https://twitter.com/poonai_ target=_blank>Twitter</a> to get notified about part 2.</p>
+<h2 id=plug>Plug</h2>
 <p>Btw, I&rsquo;ve built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to <a href=https://quicklog.dev target=_blank>https://quicklog.dev</a> or you can discuss on our discord server <a href=https://discord.gg/suk99uC5fa target=_blank>https://discord.gg/suk99uC5fa</a></p>
 </div>
 </div></div>
