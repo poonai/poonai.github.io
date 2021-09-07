@@ -74,7 +74,7 @@
 <p>Now that we know what we want to achieve. Let&rsquo;s go step by step and solve the problem statement.</p>
 <p>The first step is to pause the sample program before it prints the random int. That means we have to set the breakpoint at line number 11.</p>
 <p>To set the breakpoint at line number 11, we must gather the address of instruction at line number 11.</p>
-<p>From high school, we all know that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language?</p>
+<p>Some of us know from high school that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language?</p>
 <p><figure>
 <img src=/img/cathow.jpg alt=cathow>
 </figure></p>
@@ -118,7 +118,7 @@ sample.go                                      9            0x4982e5            
 <p>ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of &ldquo;process trace&rdquo;) one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia</p>
 </blockquote>
 <p>ptrace is a syscall that allows us to rewrite the registers and write the data at the given address.</p>
-<p>Now we know which address to pause and how to manipulate the memory of the sample program. So, let&rsquo;s put all this knowledge into action.</p>
+<p>Now we know which address to pause and how to find the memory representing lines, and manipulate the memory of the sample program. So, let&rsquo;s put all this knowledge into action.</p>
 <p>exec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#a6e22e>process</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>exec</span>.<span style=color:#a6e22e>Command</span>(<span style=color:#e6db74>&#34;./sample&#34;</span>)
 <span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>SysProcAttr</span> = <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SysProcAttr</span>{<span style=color:#a6e22e>Ptrace</span>: <span style=color:#66d9ef>true</span>, <span style=color:#a6e22e>Setpgid</span>: <span style=color:#66d9ef>true</span>,    
@@ -138,8 +138,8 @@ sample.go                                      9            0x4982e5            
     }
     <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>data</span>
 }
-</code></pre></div><p>You must already be wondering why there is <code>PtracePeekData</code>, other than <code>PtracePokeData</code>. <code>PtracePeekData</code> allows us to read the memory at the given address. I&rsquo;ll explain later why I&rsquo;m reading the data at the address <code>0x498223</code></p>
-<p>since we set the breakpoint we&rsquo;ll continue the program and wait for the interrupt to happen. This can be done by <code>PtraceCont</code> and <code>Wait4</code></p>
+</code></pre></div><p>You must already be wondering why there is <code>PtracePeekData</code>, other than <code>PtracePokeData</code>. <code>PtracePeekData</code> allows us to read the memory at the given address. I&rsquo;ll explain later why I&rsquo;m reading the data at the address <code>0x498223</code>.</p>
+<p>Since we set the breakpoint we&rsquo;ll continue the program and wait for the interrupt to happen. This can be done by <code>PtraceCont</code> and <code>Wait4</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>unix</span>.<span style=color:#a6e22e>PtraceCont</span>(<span style=color:#a6e22e>pid</span>, <span style=color:#ae81ff>0</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
      panic(<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>Error</span>())
  }
@@ -159,7 +159,7 @@ So, we want to tell the CPU to execute the instruction again at <code>0x498223</
 <p><figure>
 <img src=/img/registersintro.png alt=registers>
 </figure></p>
-<p>CPU executes the instruction that the instruction pointer pointing to. If you have studied microprocessors at school, you might strike the cord.</p>
+<p>CPU executes the instruction that the instruction pointer points to. If you have studied microprocessors at university, you might remember.</p>
 <p><figure>
 <img src=/img/dejavu.jfif alt=dejavu>
 </figure>
@@ -205,7 +205,7 @@ So, that means if we set the instruction pointer to <code>0x498223</code> then t
     <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>unix</span>.<span style=color:#a6e22e>PtraceCont</span>(<span style=color:#a6e22e>pid</span>, <span style=color:#ae81ff>0</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
         panic(<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>Error</span>())
     }
-    <span style=color:#75715e>// wait for the interupt to come.
+    <span style=color:#75715e>// wait for the interrupt to come.
 </span><span style=color:#75715e></span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>status</span> <span style=color:#a6e22e>unix</span>.<span style=color:#a6e22e>WaitStatus</span>
     <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>unix</span>.<span style=color:#a6e22e>Wait4</span>(<span style=color:#a6e22e>pid</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>status</span>, <span style=color:#ae81ff>0</span>, <span style=color:#66d9ef>nil</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
         panic(<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>Error</span>())
@@ -229,10 +229,10 @@ breakpoint hit
 1443635317331776148
 breakpoint hit
 894385949183117216
-</code></pre></div><p>You can find the full soruce code at <a href=https://github.com/poonai/debugger-example target=_blank>https://github.com/poonai/debugger-example</a></p>
+</code></pre></div><p>You can find the full source code at <a href=https://github.com/poonai/debugger-example target=_blank>https://github.com/poonai/debugger-example</a></p>
 <p>That&rsquo;s all for now. Hope you folks learned something new. In the next post, I&rsquo;ll write how to extract values from the variables by reading DWARF info. You can follow me on <a href=https://twitter.com/poonai_ target=_blank>Twitter</a> to get notified about part 2.</p>
 <h2 id=plug>Plug</h2>
-<p>Btw, I&rsquo;ve built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to <a href=https://quicklog.dev target=_blank>https://quicklog.dev</a> or you can discuss on our discord server <a href=https://discord.gg/suk99uC5fa target=_blank>https://discord.gg/suk99uC5fa</a></p>
+<p>By the way, I&rsquo;ve built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to <a href=https://quicklog.dev target=_blank>https://quicklog.dev</a> or you can discuss on our discord server <a href=https://discord.gg/suk99uC5fa target=_blank>https://discord.gg/suk99uC5fa</a></p>
 </div>
 </div></div>
 </main>
