@@ -38,7 +38,7 @@ The first step is to pause the sample program before it prints the random int. T
 
 To set the breakpoint at line number 11, we must gather the address of instruction at line number 11. 
 
-From high school, we all know that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language? 
+Some of us know from high school that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language? 
 
 ![cathow](/img/cathow.jpg)
 
@@ -91,7 +91,7 @@ Does that mean we have to rewrite the binary at `0x498223`? No, we can write it 
 
 ptrace is a syscall that allows us to rewrite the registers and write the data at the given address. 
 
-Now we know which address to pause and how to manipulate the memory of the sample program. So, let's put all this knowledge into action.
+Now we know which address to pause and how to find the memory representing lines, and manipulate the memory of the sample program. So, let's put all this knowledge into action.
 
 exec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.
 ```go
@@ -117,9 +117,9 @@ func setBreakpoint(pid int, addr uintptr) []byte {
     return data
 }
 ```
-You must already be wondering why there is `PtracePeekData`, other than `PtracePokeData`. `PtracePeekData` allows us to read the memory at the given address. I'll explain later why I'm reading the data at the address `0x498223`
+You must already be wondering why there is `PtracePeekData`, other than `PtracePokeData`. `PtracePeekData` allows us to read the memory at the given address. I'll explain later why I'm reading the data at the address `0x498223`.
 
-since we set the breakpoint we'll continue the program and wait for the interrupt to happen. This can be done by `PtraceCont` and `Wait4`
+Since we set the breakpoint we'll continue the program and wait for the interrupt to happen. This can be done by `PtraceCont` and `Wait4`
 
 ```go
 if err := unix.PtraceCont(pid, 0); err != nil {
@@ -145,7 +145,7 @@ So, we want to tell the CPU to execute the instruction again at `0x498223`.
 
 ![registers](/img/registersintro.png)
 
-CPU executes the instruction that the instruction pointer pointing to. If you have studied microprocessors at school, you might strike the cord.
+CPU executes the instruction that the instruction pointer points to. If you have studied microprocessors at university, you might remember. 
 
 ![dejavu](/img/dejavu.jfif)
 So, that means if we set the instruction pointer to `0x498223` then the CPU will execute the instruction at `0x498223` again.CPU registers can be manipulated using`PtraceGetRegs` and `PtraceSetRegs`.
@@ -198,7 +198,7 @@ for {
     if err := unix.PtraceCont(pid, 0); err != nil {
         panic(err.Error())
     }
-    // wait for the interupt to come.
+    // wait for the interrupt to come.
     var status unix.WaitStatus
     if _, err := unix.Wait4(pid, &status, 0, nil); err != nil {
         panic(err.Error())
@@ -228,10 +228,11 @@ breakpoint hit
 894385949183117216
 ```
 
-You can find the full soruce code at https://github.com/poonai/debugger-example
+You can find the full source code at https://github.com/poonai/debugger-example
 
 That's all for now. Hope you folks learned something new. In the next post, I'll write how to extract values from the variables by reading DWARF info. You can follow me on [Twitter](https://twitter.com/poonai_) to get notified about part 2.
 
 
 ## Plug
-Btw, I've built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to https://quicklog.dev or you can discuss on our discord server https://discord.gg/suk99uC5fa 
+By the way, I've built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to https://quicklog.dev or you can discuss on our discord server https://discord.gg/suk99uC5fa
+
