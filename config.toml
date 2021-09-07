@@ -3,6 +3,7 @@ languageCode = "en-us"
 defaultContentLanguage = "en"
 title = "Poonai's rant"
 theme = "hugo-vitae"
+googleAnalytics = "UA-206886735-1"
 
 [params]
     homepage = false
