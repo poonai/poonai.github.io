@@ -1,5 +1,5 @@
 ---
-title: "Part 1: How debuggers work? Example by go"
+title: "Part 1: DIY debugger in Golang"
 date: 2021-09-02T14:27:16+05:30
 draft: false
 ---
