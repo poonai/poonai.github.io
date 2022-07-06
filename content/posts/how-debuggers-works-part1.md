@@ -233,6 +233,5 @@ You can find the full source code at https://github.com/poonai/debugger-example
 That's all for now. Hope you folks learned something new. In the next post, I'll write how to extract values from the variables by reading DWARF info. You can follow me on [Twitter](https://twitter.com/poonai_) to get notified about part 2.
 
 
-## Plug
-By the way, I've built a free vs-code extension that allows developers to set logpoint and get logs from the production system straight to your vscode console. You can check it out by going to https://quicklog.dev or you can discuss on our discord server https://discord.gg/suk99uC5fa
+
 
