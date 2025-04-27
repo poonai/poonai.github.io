@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2025-04-27T14:27:16+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-04-27T14:27:16+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/simplest-backpropagation-explainer/</loc>
+    <lastmod>2025-04-27T14:27:16+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/how-debuggers-works-part1/</loc>
+    <lastmod>2021-09-02T14:27:16+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/differential-privacy/</loc>
+    <lastmod>2021-03-29T14:27:16+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/</loc>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+  </url>
+</urlset>

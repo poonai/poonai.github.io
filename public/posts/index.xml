@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Poonai&#39;s rant</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on Poonai&#39;s rant</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 27 Apr 2025 14:27:16 +0530</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Simplest backpropagation explainer</title>
+      <link>http://localhost:1313/posts/simplest-backpropagation-explainer/</link>
+      <pubDate>Sun, 27 Apr 2025 14:27:16 +0530</pubDate>
+      <guid>http://localhost:1313/posts/simplest-backpropagation-explainer/</guid>
+      <description>&lt;p&gt;Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual&#xA;network. I assume that you already know how feed forward neural network works.&lt;/p&gt;&#xA;&lt;p&gt;Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you do by hand.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Part 1: DIY debugger in Golang</title>
+      <link>http://localhost:1313/posts/how-debuggers-works-part1/</link>
+      <pubDate>Thu, 02 Sep 2021 14:27:16 +0530</pubDate>
+      <guid>http://localhost:1313/posts/how-debuggers-works-part1/</guid>
+      <description>&lt;p&gt;The first thing I do when I create a project is to create the debugger launch config at the &lt;code&gt;.vscode&lt;/code&gt; folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of &lt;a href=&#34;https://github.com/go-delve&#34;&gt;delve&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Can differential privacy protect our privacy?</title>
+      <link>http://localhost:1313/posts/differential-privacy/</link>
+      <pubDate>Mon, 29 Mar 2021 14:27:16 +0530</pubDate>
+      <guid>http://localhost:1313/posts/differential-privacy/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&amp;rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.&lt;/p&gt;&#xA;&lt;p&gt;Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&amp;rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&amp;rsquo;s app is not present on the user phone).&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<title>Can differential privacy protect our privacy?</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="UA-206886735-1">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.0f7bfa4dce23d518a6b7625e765b874a2fd28e171057bbc2009669780dfb5836.css" integrity="sha256-D3v6Tc4j1Rimt2JedluHSi/SjhcQV7vCAJZpeA37WDY=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#closing-thoughts" class="nav-closing-thoughts">
+									Closing Thoughts:
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="http://localhost:1313/">
+            Poonai&#39;s rant
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="http://localhost:1313/">
+        <div class="single-column-header-title">Poonai&#39;s rant</div>
+        
+        <div class="single-column-header-subtitle">Poonai is an independent software developer(Indie Hustler). கல்வி-அன்பு நிறைய உடையவர்கள் மேலோர்.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Can differential privacy protect our privacy?
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2021-03-29 14:27
+                        </time>
+                        
+
+                        
+
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.</p>
+<p>Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&rsquo;s app is not present on the user phone).</p>
+<p>I decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to <a href="https://docs-assets.developer.apple.com/ml-research/papers/learning-with-privacy-at-scale.pdf">Apple's paper</a>. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.</p>
+<p>Usually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small <a href="https://github.com/poonai/diffrential_privacy/blob/master/cms_test.go#L30">experiment</a> to estimate the popular view on a project management app to validate the paper.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#75715e">// we are tracking what view users are using in their project management app.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 6k users are using list view.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">6000</span>, <span style="color:#e6db74">&#34;list&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 9k user using board view.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">9000</span>, <span style="color:#e6db74">&#34;board&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2k user using calendar view.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">2000</span>, <span style="color:#e6db74">&#34;calendar&#34;</span>)
+</span></span></code></pre></div><p>The variance between the actual inference and the inference calculated via differential privacy is not that large.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for list&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;list&#34;</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for board&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;board&#34;</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for calendar&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;calendar&#34;</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// output</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// estimate for list 6572.1029024055715</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// estimate for board 9154.186791339975</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// estimate for calendar 1157.801902649071</span>
+</span></span></code></pre></div><p>I presented it to my friend and asked him whether his company would consider using such tech.</p>
+<p>Unfortunately, the inference of users&rsquo; behaviour alone is not enough, they would also want to send notifications based on certain events.</p>
+<p>For example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the <a href="https://docs.moengage.com/docs/tracking-user-attributes#default-user-attributes">user level</a>.</p>
+<p>Companies don&rsquo;t just want analytics, they also want to target the user. which reminds me of the quote from the movie <code>The Social Dilemma</code></p>
+<blockquote>
+<p>We want to psychologically figure out how to manipulate you as fast as possible</p></blockquote>
+<h3 id="closing-thoughts">Closing Thoughts:</h3>
+<p>Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies&rsquo; needs. There are some use cases, where I think differential privacy can be deployed.</p>
+<ul>
+<li>customers&rsquo; sensitive data can be tracked.</li>
+<li>privacy-focused applications.</li>
+</ul>
+<p>I would love to hear where else differential-privacy can be plugged in. <a href="https://twitter.com/poonai_">My profile</a> if anyone wants to reach out.</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2021-03-29</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/how-debuggers-works-part1/">
+			Next<br>Part 1: DIY debugger in Golang
+                </a>
+                
+                
+                
+                <a class="older-posts">
+			Previous<br>No older posts.
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="http://localhost:1313/">
+    
+        <div class="nav-title">
+            Poonai&#39;s rant
+        </div>
+        
+        <div class="nav-subtitle">
+            Poonai is an independent software developer(Indie Hustler). கல்வி-அன்பு நிறைய உடையவர்கள் மேலோர்.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2025 Poonai&#39;s rant
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#closing-thoughts" class="nav-closing-thoughts">
+									Closing Thoughts:
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2025 Poonai&#39;s rant
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
