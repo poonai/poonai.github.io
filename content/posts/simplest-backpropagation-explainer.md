@@ -1,5 +1,5 @@
 ---
-title: "Simplest backpropagation explainer"
+title: "Simplest backpropagation explainer with no chain rule"
 date: 2025-04-27T14:27:16+05:30
 draft: false
 ---
@@ -103,7 +103,85 @@ But in our case, we are off by 2 units.
 
 ## How do we decrease the cost?
 
-Tweaking the weight parameter will reduce the cost.
-However, throwing random weights will not help — it's like finding a needle in a haystack.
+To reduce the cost, we need to tweak the weight parameter. However, randomly adjusting weights won't help — it would be like searching for a needle in a haystack. Instead, we use the derivative to understand how the weight affects the cost.
 
+\[
+\frac{dC}{dw} = x = 2
+\]
 
+The derivative tells us that any change in the weight will change the cost by twice that amount. In other words, if we increase the weight by 1 unit, the cost will change by 2 units.
+
+Since our current cost is negative, it signals that the weight should be increased.(If the cost were positive, we would need to decrease the weight.) Thus, we increase the weight to \( w = 5 \) to move the cost toward zero.
+
+## With a Hidden Layer
+
+Let's add a hidden layer to the same simple network:
+
+- Input \( x = 2 \)
+- Weight \( w_1 = 4 \)
+- Weight \( w_2 = 3 \)
+- Target output \( y_{\text{target}} = 10 \)
+
+{{< figure src="/img/with_hidden.png" width="600" height="400" alt="hidden-network" class="center" >}}
+
+The prediction is given by:
+
+\[
+\hat{y} = (x \cdot w_1) \cdot w_2
+\]
+
+Substituting the values:
+
+\[
+\hat{y} = (2 \times 4) \times 3 = 24
+\]
+
+The cost is the difference between the prediction and the target:
+
+\[
+\text{Cost} = \hat{y} - y_{\text{target}} = 24 - 10 = 14
+\]
+
+Now, let's compute the derivatives:
+
+\[
+\frac{dC}{dw_1} = x \cdot w_2 = 2 \times 3 = 6
+\]
+\[
+\frac{dC}{dw_2} = x \cdot w_1 = 2 \times 4 = 8
+\]
+
+The derivatives tell us that the \(w_2\) influences the network more than the \(w_1\). 
+
+Now, I want you to **pause reading** and try this quick exercise:
+- Increase \( w_1 \) by 0.1 and observe how much \( \hat{y} \) changes.
+- Increase \( w_2 \) by 0.1 and observe how much \( \hat{y} \) changes.
+- Verify that changing \( w_2 \) causes a bigger change in the output than changing \( w_1 \).
+
+## How Do Computers Adjust Weights?
+
+In our first simple network, we manually found the correct weight using our intelligence.  
+However, computers work much more rudimentary — they adjust the weights using the corresponding derivatives.
+
+The idea is simple:
+- **Weights with higher influence** (higher derivative) are adjusted more.
+- **Weights with lower influence** are adjusted less.
+
+But here's the catch:  
+If the derivative values are large, the weights can change abruptly — causing the cost to fluctuate wildly.  
+This phenomenon is known as the **exploding gradient problem**.
+
+To prevent this, we multiply the derivative by a small number called the **learning rate** (e.g., \( 0.01 \)) to ensure smoother learning:
+
+\[
+w_1 = w_1 - \text{learning\_rate} \times \frac{dC}{dw_1}
+\]
+\[
+w_2 = w_2 - \text{learning\_rate} \times \frac{dC}{dw_2}
+\]
+
+By training the model over a large number of samples, the weights are **gradually smoothened** toward their optimal values, leading to better predictions.
+
+## Last Words
+
+I've intentionally avoided the chain rule to wrap the core idea in our head. There are a lot of examples out in the wild that use chain rule. Here, is one of my [personal favorite](https://www.youtube.com/watch?v=sIX_9n-1UbM)

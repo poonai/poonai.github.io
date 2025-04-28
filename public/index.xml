@@ -13,7 +13,7 @@
     
     
         <item>
-        <title>Simplest backpropagation explainer</title>
+        <title>Simplest backpropagation explainer with no chain rule</title>
         <link>http://localhost:1313/posts/simplest-backpropagation-explainer/</link>
         <pubDate>Sun, 27 Apr 2025 14:27:16 +0530</pubDate>
         
@@ -91,8 +91,67 @@ Let&amp;rsquo;s define a cost function to determine the error rate:&lt;/p&gt;
 When the cost approaches zero, the predicted output correlates closely with the target output.
 But in our case, we are off by 2 units.&lt;/p&gt;
 &lt;h2 id=&#34;how-do-we-decrease-the-cost&#34;&gt;How do we decrease the cost?&lt;/h2&gt;
-&lt;p&gt;Tweaking the weight parameter will reduce the cost.
-However, throwing random weights will not help — it&amp;rsquo;s like finding a needle in a haystack.&lt;/p&gt;
+&lt;p&gt;To reduce the cost, we need to tweak the weight parameter. However, randomly adjusting weights won&amp;rsquo;t help — it would be like searching for a needle in a haystack. Instead, we use the derivative to understand how the weight affects the cost.&lt;/p&gt;
+\[
+\frac{dC}{dw} = x = 2
+\]&lt;p&gt;The derivative tells us that any change in the weight will change the cost by twice that amount. In other words, if we increase the weight by 1 unit, the cost will change by 2 units.&lt;/p&gt;
+&lt;p&gt;Since our current cost is negative, it signals that the weight should be increased.(If the cost were positive, we would need to decrease the weight.) Thus, we increase the weight to \( w = 5 \) to move the cost toward zero.&lt;/p&gt;
+&lt;h2 id=&#34;with-a-hidden-layer&#34;&gt;With a Hidden Layer&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s add a hidden layer to the same simple network:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Input \( x = 2 \)&lt;/li&gt;
+&lt;li&gt;Weight \( w_1 = 4 \)&lt;/li&gt;
+&lt;li&gt;Weight \( w_2 = 3 \)&lt;/li&gt;
+&lt;li&gt;Target output \( y_{\text{target}} = 10 \)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&#34;center&#34;&gt;&lt;img src=&#34;http://localhost:1313/img/with_hidden.png&#34;
+    alt=&#34;hidden-network&#34; width=&#34;600&#34; height=&#34;400&#34;&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;The prediction is given by:&lt;/p&gt;
+\[
+\hat{y} = (x \cdot w_1) \cdot w_2
+\]&lt;p&gt;Substituting the values:&lt;/p&gt;
+\[
+\hat{y} = (2 \times 4) \times 3 = 24
+\]&lt;p&gt;The cost is the difference between the prediction and the target:&lt;/p&gt;
+\[
+\text{Cost} = \hat{y} - y_{\text{target}} = 24 - 10 = 14
+\]&lt;p&gt;Now, let&amp;rsquo;s compute the derivatives:&lt;/p&gt;
+\[
+\frac{dC}{dw_1} = x \cdot w_2 = 2 \times 3 = 6
+\]&lt;p&gt;
+&lt;/p&gt;
+\[
+\frac{dC}{dw_2} = x \cdot w_1 = 2 \times 4 = 8
+\]&lt;p&gt;The derivatives tell us that the \(w_2\) influences the network more than the \(w_1\).&lt;/p&gt;
+&lt;p&gt;Now, I want you to &lt;strong&gt;pause reading&lt;/strong&gt; and try this quick exercise:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Increase \( w_1 \) by 0.1 and observe how much \( \hat{y} \) changes.&lt;/li&gt;
+&lt;li&gt;Increase \( w_2 \) by 0.1 and observe how much \( \hat{y} \) changes.&lt;/li&gt;
+&lt;li&gt;Verify that changing \( w_2 \) causes a bigger change in the output than changing \( w_1 \).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;how-do-computers-adjust-weights&#34;&gt;How Do Computers Adjust Weights?&lt;/h2&gt;
+&lt;p&gt;In our first simple network, we manually found the correct weight using our intelligence.&lt;br&gt;
+However, computers work much more rudimentary — they adjust the weights using the corresponding derivatives.&lt;/p&gt;
+&lt;p&gt;The idea is simple:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Weights with higher influence&lt;/strong&gt; (higher derivative) are adjusted more.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Weights with lower influence&lt;/strong&gt; are adjusted less.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;But here&amp;rsquo;s the catch:&lt;br&gt;
+If the derivative values are large, the weights can change abruptly — causing the cost to fluctuate wildly.&lt;br&gt;
+This phenomenon is known as the &lt;strong&gt;exploding gradient problem&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;To prevent this, we multiply the derivative by a small number called the &lt;strong&gt;learning rate&lt;/strong&gt; (e.g., \( 0.01 \)) to ensure smoother learning:&lt;/p&gt;
+\[
+w_1 = w_1 - \text{learning\_rate} \times \frac{dC}{dw_1}
+\]&lt;p&gt;
+&lt;/p&gt;
+\[
+w_2 = w_2 - \text{learning\_rate} \times \frac{dC}{dw_2}
+\]&lt;p&gt;By training the model over a large number of samples, the weights are &lt;strong&gt;gradually smoothened&lt;/strong&gt; toward their optimal values, leading to better predictions.&lt;/p&gt;
+&lt;h2 id=&#34;last-words&#34;&gt;Last Words&lt;/h2&gt;
+&lt;p&gt;I&amp;rsquo;ve intentionally avoided the chain rule to wrap the core idea in our head. There are a lot of examples out in the wild that use chain rule. Here, is one of my &lt;a href=&#34;https://www.youtube.com/watch?v=sIX_9n-1UbM&#34;&gt;personal favorite&lt;/a&gt;&lt;/p&gt;
 - http://localhost:1313/posts/simplest-backpropagation-explainer/ - </description>
         </item>
     

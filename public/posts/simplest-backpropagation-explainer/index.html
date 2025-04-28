@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-<title>Simplest backpropagation explainer</title>
+<title>Simplest backpropagation explainer with no chain rule</title>
 
 
 
@@ -169,6 +169,60 @@
 					
 				
 			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#with-a-hidden-layer" class="nav-with-a-hidden-layer">
+									With a Hidden Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#how-do-computers-adjust-weights" class="nav-how-do-computers-adjust-weights">
+									How Do Computers Adjust Weights?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#last-words" class="nav-last-words">
+									Last Words
+								</a>
+							</li>
+						
+						
+					
+				
+			
 		</ul>
 	</div>
 
@@ -224,7 +278,7 @@
                 
             >
                 <div class="post-title">
-                    Simplest backpropagation explainer
+                    Simplest backpropagation explainer with no chain rule
                     
                     <div class="post-meta">
                         
@@ -318,8 +372,67 @@ Let&rsquo;s define a cost function to determine the error rate:</p>
 When the cost approaches zero, the predicted output correlates closely with the target output.
 But in our case, we are off by 2 units.</p>
 <h2 id="how-do-we-decrease-the-cost">How do we decrease the cost?</h2>
-<p>Tweaking the weight parameter will reduce the cost.
-However, throwing random weights will not help — it&rsquo;s like finding a needle in a haystack.</p>
+<p>To reduce the cost, we need to tweak the weight parameter. However, randomly adjusting weights won&rsquo;t help — it would be like searching for a needle in a haystack. Instead, we use the derivative to understand how the weight affects the cost.</p>
+\[
+\frac{dC}{dw} = x = 2
+\]<p>The derivative tells us that any change in the weight will change the cost by twice that amount. In other words, if we increase the weight by 1 unit, the cost will change by 2 units.</p>
+<p>Since our current cost is negative, it signals that the weight should be increased.(If the cost were positive, we would need to decrease the weight.) Thus, we increase the weight to \( w = 5 \) to move the cost toward zero.</p>
+<h2 id="with-a-hidden-layer">With a Hidden Layer</h2>
+<p>Let&rsquo;s add a hidden layer to the same simple network:</p>
+<ul>
+<li>Input \( x = 2 \)</li>
+<li>Weight \( w_1 = 4 \)</li>
+<li>Weight \( w_2 = 3 \)</li>
+<li>Target output \( y_{\text{target}} = 10 \)</li>
+</ul>
+<figure class="center"><img src="/img/with_hidden.png"
+    alt="hidden-network" width="600" height="400">
+</figure>
+
+<p>The prediction is given by:</p>
+\[
+\hat{y} = (x \cdot w_1) \cdot w_2
+\]<p>Substituting the values:</p>
+\[
+\hat{y} = (2 \times 4) \times 3 = 24
+\]<p>The cost is the difference between the prediction and the target:</p>
+\[
+\text{Cost} = \hat{y} - y_{\text{target}} = 24 - 10 = 14
+\]<p>Now, let&rsquo;s compute the derivatives:</p>
+\[
+\frac{dC}{dw_1} = x \cdot w_2 = 2 \times 3 = 6
+\]<p>
+</p>
+\[
+\frac{dC}{dw_2} = x \cdot w_1 = 2 \times 4 = 8
+\]<p>The derivatives tell us that the \(w_2\) influences the network more than the \(w_1\).</p>
+<p>Now, I want you to <strong>pause reading</strong> and try this quick exercise:</p>
+<ul>
+<li>Increase \( w_1 \) by 0.1 and observe how much \( \hat{y} \) changes.</li>
+<li>Increase \( w_2 \) by 0.1 and observe how much \( \hat{y} \) changes.</li>
+<li>Verify that changing \( w_2 \) causes a bigger change in the output than changing \( w_1 \).</li>
+</ul>
+<h2 id="how-do-computers-adjust-weights">How Do Computers Adjust Weights?</h2>
+<p>In our first simple network, we manually found the correct weight using our intelligence.<br>
+However, computers work much more rudimentary — they adjust the weights using the corresponding derivatives.</p>
+<p>The idea is simple:</p>
+<ul>
+<li><strong>Weights with higher influence</strong> (higher derivative) are adjusted more.</li>
+<li><strong>Weights with lower influence</strong> are adjusted less.</li>
+</ul>
+<p>But here&rsquo;s the catch:<br>
+If the derivative values are large, the weights can change abruptly — causing the cost to fluctuate wildly.<br>
+This phenomenon is known as the <strong>exploding gradient problem</strong>.</p>
+<p>To prevent this, we multiply the derivative by a small number called the <strong>learning rate</strong> (e.g., \( 0.01 \)) to ensure smoother learning:</p>
+\[
+w_1 = w_1 - \text{learning\_rate} \times \frac{dC}{dw_1}
+\]<p>
+</p>
+\[
+w_2 = w_2 - \text{learning\_rate} \times \frac{dC}{dw_2}
+\]<p>By training the model over a large number of samples, the weights are <strong>gradually smoothened</strong> toward their optimal values, leading to better predictions.</p>
+<h2 id="last-words">Last Words</h2>
+<p>I&rsquo;ve intentionally avoided the chain rule to wrap the core idea in our head. There are a lot of examples out in the wild that use chain rule. Here, is one of my <a href="https://www.youtube.com/watch?v=sIX_9n-1UbM">personal favorite</a></p>
 
                     
                     <HR width="100%" id="EOF">
@@ -469,6 +582,60 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 							<li>
 								<a href="#how-do-we-decrease-the-cost" class="nav-how-do-we-decrease-the-cost">
 									How do we decrease the cost?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#with-a-hidden-layer" class="nav-with-a-hidden-layer">
+									With a Hidden Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#how-do-computers-adjust-weights" class="nav-how-do-computers-adjust-weights">
+									How Do Computers Adjust Weights?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#last-words" class="nav-last-words">
+									Last Words
 								</a>
 							</li>
 						
