@@ -1,13 +1,13 @@
 ---
 title: "Simplest backpropagation explainer with no chain rule"
-date: 2025-04-27T14:27:16+05:30
+date: "2025-04-27"
 draft: false
 ---
 
 Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual 
 network. I assume that you already know how feed forward neural network works. 
 
-Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you do by hand. 
+Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand. 
 
 >> "Mathematics is not a spectator sport." — George Pólya
 
@@ -174,10 +174,10 @@ This phenomenon is known as the **exploding gradient problem**.
 To prevent this, we multiply the derivative by a small number called the **learning rate** (e.g., \( 0.01 \)) to ensure smoother learning:
 
 \[
-w_1 = w_1 - \text{learning\_rate} \times \frac{dC}{dw_1}
+w_1 = w_1 - \text{learning_rate} \times \frac{dC}{dw_1}
 \]
 \[
-w_2 = w_2 - \text{learning\_rate} \times \frac{dC}{dw_2}
+w_2 = w_2 - \text{learning_rate} \times \frac{dC}{dw_2}
 \]
 
 By training the model over a large number of samples, the weights are **gradually smoothened** toward their optimal values, leading to better predictions.

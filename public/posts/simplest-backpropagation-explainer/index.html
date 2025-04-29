@@ -1,311 +1,157 @@
 <!DOCTYPE html>
-<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-<title>Simplest backpropagation explainer with no chain rule</title>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-73YW8YW7XL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-73YW8YW7XL');
+        }
+      </script><meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="robots" content="index, follow"><meta name="author" content="">
+<meta name="description" content="Poonai is an independent software developer(Indie Hustler).">
+<link rel="author" type="text/plain" href="/humans.txt">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+<meta name="theme-color" content="#494f5c">
+<meta name="msapplication-TileColor" content="#494f5c">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#494f5c">
 
+  <meta itemprop="name" content="Simplest backpropagation explainer with no chain rule">
+  <meta itemprop="description" content="Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual network. I assume that you already know how feed forward neural network works.
+Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.">
+  <meta itemprop="datePublished" content="2025-04-27T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-04-27T00:00:00+00:00">
+  <meta itemprop="wordCount" content="981"><meta property="og:url" content="http://localhost:1313/posts/simplest-backpropagation-explainer/">
+  <meta property="og:site_name" content="Poonai&#39;s space">
+  <meta property="og:title" content="Simplest backpropagation explainer with no chain rule">
+  <meta property="og:description" content="Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual network. I assume that you already know how feed forward neural network works.
+Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-04-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-27T00:00:00+00:00">
 
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Simplest backpropagation explainer with no chain rule">
+  <meta name="twitter:description" content="Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual network. I assume that you already know how feed forward neural network works.
+Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.">
 
-
-<meta charset="utf-8">
-<meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="UA-206886735-1">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
-<meta content="telephone=no" name="format-detection">
-<meta name="description" content="">
-<meta name="renderer" content="webkit">
-<meta name="theme-color" content="#ffffff">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-      <script src="/js/toc.js"></script>
-    
-    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-
-<link rel="stylesheet" href="/scss/dark-mode.min.0f7bfa4dce23d518a6b7625e765b874a2fd28e171057bbc2009669780dfb5836.css" integrity="sha256-D3v6Tc4j1Rimt2JedluHSi/SjhcQV7vCAJZpeA37WDY=" media="screen">
-
-
-<link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Material+Icons">
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-          
-          
-          delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false},
-              {left: '\\(', right: '\\)', display: false},
-              {left: '\\[', right: '\\]', display: true}
-          ],
-          
-          throwOnError : false
-        });
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</head>
-<body>
-    	<div id="app"><div class="single-column-drawer-container" id="drawer"
-     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-    <div class="drawer-content">
-        <div class="drawer-menu">
-            
-            
-            
-            
-            <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- CATALOG -</center>
-		
-		
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Simplest backpropagation explainer with no chain rule",
+    "name": "Simplest backpropagation explainer with no chain rule",
+    "description": "Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual network. I assume that you already know how feed forward neural network works.\nBefore reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.\n",
+    "keywords": [],
+    "articleBody": "Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual network. I assume that you already know how feed forward neural network works.\nBefore reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.\n“Mathematics is not a spectator sport.” — George Pólya\nCalculus: The Art of Change : Derivation is used throughout the backpropogation, so it’s crucial for us to revise calculus before reaching our desired goal. As title suggests, derivation is used to find how change in value of an variable affect the result. In the context of neural network, how change in weights affects the results of neural networks.\nLet’s look at a simple equation:\n\\[ y = x^3 \\]If we plug in \\(x = 2\\), we get:\n\\[ y = 2^3 = 8 \\]Now, what happens if we slightly increase \\(x\\) by \\(0.01\\)? Instead of calculating everything again, we can use the derivative.\nThe derivative of \\(y\\) is:\n\\[ \\frac{dy}{dx} = 3x^2 \\]\\[ dy = 3x^2 \\times dx \\]Substituting \\(x = 2\\) and \\(dx = 0.01\\):\n\\[ dy = 3(2)^2 \\times 0.01 = 12 \\times 0.01 = 0.12 \\]So, if \\(x\\) increases by \\(0.01\\), \\(y\\) should increase by about \\(0.12\\) which is \\(8.12\\).\nLet’s check it:\nAt \\(x = 2\\), \\(y = 8\\). At \\(x = 2.01\\), plugging into the original equation: \\[ y = (2.01)^3 = 8.120601 \\]The actual change is about \\(8.1206\\), which is very close to our estimate of \\(8.12\\).\nNote: The derivative is a good approximation function for small changes, does not work well with bigger number. Curious?? plug in \\(dx = 0.5\\) and see yourself.\nNo hidden layer It almost took two days for me to understand backpropagation clearly. The idea finally clicked when I removed the hidden layer and made it a simple one-to-one network. We’ll take the same route to build up intuition, and later we can stack hidden layers to play with multiple weights.\nFor this simple network, we’ll consider the following parameters:\nInput \\( x = 2 \\)\nWeight \\( w = 4 \\)\nTarget output \\( y = 10 \\)\nThe prediction formula is:\n\\[ \\hat{y} = x \\times w \\] Substituting the values:\n\\[ \\hat{y} = 2 \\times 4 = 8 \\] Let’s define a cost function to determine the error rate:\n\\[ \\text{Cost} = \\hat{y} - y = (x \\times w) - 10 \\] \\[ \\text{Cost} = (2 \\times 4) - 10 = 8 - 10 = -2 \\] When the cost approaches zero, the predicted output correlates closely with the target output. But in our case, we are off by 2 units.\nHow do we decrease the cost? To reduce the cost, we need to tweak the weight parameter. However, randomly adjusting weights won’t help — it would be like searching for a needle in a haystack. Instead, we use the derivative to understand how the weight affects the cost.\n\\[ \\frac{dC}{dw} = x = 2 \\]The derivative tells us that any change in the weight will change the cost by twice that amount. In other words, if we increase the weight by 1 unit, the cost will change by 2 units.\nSince our current cost is negative, it signals that the weight should be increased.(If the cost were positive, we would need to decrease the weight.) Thus, we increase the weight to \\( w = 5 \\) to move the cost toward zero.\nWith a Hidden Layer Let’s add a hidden layer to the same simple network:\nInput \\( x = 2 \\) Weight \\( w_1 = 4 \\) Weight \\( w_2 = 3 \\) Target output \\( y_{\\text{target}} = 10 \\) The prediction is given by:\n\\[ \\hat{y} = (x \\cdot w_1) \\cdot w_2 \\]Substituting the values:\n\\[ \\hat{y} = (2 \\times 4) \\times 3 = 24 \\]The cost is the difference between the prediction and the target:\n\\[ \\text{Cost} = \\hat{y} - y_{\\text{target}} = 24 - 10 = 14 \\]Now, let’s compute the derivatives:\n\\[ \\frac{dC}{dw_1} = x \\cdot w_2 = 2 \\times 3 = 6 \\] \\[ \\frac{dC}{dw_2} = x \\cdot w_1 = 2 \\times 4 = 8 \\]The derivatives tell us that the \\(w_2\\) influences the network more than the \\(w_1\\).\nNow, I want you to pause reading and try this quick exercise:\nIncrease \\( w_1 \\) by 0.1 and observe how much \\( \\hat{y} \\) changes. Increase \\( w_2 \\) by 0.1 and observe how much \\( \\hat{y} \\) changes. Verify that changing \\( w_2 \\) causes a bigger change in the output than changing \\( w_1 \\). How Do Computers Adjust Weights? In our first simple network, we manually found the correct weight using our intelligence.\nHowever, computers work much more rudimentary — they adjust the weights using the corresponding derivatives.\nThe idea is simple:\nWeights with higher influence (higher derivative) are adjusted more. Weights with lower influence are adjusted less. But here’s the catch:\nIf the derivative values are large, the weights can change abruptly — causing the cost to fluctuate wildly.\nThis phenomenon is known as the exploding gradient problem.\nTo prevent this, we multiply the derivative by a small number called the learning rate (e.g., \\( 0.01 \\)) to ensure smoother learning:\n\\[ w_1 = w_1 - \\text{learning_rate} \\times \\frac{dC}{dw_1} \\] \\[ w_2 = w_2 - \\text{learning_rate} \\times \\frac{dC}{dw_2} \\]By training the model over a large number of samples, the weights are gradually smoothened toward their optimal values, leading to better predictions.\nLast Words I’ve intentionally avoided the chain rule to wrap the core idea in our head. There are a lot of examples out in the wild that use chain rule. Here, is one of my personal favorite\n",
+    "wordCount" : "981",
+    "inLanguage": "en",
+    "datePublished": "2025-04-27T00:00:00Z",
+    "dateModified": "2025-04-27T00:00:00Z",
+    "author":{
+        "@type": "Person",
+        "name":  null ,},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http://localhost:1313/posts/simplest-backpropagation-explainer/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Poonai's space",
+      "description": "Poonai is an independent software developer(Indie Hustler).",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://localhost:1313/favicon.ico"
+      }
+    }
+}
+</script><title>Simplest backpropagation explainer with no chain rule</title>
+<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" media="screen" href="http://localhost:1313/css/style.min.65788784967ef394e528967eed8c63658368c6c4d417053ce77fd6c5ba25d364.css" integrity="sha256-ZXiHhJZ+85TlKJZ+7YxjZYNoxsTUFwU853/Wxbol02Q=" crossorigin="anonymous">
+	</head>
+<body id="page">
+	<header id="site-header">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://localhost:1313/">Poonai&#39;s space</a>
+				</div>
+				<nav class="site-nav hide-in-mobile"><a href="http://localhost:1313/posts/">Posts</a><a href="http://localhost:1313/about-me/">About</a></nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-links hide-in-mobile"><a href="https://twitter.com/poonai_" target="_blank" rel="noopener me" title="X"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path class="st0" d="m21.3 21.1 -11.4 -18.2h-7.2l11.4 18.2zm-18.6 0 7.2 -6.6m4.2 -5 7.2 -6.6" />
+</svg></a><a href="https://github.com/poonai" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path
+      d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+   </path>
+</svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+   </svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
 		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#calculus-the-art-of-change-" class="nav-calculus-the-art-of-change-">
-									Calculus: The Art of Change :
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#no-hidden-layer" class="nav-no-hidden-layer">
-									No hidden layer
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#how-do-we-decrease-the-cost" class="nav-how-do-we-decrease-the-cost">
-									How do we decrease the cost?
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#with-a-hidden-layer" class="nav-with-a-hidden-layer">
-									With a Hidden Layer
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#how-do-computers-adjust-weights" class="nav-how-do-computers-adjust-weights">
-									How Do Computers Adjust Weights?
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#last-words" class="nav-last-words">
-									Last Words
-								</a>
-							</li>
-						
-						
-					
-				
-			
+			<li><a href="http://localhost:1313/posts/">Posts</a></li>
+			<li><a href="http://localhost:1313/about-me/">About</a></li>
 		</ul>
 	</div>
 
-</div>
-            
-        </div>
-    </div>
-</div>
-<transition name="fade">
-    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
-</transition>
-<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
-    <div id="navBackground" class="nav-background"></div>
-    <div class="container container-narrow nav-content">
-        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
-            <i class="material-icons">
-                menu
-            </i>
-        </button>
-        <a id="navTitle" class="navbar-brand" href="http://localhost:1313/">
-            Poonai&#39;s rant
-        </a>
-        
-        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
-            <i class="material-icons" id="darkModeToggleIcon2">
-                dark_mode
-            </i>
-        </button>
-        
-    </div>
-</nav>
-<div class="single-column-header-container" id="pageHead"
-     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-    <a href="http://localhost:1313/">
-        <div class="single-column-header-title">Poonai&#39;s rant</div>
-        
-        <div class="single-column-header-subtitle">Poonai is an independent software developer(Indie Hustler). கல்வி-அன்பு நிறைய உடையவர்கள் மேலோர்.</div>
-        
 
-    </a>
-</div>
-
-            <div id="content">
-                <div id="streamContainer" class="stream-container">
-
-    <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-
-            <div class="post-head-wrapper-text-only"
-                
-            >
-                <div class="post-title">
-                    Simplest backpropagation explainer with no chain rule
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
-                            2025-04-27 14:27
-                        </time>
-                        
-
-                        
-
-                        
-                        
-                    </div>
-                </div>
-            </div>
-            
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <p>Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual
+	<main class="site-main section-inner animated fadeIn faster"><article class="thin">
+			<header class="post-header">
+				<div class="post-date"><span>Apr 27, 2025</span></div>
+				<h1>Simplest backpropagation explainer with no chain rule</h1>
+			</header>
+			<div class="post-description">
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+      <polyline points="14 2 14 8 20 8"></polyline>
+      <line x1="16" y1="13" x2="8" y2="13"></line>
+      <line x1="16" y1="17" x2="8" y2="17"></line>
+      <polyline points="10 9 9 9 8 9"></polyline>
+   </svg>981&nbsp  </p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="16" y1="2" x2="16" y2="6"></line>
+      <line x1="8" y1="2" x2="8" y2="6"></line>
+      <line x1="3" y1="10" x2="21" y2="10"></line>
+   </svg>2025-04-27 05:30 &#43;0530
+</p></div>
+			<hr class="post-end">
+			<div class="content">
+				 <p>Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual
 network. I assume that you already know how feed forward neural network works.</p>
-<p>Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you do by hand.</p>
+<p>Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.</p>
 <blockquote>
 <blockquote>
 <p>&ldquo;Mathematics is not a spectator sport.&rdquo; — George Pólya</p></blockquote></blockquote>
-<h2 id="calculus-the-art-of-change-">Calculus: The Art of Change :</h2>
+<h2 id="calculus-the-art-of-change-">Calculus: The Art of Change :<a href="#calculus-the-art-of-change-" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
 <p>Derivation is used throughout the backpropogation, so it&rsquo;s crucial for us to revise calculus before reaching our desired goal.  As title suggests, derivation is used to find how change in value of an variable affect the result. In the context of neural network, how change in weights affects the results of neural networks.</p>
 <p>Let&rsquo;s look at a simple equation:</p>
 \[
@@ -333,14 +179,17 @@ y = (2.01)^3 = 8.120601
 \]<p>The actual change is about \(8.1206\), which is very close to our estimate of \(8.12\).</p>
 <p><strong>Note:</strong> The derivative is a good approximation function for small changes, does not work well with
 bigger number. Curious?? plug in \(dx = 0.5\) and see yourself.</p>
-<h2 id="no-hidden-layer">No hidden layer</h2>
+<h2 id="no-hidden-layer">No hidden layer<a href="#no-hidden-layer" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
 <p>It almost took two days for me to understand backpropagation clearly.
 The idea finally clicked when I removed the hidden layer and made it a simple one-to-one network.
 We&rsquo;ll take the same route to build up intuition, and later we can stack hidden layers to play with multiple weights.</p>
-<figure class="center"><img src="/img/one-one.png"
-    alt="one-one-network" width="600" height="400">
-</figure>
 
+
+    <figure class="center" ><img src="http://localhost:1313/img/one-one.png"alt="one-one-network" width="600"  height="400" /></figure>
 <p>For this simple network, we&rsquo;ll consider the following parameters:</p>
 <ul>
 <li>
@@ -371,13 +220,21 @@ Let&rsquo;s define a cost function to determine the error rate:</p>
 \]<p>
 When the cost approaches zero, the predicted output correlates closely with the target output.
 But in our case, we are off by 2 units.</p>
-<h2 id="how-do-we-decrease-the-cost">How do we decrease the cost?</h2>
+<h2 id="how-do-we-decrease-the-cost">How do we decrease the cost?<a href="#how-do-we-decrease-the-cost" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
 <p>To reduce the cost, we need to tweak the weight parameter. However, randomly adjusting weights won&rsquo;t help — it would be like searching for a needle in a haystack. Instead, we use the derivative to understand how the weight affects the cost.</p>
 \[
 \frac{dC}{dw} = x = 2
 \]<p>The derivative tells us that any change in the weight will change the cost by twice that amount. In other words, if we increase the weight by 1 unit, the cost will change by 2 units.</p>
 <p>Since our current cost is negative, it signals that the weight should be increased.(If the cost were positive, we would need to decrease the weight.) Thus, we increase the weight to \( w = 5 \) to move the cost toward zero.</p>
-<h2 id="with-a-hidden-layer">With a Hidden Layer</h2>
+<h2 id="with-a-hidden-layer">With a Hidden Layer<a href="#with-a-hidden-layer" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
 <p>Let&rsquo;s add a hidden layer to the same simple network:</p>
 <ul>
 <li>Input \( x = 2 \)</li>
@@ -385,10 +242,9 @@ But in our case, we are off by 2 units.</p>
 <li>Weight \( w_2 = 3 \)</li>
 <li>Target output \( y_{\text{target}} = 10 \)</li>
 </ul>
-<figure class="center"><img src="/img/with_hidden.png"
-    alt="hidden-network" width="600" height="400">
-</figure>
 
+
+    <figure class="center" ><img src="http://localhost:1313/img/with_hidden.png"alt="hidden-network" width="600"  height="400" /></figure>
 <p>The prediction is given by:</p>
 \[
 \hat{y} = (x \cdot w_1) \cdot w_2
@@ -412,7 +268,11 @@ But in our case, we are off by 2 units.</p>
 <li>Increase \( w_2 \) by 0.1 and observe how much \( \hat{y} \) changes.</li>
 <li>Verify that changing \( w_2 \) causes a bigger change in the output than changing \( w_1 \).</li>
 </ul>
-<h2 id="how-do-computers-adjust-weights">How Do Computers Adjust Weights?</h2>
+<h2 id="how-do-computers-adjust-weights">How Do Computers Adjust Weights?<a href="#how-do-computers-adjust-weights" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
 <p>In our first simple network, we manually found the correct weight using our intelligence.<br>
 However, computers work much more rudimentary — they adjust the weights using the corresponding derivatives.</p>
 <p>The idea is simple:</p>
@@ -425,260 +285,40 @@ If the derivative values are large, the weights can change abruptly — causing 
 This phenomenon is known as the <strong>exploding gradient problem</strong>.</p>
 <p>To prevent this, we multiply the derivative by a small number called the <strong>learning rate</strong> (e.g., \( 0.01 \)) to ensure smoother learning:</p>
 \[
-w_1 = w_1 - \text{learning\_rate} \times \frac{dC}{dw_1}
+w_1 = w_1 - \text{learning_rate} \times \frac{dC}{dw_1}
 \]<p>
 </p>
 \[
-w_2 = w_2 - \text{learning\_rate} \times \frac{dC}{dw_2}
+w_2 = w_2 - \text{learning_rate} \times \frac{dC}{dw_2}
 \]<p>By training the model over a large number of samples, the weights are <strong>gradually smoothened</strong> toward their optimal values, leading to better predictions.</p>
-<h2 id="last-words">Last Words</h2>
+<h2 id="last-words">Last Words<a href="#last-words" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
 <p>I&rsquo;ve intentionally avoided the chain rule to wrap the core idea in our head. There are a lot of examples out in the wild that use chain rule. Here, is one of my <a href="https://www.youtube.com/watch?v=sIX_9n-1UbM">personal favorite</a></p>
 
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2025-04-27</p>
-                    
-                </div>
-            </div>
-            
-            
-            <nav class="post-pagination">
-
-                
-                <a class="newer-posts">
-			Next<br>No newer posts.
-                </a>
-                
-                
-                
-                <a class="older-posts" href="/posts/how-debuggers-works-part1/">
-			Previous<br>Part 1: DIY debugger in Golang
-                </a>
-                
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-        </div>
-    </div>
-
-
-                    </div>
-            </div><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="http://localhost:1313/">
-    
-        <div class="nav-title">
-            Poonai&#39;s rant
-        </div>
-        
-        <div class="nav-subtitle">
-            Poonai is an independent software developer(Indie Hustler). கல்வி-அன்பு நிறைய உடையவர்கள் மேலோர்.
-        </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
-        
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
-
-&copy;
-	
-	2025 Poonai&#39;s rant
-	
-
-    </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    <div class="toc-wrapper">
-        
-
-        
-        <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- CATALOG -</center>
-		
-		
-		<ul>
+			</div>
 			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#calculus-the-art-of-change-" class="nav-calculus-the-art-of-change-">
-									Calculus: The Art of Change :
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#no-hidden-layer" class="nav-no-hidden-layer">
-									No hidden layer
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#how-do-we-decrease-the-cost" class="nav-how-do-we-decrease-the-cost">
-									How do we decrease the cost?
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#with-a-hidden-layer" class="nav-with-a-hidden-layer">
-									With a Hidden Layer
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#how-do-computers-adjust-weights" class="nav-how-do-computers-adjust-weights">
-									How Do Computers Adjust Weights?
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#last-words" class="nav-last-words">
-									Last Words
-								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="http://localhost:1313/posts/how-debuggers-works-part1/">
+				<span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+   </svg></span><br><span>Part 1: DIY debugger in Golang</span>
+			</a>
+		</div>
+		<div id="comments" class="thin"></div>
+	</main>
+<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+<p>
+	&copy; 2025 <a href="http://localhost:1313/">Poonai&#39;s space</a>
+	&#183; &#183; Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>
+	&#183; Theme <a href="https://github.com/1bl4z3r/hermit-V2" target="_blank" rel="noopener">Hermit-V2</a></p></footer>
+<script async src="http://localhost:1313/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js" integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin="anonymous"></script><script id="MathJax-script" type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" crossorigin="anonymous"></script>
+<script type="text/javascript" id="MathJax-script-helper" async src="http://localhost:1313/js/mathjax-assistant.min.ca29e9d446b2a6cb6c6e3eb0d47e9693f5c306c146eaccb43047afbf31b07a6f.js" integrity="sha256-yinp1Eaypstsbj6w1H6Wk/XDBsFG6sy0MEevvzGwem8=" crossorigin="anonymous"></script>
 
-</div>
-        
-    </div>
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
-            :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
-                keyboard_arrow_up
-            </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
-                dark_mode
-            </span>
-        </a>
-        
-        
-    </div>
-</div>
-
-<div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
-
-&copy;
-	
-	2025 Poonai&#39;s rant
-	
-</div>
-            </div>
-    
-    <script src="/js/journal.js"></script></body>
+</body>
 </html>

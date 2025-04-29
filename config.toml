@@ -1,19 +1,29 @@
 baseURL = "https://poonai.github.io"
 languageCode = "en-us"
 defaultContentLanguage = "en"
-title = "Poonai's rant"
-theme = "hugo-theme-diary"
+title = "Poonai's space"
+theme = "hermit-V2"
 
 [services.googleAnalytics]
-id = "UA-206886735-1"
+id = "G-73YW8YW7XL"
 
 [params]
     homepage = false
     description = "Poonai is an independent software developer(Indie Hustler)."
-    subtitle = "Poonai is an independent software developer(Indie Hustler). கல்வி-அன்பு நிறைய உடையவர்கள் மேலோர்."
+    homeSubtitle = "Poonai is an software developer. கல்வி-அன்பு நிறைய உடையவர்கள் மேலோர்."
     avatar = "/img/avatar.jpg"
-    math = true
-    enableLaTeX = true
+    dateform        = "Jan 2, 2006"
+    dateformShort   = "Jan 2"
+    dateformNum     = "2006-01-02"
+    dateformNumTime = "2006-01-02 15:04 -0700"
+    global_mathjax = true
+    [[params.socialLinks]]
+      name = "x"
+      url = "https://twitter.com/poonai_"
+
+    [[params.socialLinks]]
+      name = "github"
+      url = "https://github.com/poonai"
 
 [markup]
   [markup.goldmark]
@@ -34,4 +44,17 @@ url = "https://github.com/poonai"
 name = "Twitter"
 icon = "fab fa-twitter"
 url = "https://twitter.com/poonai_" 
+
+[menu]
+
+  [[menu.main]]
+    name = "Posts"
+    url = "posts/"
+    weight = 10
+
+  [[menu.main]]
+    name = "About"
+    url = "about-me/"
+    weight = 20
+
 
