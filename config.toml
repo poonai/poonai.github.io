@@ -5,7 +5,7 @@ title = "Poonai's space"
 theme = "hermit-V2"
 
 [services.googleAnalytics]
-id = "G-73YW8YW7XL"
+id = "GTM-5GC32V8H"
 
 [params]
     homepage = false
