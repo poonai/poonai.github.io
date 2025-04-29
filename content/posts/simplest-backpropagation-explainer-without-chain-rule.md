@@ -1,5 +1,5 @@
 ---
-title: "Simplest backpropagation explainer with no chain rule"
+title: "Simplest backpropagation explainer without chain rule"
 date: "2025-04-27"
 draft: false
 ---
