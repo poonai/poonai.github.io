@@ -139,7 +139,7 @@ Substituting the values:
 The cost is the difference between the prediction and the target:
 
 \[
-\text{Cost} = \hat{y} - y_{\text{target}} = 24 - 10 = 14
+\text{Cost} = \hat{y} - y_{\text{target}} = (x \cdot w_1) \cdot w_2 - 10 = 24 - 10 = 14
 \]
 
 Now, let's compute the derivatives:
