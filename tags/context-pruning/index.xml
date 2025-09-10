@@ -1,19 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Context-Pruning on Poonai&#39;s space</title>
-    <link>http://localhost:1313/tags/context-pruning/</link>
-    <description>Recent content in Context-Pruning on Poonai&#39;s space</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 08 Sep 2025 11:12:35 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/context-pruning/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Context Pruning in conversational agents</title>
-      <link>http://localhost:1313/posts/context-pruning-in-conversational-agent/</link>
-      <pubDate>Mon, 08 Sep 2025 11:12:35 +0000</pubDate>
-      <guid>http://localhost:1313/posts/context-pruning-in-conversational-agent/</guid>
-      <description>&lt;h1 id=&#34;my-journey-to-building-agentic-apps&#34;&gt;My Journey to Building Agentic Apps&lt;a href=&#34;#my-journey-to-building-agentic-apps&#34; class=&#34;anchor&#34; aria-hidden=&#34;true&#34;&gt;&lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34;&#xA;      stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34;&gt;&#xA;      &lt;path d=&#34;M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3&#34;&gt;&lt;/path&gt;&#xA;      &lt;line x1=&#34;8&#34; y1=&#34;12&#34; x2=&#34;16&#34; y2=&#34;12&#34;&gt;&lt;/line&gt;&#xA;   &lt;/svg&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;My childhood dream of having a personal &lt;strong&gt;J.A.R.V.I.S&lt;/strong&gt; has come true. The recent advancement in &lt;strong&gt;LLMs (Large Language Models)&lt;/strong&gt; made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps &lt;em&gt;“the right way.”&lt;/em&gt;&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Context-Pruning on Poonai's space</title><link>https://poonai.xyz/tags/context-pruning/</link><description>Recent content in Context-Pruning on Poonai's space</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 08 Sep 2025 11:12:35 +0000</lastBuildDate><atom:link href="https://poonai.xyz/tags/context-pruning/index.xml" rel="self" type="application/rss+xml"/><item><title>Context Pruning in conversational agents</title><link>https://poonai.xyz/posts/context-pruning-in-conversational-agent/</link><pubDate>Mon, 08 Sep 2025 11:12:35 +0000</pubDate><guid>https://poonai.xyz/posts/context-pruning-in-conversational-agent/</guid><description>&lt;h1 id="my-journey-to-building-agentic-apps"&gt;My Journey to Building Agentic Apps&lt;a href="#my-journey-to-building-agentic-apps" class="anchor" aria-hidden="true"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round"&gt;
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"&gt;&lt;/path&gt;
+ &lt;line x1="8" y1="12" x2="16" y2="12"&gt;&lt;/line&gt;
+ &lt;/svg&gt;&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;My childhood dream of having a personal &lt;strong&gt;J.A.R.V.I.S&lt;/strong&gt; has come true. The recent advancement in &lt;strong&gt;LLMs (Large Language Models)&lt;/strong&gt; made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps &lt;em&gt;“the right way.”&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>
