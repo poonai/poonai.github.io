@@ -33,7 +33,7 @@
 Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).">
   <meta itemprop="datePublished" content="2021-03-29T00:00:00+00:00">
   <meta itemprop="dateModified" content="2021-03-29T00:00:00+00:00">
-  <meta itemprop="wordCount" content="445"><meta property="og:url" content="http://localhost:1313/posts/differential-privacy/">
+  <meta itemprop="wordCount" content="447"><meta property="og:url" content="http://localhost:1313/posts/differential-privacy/">
   <meta property="og:site_name" content="Poonai&#39;s space">
   <meta property="og:title" content="Can differential privacy protect our privacy?">
   <meta property="og:description" content="I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.
@@ -57,8 +57,8 @@ Recently, one of my friends explained to me the kind of events they track in the
     "name": "Can differential privacy protect our privacy?",
     "description": "I\u0026rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I\u0026rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user\u0026rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor\u0026rsquo;s app is not present on the user phone).\n",
     "keywords": [],
-    "articleBody": "I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).\nI decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to Apple's paper. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.\nUsually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small experiment to estimate the popular view on a project management app to validate the paper.\n// we are tracking what view users are using in their project management app. // 6k users are using list view. track(6000, \"list\") // 9k user using board view. track(9000, \"board\") // 2k user using calendar view. track(2000, \"calendar\") The variance between the actual inference and the inference calculated via differential privacy is not that large.\nfmt.Println(\"estimate for list\", server.Estimate([]byte(\"list\"))) fmt.Println(\"estimate for board\", server.Estimate([]byte(\"board\"))) fmt.Println(\"estimate for calendar\", server.Estimate([]byte(\"calendar\"))) // output // estimate for list 6572.1029024055715 // estimate for board 9154.186791339975 // estimate for calendar 1157.801902649071 I presented it to my friend and asked him whether his company would consider using such tech.\nUnfortunately, the inference of users’ behaviour alone is not enough, they would also want to send notifications based on certain events.\nFor example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the user level.\nCompanies don’t just want analytics, they also want to target the user. which reminds me of the quote from the movie The Social Dilemma\nWe want to psychologically figure out how to manipulate you as fast as possible\nClosing Thoughts: Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies’ needs. There are some use cases, where I think differential privacy can be deployed.\ncustomers’ sensitive data can be tracked. privacy-focused applications. I would love to hear where else differential-privacy can be plugged in. My profile if anyone wants to reach out.\n",
-    "wordCount" : "445",
+    "articleBody": "I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).\nI decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to Apple's paper . This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.\nUsually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small experiment to estimate the popular view on a project management app to validate the paper.\n// we are tracking what view users are using in their project management app. // 6k users are using list view. track(6000, \"list\") // 9k user using board view. track(9000, \"board\") // 2k user using calendar view. track(2000, \"calendar\") The variance between the actual inference and the inference calculated via differential privacy is not that large.\nfmt.Println(\"estimate for list\", server.Estimate([]byte(\"list\"))) fmt.Println(\"estimate for board\", server.Estimate([]byte(\"board\"))) fmt.Println(\"estimate for calendar\", server.Estimate([]byte(\"calendar\"))) // output // estimate for list 6572.1029024055715 // estimate for board 9154.186791339975 // estimate for calendar 1157.801902649071 I presented it to my friend and asked him whether his company would consider using such tech.\nUnfortunately, the inference of users’ behaviour alone is not enough, they would also want to send notifications based on certain events.\nFor example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the user level .\nCompanies don’t just want analytics, they also want to target the user. which reminds me of the quote from the movie The Social Dilemma\nWe want to psychologically figure out how to manipulate you as fast as possible\nClosing Thoughts: Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies’ needs. There are some use cases, where I think differential privacy can be deployed.\ncustomers’ sensitive data can be tracked. privacy-focused applications. I would love to hear where else differential-privacy can be plugged in. My profile if anyone wants to reach out.\n",
+    "wordCount" : "447",
     "inLanguage": "en",
     "datePublished": "2021-03-29T00:00:00Z",
     "dateModified": "2021-03-29T00:00:00Z",
@@ -80,7 +80,7 @@ Recently, one of my friends explained to me the kind of events they track in the
     }
 }
 </script><title>Can differential privacy protect our privacy?</title>
-<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" media="screen" href="http://localhost:1313/css/style.min.65788784967ef394e528967eed8c63658368c6c4d417053ce77fd6c5ba25d364.css" integrity="sha256-ZXiHhJZ+85TlKJZ+7YxjZYNoxsTUFwU853/Wxbol02Q=" crossorigin="anonymous">
+<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" media="screen" href="http://localhost:1313/css/style.min.52c1c2ad609948f726f0120daf92dbb102367784647afea089e0f34ce7156b3c.css" integrity="sha256-UsHCrWCZSPcm8BINr5LbsQI2d4Rkev6gieDzTOcVazw=" crossorigin="anonymous">
 	</head>
 <body id="page">
 	<header id="site-header">
@@ -130,21 +130,23 @@ Recently, one of my friends explained to me the kind of events they track in the
       <line x1="16" y1="13" x2="8" y2="13"></line>
       <line x1="16" y1="17" x2="8" y2="17"></line>
       <polyline points="10 9 9 9 8 9"></polyline>
-   </svg>445&nbsp  </p>
+   </svg>447&nbsp  </p>
 <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>
       <line x1="8" y1="2" x2="8" y2="6"></line>
       <line x1="3" y1="10" x2="21" y2="10"></line>
-   </svg>2021-03-29 05:30 &#43;0530
+   </svg>2021-03-29 00:00 &#43;0000
 </p></div>
 			<hr class="post-end">
 			<div class="content">
 				 <p>I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.</p>
 <p>Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&rsquo;s app is not present on the user phone).</p>
-<p>I decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to <a href="https://docs-assets.developer.apple.com/ml-research/papers/learning-with-privacy-at-scale.pdf">Apple's paper</a>. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.</p>
-<p>Usually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small <a href="https://github.com/poonai/diffrential_privacy/blob/master/cms_test.go#L30">experiment</a> to estimate the popular view on a project management app to validate the paper.</p>
+<p>I decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to <a href="https://docs-assets.developer.apple.com/ml-research/papers/learning-with-privacy-at-scale.pdf" target="_blank" rel="noopener">Apple's paper</a>
+. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.</p>
+<p>Usually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small <a href="https://github.com/poonai/diffrential_privacy/blob/master/cms_test.go#L30" target="_blank" rel="noopener">experiment</a>
+ to estimate the popular view on a project management app to validate the paper.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#75715e">// we are tracking what view users are using in their project management app.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 6k users are using list view.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">6000</span>, <span style="color:#e6db74">&#34;list&#34;</span>)
@@ -162,7 +164,8 @@ Recently, one of my friends explained to me the kind of events they track in the
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// estimate for calendar 1157.801902649071</span>
 </span></span></code></pre></div><p>I presented it to my friend and asked him whether his company would consider using such tech.</p>
 <p>Unfortunately, the inference of users&rsquo; behaviour alone is not enough, they would also want to send notifications based on certain events.</p>
-<p>For example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the <a href="https://docs.moengage.com/docs/tracking-user-attributes#default-user-attributes">user level</a>.</p>
+<p>For example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the <a href="https://docs.moengage.com/docs/tracking-user-attributes#default-user-attributes" target="_blank" rel="noopener">user level</a>
+.</p>
 <p>Companies don&rsquo;t just want analytics, they also want to target the user. which reminds me of the quote from the movie <code>The Social Dilemma</code></p>
 <blockquote>
 <p>We want to psychologically figure out how to manipulate you as fast as possible</p></blockquote>
@@ -176,7 +179,8 @@ Recently, one of my friends explained to me the kind of events they track in the
 <li>customers&rsquo; sensitive data can be tracked.</li>
 <li>privacy-focused applications.</li>
 </ul>
-<p>I would love to hear where else differential-privacy can be plugged in. <a href="https://twitter.com/poonai_">My profile</a> if anyone wants to reach out.</p>
+<p>I would love to hear where else differential-privacy can be plugged in. <a href="https://twitter.com/poonai_" target="_blank" rel="noopener">My profile</a>
+ if anyone wants to reach out.</p>
 
 			</div>
 			
