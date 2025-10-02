@@ -3,7 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/tags/ai/</loc>
-    <lastmod>2025-09-08T11:12:35+00:00</lastmod>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/building-visual-language-model/</loc>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/image/</loc>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/llm/</loc>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/natural-language-processing/</loc>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2025-10-01T11:12:35+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/context-pruning-in-conversational-agent/</loc>
     <lastmod>2025-09-08T11:12:35+00:00</lastmod>
@@ -12,18 +33,6 @@
     <lastmod>2025-09-08T11:12:35+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/context-pruning/</loc>
-    <lastmod>2025-09-08T11:12:35+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/llm/</loc>
-    <lastmod>2025-09-08T11:12:35+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2025-09-08T11:12:35+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2025-09-08T11:12:35+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2025-09-08T11:12:35+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/simplest-backpropagation-explainer-without-chain-rule/</loc>

@@ -6,8 +6,15 @@
     <description>Recent content in Ai on Poonai&#39;s space</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Sep 2025 11:12:35 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Oct 2025 11:12:35 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/ai/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building an Visual Language Model from scratch</title>
+      <link>http://localhost:1313/posts/building-visual-language-model/</link>
+      <pubDate>Wed, 01 Oct 2025 11:12:35 +0000</pubDate>
+      <guid>http://localhost:1313/posts/building-visual-language-model/</guid>
+      <description>&lt;p&gt;My intial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for builing a toy version of visual language model for better understanding of VLM. I&amp;rsquo;m documenting my intiution for the benefit of myself and others. My model will receive image as an input and return it&amp;rsquo;s caption as an output. Luckily, I found a &lt;a href=&#34;https://huggingface.co/datasets/visual-layer/imagenet-1k-vl-enriched&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;dataset&lt;/a&gt;&#xA; with image and it&amp;rsquo;s caption to train.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Context Pruning in conversational agents</title>
       <link>http://localhost:1313/posts/context-pruning-in-conversational-agent/</link>

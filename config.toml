@@ -25,6 +25,10 @@ id = "G-WXVC1D5RC9"
       name = "github"
       url = "https://github.com/poonai"
 
+    [[params.socialLinks]]
+      name = "huggingface"
+      url = "https://huggingface.co/poonai"
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.extensions]
