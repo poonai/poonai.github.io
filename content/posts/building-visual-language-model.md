@@ -1,6 +1,6 @@
 ---
 title: "Building an Visual Language Model from scratch"
-date: 2025-10-01T11:12:35Z
+date: 2025-10-02T11:12:35Z
 draft: false
 toc: false
 images:

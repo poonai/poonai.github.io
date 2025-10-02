@@ -30,8 +30,8 @@
 
   <meta itemprop="name" content="Building an Visual Language Model from scratch">
   <meta itemprop="description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train.">
-  <meta itemprop="datePublished" content="2025-10-01T11:12:35+00:00">
-  <meta itemprop="dateModified" content="2025-10-01T11:12:35+00:00">
+  <meta itemprop="datePublished" content="2025-10-02T11:12:35+00:00">
+  <meta itemprop="dateModified" content="2025-10-02T11:12:35+00:00">
   <meta itemprop="wordCount" content="410">
   <meta itemprop="keywords" content="Ai,Image,Llm,Natural-Language-Processing"><meta property="og:url" content="http://localhost:1313/posts/building-visual-language-model/">
   <meta property="og:site_name" content="Poonai&#39;s space">
@@ -40,8 +40,8 @@
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-10-01T11:12:35+00:00">
-    <meta property="article:modified_time" content="2025-10-01T11:12:35+00:00">
+    <meta property="article:published_time" content="2025-10-02T11:12:35+00:00">
+    <meta property="article:modified_time" content="2025-10-02T11:12:35+00:00">
     <meta property="article:tag" content="Ai">
     <meta property="article:tag" content="Image">
     <meta property="article:tag" content="Llm">
@@ -62,8 +62,8 @@
     "articleBody": "My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train.\nInstead of training all the component from scratch, I’m going to use pre existing LLM model and customize to our need. You could ask why did you mention scratch in the title and say the title is misleading. In general, this is how VLM are built. Correct me if I’m wrong me.\nThe off the shelf models are:\nViT - Vision Transformer Image Classification GPT2 - A Text Generation Model ViT This model is an image embedding model. It returns embedding tensor representation for an image. That means, the vector distance between similar image is shorter. The vector distance between lion and cat will shorter than the vector distance between lion and car. Since, the lion and cat are animals.\nGPT2 This model is a text generation model. Given a list of word, it’ll predict the next series of words.\nInput Output The sky is The sky is blue Projection layer. This is the key component of our VLM model. This layer transform the image embedding output into a GPT2 textual embedding space. In other words we are converting the images into an intermediate state for the GPT2 to produce meaningful output.\nclass Projection(nn.Module): def __init__(self, in_features, out_features): super().__init__() self.network = nn.Sequential( nn.Linear(in_features, in_features * 3), nn.GELU(), nn.Linear(in_features * 3, out_features), ) def forward(self, input): return self.network(input) The tensor output size of ViT mode is 512 and the tensor input size of gpt2 model is 768. This projection layer will convert the ViT output tensor size into gpt2 input tensor size. With training, the image tensor are transformed into a tensor that GPT2 understands.\nself.projection = Projection(512,768) Conclusion I’ve put all the component together and trained it with the dataset. Here is the result:\nInput Image:\nOutput Text:\na boy holding a fish in the woods This project gave me an solid intuition of building a VLM model. In the upcoming days I’m aspiring to build a document processing VLM model that beats state-of-the-art(SOTA) benchmarks. You can see the entire code here ",
     "wordCount" : "410",
     "inLanguage": "en",
-    "datePublished": "2025-10-01T11:12:35Z",
-    "dateModified": "2025-10-01T11:12:35Z",
+    "datePublished": "2025-10-02T11:12:35Z",
+    "dateModified": "2025-10-02T11:12:35Z",
     "author":{
         "@type": "Person",
         "name":  null ,},
@@ -127,7 +127,7 @@
 
 	<main class="site-main section-inner animated fadeIn faster"><article class="thin">
 			<header class="post-header">
-				<div class="post-date"><span>Oct 1, 2025</span></div>
+				<div class="post-date"><span>Oct 2, 2025</span></div>
 				<h1>Building an Visual Language Model from scratch</h1>
 			</header>
 			<div class="post-description">
@@ -150,7 +150,7 @@
       <line x1="16" y1="2" x2="16" y2="6"></line>
       <line x1="8" y1="2" x2="8" y2="6"></line>
       <line x1="3" y1="10" x2="21" y2="10"></line>
-   </svg>2025-10-01 11:12 &#43;0000
+   </svg>2025-10-02 11:12 &#43;0000
 </p></div>
 			<hr class="post-end">
 			<div class="content">
