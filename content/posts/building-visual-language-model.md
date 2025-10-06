@@ -3,7 +3,7 @@ title: "Building an Visual Language Model from scratch"
 date: 2025-10-02T11:12:35Z
 draft: false
 toc: false
-images:
+images: ['./public/img/banner.png']
 tags: 
   - ai
   - image
