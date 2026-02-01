@@ -50,16 +50,3 @@ name = "Twitter"
 icon = "fab fa-twitter"
 url = "https://twitter.com/poonai_" 
 
-[menu]
-
-  [[menu.main]]
-    name = "Posts"
-    url = "posts/"
-    weight = 10
-
-  [[menu.main]]
-    name = "About"
-    url = "about-me/"
-    weight = 20
-
-

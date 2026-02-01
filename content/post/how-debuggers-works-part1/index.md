@@ -40,7 +40,7 @@ To set the breakpoint at line number 11, we must gather the address of instructi
 
 Some of us know from high school that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language? 
 
-![cathow](/img/cathow.jpg)
+![cathow](./cathow.jpg)
 
 Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to the mapping of assembly code to high-level language.
 For Linux binaries, debug information is usually encoded in the DWARF format. 
@@ -143,11 +143,11 @@ if _, err := unix.PtracePokeData(pid, addr, data); err != nil {
 Just reverting to original data doesn't run the program as usual. Because the instruction at `0x498223` is already executed when breakpoint hits. 
 So, we want to tell the CPU to execute the instruction again at `0x498223`.
 
-![registers](/img/registersintro.png)
+![registers](./registersintro.png)
 
 CPU executes the instruction that the instruction pointer points to. If you have studied microprocessors at university, you might remember. 
 
-![dejavu](/img/dejavu.jfif)
+![dejavu](./dejavu.jfif)
 So, that means if we set the instruction pointer to `0x498223` then the CPU will execute the instruction at `0x498223` again.CPU registers can be manipulated using`PtraceGetRegs` and `PtraceSetRegs`.
 
 ```go

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\nThe good news is there is no “the right way” yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.\n">
+<title>Context Pruning in conversational agents</title>
+
+<link rel='canonical' href='http://localhost:1313/post/context-pruning-in-conversational-agent/'>
+
+<link rel="stylesheet" href="/scss/style.min.51098b80cc297c94c0f57786d4a04e7372774e5993b60facf53870128a79bf73.css"><meta property='og:title' content="Context Pruning in conversational agents">
+<meta property='og:description' content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\nThe good news is there is no “the right way” yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.\n">
+<meta property='og:url' content='http://localhost:1313/post/context-pruning-in-conversational-agent/'>
+<meta property='og:site_name' content='Poonai&#39;s space'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='ai' /><meta property='article:tag' content='context-engineering' /><meta property='article:tag' content='llm' /><meta property='article:tag' content='context-pruning' /><meta property='article:published_time' content='2025-09-08T11:12:35&#43;00:00'/><meta property='article:modified_time' content='2025-09-08T11:12:35&#43;00:00'/>
+<meta name="twitter:title" content="Context Pruning in conversational agents">
+<meta name="twitter:description" content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\nThe good news is there is no “the right way” yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.\n">
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WXVC1D5RC9');
+        }
+      </script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Poonai&#39;s space</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/page/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/post/context-pruning-in-conversational-agent/">Context Pruning in conversational agents</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2025-09-08T11:12:35Z'>Monday, September 8, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    8 minutes read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+    <section class="article-content">
+    
+    
+    <h1 id="my-journey-to-building-agentic-apps">My Journey to Building Agentic Apps
+</h1><p>My childhood dream of having a personal <strong>J.A.R.V.I.S</strong> has come true. The recent advancement in <strong>LLMs (Large Language Models)</strong> made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps <em>“the right way.”</em></p>
+<p>The good news is there is no <em>“the right way”</em> yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.</p>
+<hr>
+<h2 id="why-baml">Why BAML?
+</h2><p>The minimal framework is <strong>BAML</strong>. I&rsquo;ve been using BAML for the past couple of months and am delighted with the developer experience it offers.</p>
+<p>It offers <strong>function-style LLM calling</strong>. All you have to do is define your prompt, input, and output format in BAML language. Then BAML generates type-safe functions that take typed input and return typed output. This is like any other function you use every day.</p>
+<p>As you read the blog, you&rsquo;ll understand how easy BAML is — or you can check their <a class="link" href="https://docs.boundaryml.com/guide/introduction/what-is-baml"  target="_blank" rel="noopener"
+    >docs</a> as well.</p>
+<hr>
+<h2 id="context-engineering">Context Engineering
+</h2><p><strong>Context engineering</strong> is an important skill in terms of agentic application building. It is essentially providing the right context to steer the LLM in the right direction. There are several ways to do context engineering.</p>
+<p>However, I want to demonstrate <strong>context pruning</strong> in conversational agents. An agent that does a lot of tool calls will be ideal to demonstrate the technique. So, I built an agent that solves mathematical equations which require to stitch multiple tool results. The source code can be seen <a class="link" href="https://github.com/poonai/context-trimming-sample"  target="_blank" rel="noopener"
+    >here</a></p>
+<p><strong>Example:</strong><br>
+Solve the quadratic equation: <code>x^2 + 5*x + 6 = 0</code> and find its derivative.</p>
+<p>To answer this question:</p>
+<ul>
+<li>it has to solve an equation with a tool call</li>
+<li>it has to find a derivative with another tool call</li>
+</ul>
+<p>Basically, the agent has to call two tools sequentially to answer the user query. The agent can be implemented by a single prompt. Here is the respective BAML code and prompt for it:</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">class AgentResponse {
+    tools QuandraticSolver  | QuadraticDerivative | QuadraticEvaluator | MessageToUser
+}
+
+function MathChat(message_history: string[]) -&gt; AgentResponse {
+    client OpenRouter
+    prompt #&#34;
+        You&#39;re a helpful Math AI assistant. You have tools to solve equations related to quadratic 
+        equations. The user query could be simple, or complex that requires you to take multiple turns
+        between you and tools to resolve the user query.
+
+        Use message_to_user tools to reply or ask clarification questions to the user.
+
+        &lt;CONVERSATION HISTORY&gt;
+        {% for message in message_history %}
+         {{ message}}  
+        {% endfor %}
+        &lt;/CONVERSATION HISTORY&gt;
+       
+        {{ctx.output_format}}
+    &#34;#
+}
+</code></pre><p>BAML will generate a type-safe Python function where you can pass <code>message_history</code> as input and <code>AgentResponse</code> as output.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> baml_client <span style="color:#f92672">import</span> b
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example of using the BAML-generated MathChat function</span>
+</span></span><span style="display:flex;"><span>message_history <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;{&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;Solve the quadratic equation: x^2 + 5*x + 6 = 0&#39;}&#34;</span>
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Call the BAML-generated function</span>
+</span></span><span style="display:flex;"><span>agent_response <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>MathChat(message_history)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The agent_response will contain a tool call, which could be:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticSolver: To solve the equation</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticDerivative: To find the derivative</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticEvaluator: To evaluate the equation at a specific value</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - MessageToUser: To respond directly to the user</span>
+</span></span></code></pre></div><p>The AI response could be a tool call or a response to the user. The AI responds based on the feedback obtained from the external system. All the interactions are stored in <code>message_history</code> and used as context to decide the flow of the conversation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">chat</span>(self, user_message: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Add user message to history</span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>message_history<span style="color:#f92672">.</span>append({
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;role&#39;</span>: <span style="color:#e6db74">&#39;user&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;msg&#39;</span>: user_message
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Get response from BAML MathChat</span>
+</span></span><span style="display:flex;"><span>        agent_response <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>MathChat([str(message) <span style="color:#66d9ef">for</span> message <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>message_history])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Use the tool and get the response</span>
+</span></span><span style="display:flex;"><span>        tool_response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>use_tool(agent_response)
+</span></span><span style="display:flex;"><span>               
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># If it&#39;s a direct message to the user, return it</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> tool_response[<span style="color:#e6db74">&#39;role&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;assistant&#39;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> tool_response[<span style="color:#e6db74">&#39;msg&#39;</span>]
+</span></span></code></pre></div><hr>
+<h2 id="example-message-history">Example Message History
+</h2><pre tabindex="0"><code>User: Solve the quadratic equation: x² + 5x + 6 = 0  
+Assistant (PROCESSING): I need to solve this quadratic equation. [Calling `quadratic_solver`]  
+Tool: Solved equation: x² + 5x + 6 = 0. Roots: [-3, -2]  
+Assistant (COMPLETED): The roots of the quadratic equation x² + 5x + 6 = 0 are x = -3 and x = -2.  
+
+User: Find the derivative of: 2x² + 4x − 6  
+Assistant (PROCESSING): I need to find the derivative of this quadratic equation. [Calling `quadratic_derivative`]  
+Tool: Derivative of equation: 2x² + 4x − 6. Result: 4x + 4  
+Assistant (COMPLETED): The derivative of the quadratic equation 2x² + 4x − 6 is 4x + 4.  
+</code></pre><hr>
+<h2 id="pruning-the-context">Pruning the Context
+</h2><p>The interaction between tool and AI is not always needed to answer future user questions. Since the AI response already encapsulates the context in its response, tool-related messages can be removed when irrelevant.</p>
+<p>However, we can’t always prune immediately. The AI might still be clarifying missing information before solving. Intermediate tool-related messages should be removed <strong>only when not relevant anymore</strong>.</p>
+<h2 id="clarifying-conversation-example">Clarifying Conversation Example
+</h2><p>Sometimes the AI must clarify before solving. Example:</p>
+<pre tabindex="0"><code>User: Integrate this equation  
+Assistant (PROCESSING): Sure! Could you provide the equation you want me to integrate?  
+
+User: x² + 3x  
+Assistant (PROCESSING): I need to integrate this equation. [Calling `integral_solver`]  
+Tool: Equation received: x² + 3x. Integration requires clarification: definite or indefinite?  
+Assistant (PROCESSING): Do you want me to compute the definite integral (with limits) or the indefinite integral of x² + 3x?  
+
+User: Indefinite integral  
+Assistant (PROCESSING): I need to compute the indefinite integral of this equation. [Calling `integral_solver`]  
+Tool: Result of ∫(x² + 3x) dx = (x³)/3 + (3x²)/2 + C  
+Assistant (COMPLETED): The indefinite integral of x² + 3x is (x³)/3 + (3x²)/2 + C. 
+</code></pre><hr>
+<h2 id="task-status">Task Status
+</h2><p>When to prune context will be decided based on the current phase of the Agent. It could be in <strong>PROCESSING</strong> phase or <strong>COMPLETED</strong> phase. We&rsquo;ll let the LLM itself tell us by adding the <code>task_status</code> flag to <code>message_to_user</code> tool calls.</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">enum TaskStatus {
+    COMPLETED 
+    PROCESSING
+}
+
+class MessageToUser {
+    type &#34;message_to_user&#34; @description(#&#34;
+        DESCRIPTION: MessageToUser is used to respond to the user
+    &#34;#)
+
+    response string @description(#&#34;
+        The assistant response to the user
+    &#34;#)
+
+    task_status TaskStatus
+}
+</code></pre><p><strong>Example pruning logic:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>context_trimming <span style="color:#f92672">and</span> tools<span style="color:#f92672">.</span>task_status <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;COMPLETED&#34;</span>:
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Convert message history to string list for BAML function</span>
+</span></span><span style="display:flex;"><span>    message_history_str <span style="color:#f92672">=</span> [str(message) <span style="color:#66d9ef">for</span> message <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>message_history]
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Call SummarizeContext BAML function</span>
+</span></span><span style="display:flex;"><span>    summarized_context <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>SummarizeContext(message_history_str)
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Replace message history with summarized context</span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>message_history <span style="color:#f92672">=</span> summarized_context
+</span></span></code></pre></div><hr>
+<h2 id="summarization">Summarization
+</h2><p>The pruning logic could be as simple as removing all tool calls, or we can use an LLM to <strong>summarize the context</strong> for us.</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">function SummarizeContext(message_history: string[]) -&gt; string []{
+    client OpenRouter
+    prompt #&#34;
+         Your job is to summarize the user conversation to reduce the token length.
+         Ideas to summarize:
+         - remove intermediate tool calls and tool responses 
+         - summarize the user question and response in concise form
+
+         &lt;EXAMPLE INPUT&gt;
+           {&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;solve x^2 - 5*x + 6 =0 and find derivative&#39;}  
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;I need to solve this quadratic equation&#39;, &#39;tool_name&#39;: &#39;quadratic_solver&#39;, &#39;tool_args&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;}}  
+           {&#39;role&#39;: &#39;tool&#39;, &#39;msg&#39;: &#39;Solved equation: x^2 - 5*x + 6 = 0. Roots: [2, 3]&#39;, &#39;tool_name&#39;: &#39;quadratic_solver&#39;, &#39;metadata&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;, &#39;result&#39;: &#39;[2, 3]&#39;}}  
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;I need to find the derivative of this quadratic equation&#39;, &#39;tool_name&#39;: &#39;quadratic_derivative&#39;, &#39;tool_args&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;}}  
+           {&#39;role&#39;: &#39;tool&#39;, &#39;msg&#39;: &#39;Derivative of equation: x^2 - 5*x + 6 = 0. Result: 2*x - 5&#39;, &#39;tool_name&#39;: &#39;quadratic_derivative&#39;, &#39;metadata&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;, &#39;result&#39;: &#39;2*x - 5&#39;}}
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5. If you want me to evaluate the equation or the derivative at a specific x value, please let me know.&#39;, &#39;tool_name&#39;: &#39;message_to_user&#39;}    
+         &lt;/EXAMPLE INPUT&gt;
+
+        &lt;EXAMPLE OUTPUT&gt;
+           {&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;solve x^2 - 5*x + 6 =0 and find derivative&#39;}  
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5.&#39;, &#39;tool_name&#39;: &#39;message_to_user&#39;}    
+        &lt;/EXAMPLE OUTPUT&gt;
+
+        &lt;BAD OUTPUT&gt;
+          &#34;User asked to solve x^2 - 5*x + 6 = 0, find its derivative, and the squares of the roots; assistant provided roots (2, 3), derivative (2*x - 5), and squares (4, 9).&#34;
+        &lt;/BAD OUTPUT&gt;
+
+        &lt;GOOD OUTPUT&gt;
+        {&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;solve x^2 - 5*x + 6 =0 and find derivative&#39;}
+        {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;roots (2, 3), derivative (2*x - 5)&#39;, &#39;tool_name&#39;: &#39;message_to_user&#39;} 
+        &lt;/GOOD OUTPUT&gt;
+        
+        &lt;INPUT&gt;
+        {% for message in message_history %}
+         {{ message}}  
+        {% endfor %}
+        &lt;/INPUT&gt;
+        {{ctx.output_format}}
+    &#34;#
+} 
+</code></pre><hr>
+<h2 id="token-usage-comparison">Token Usage Comparison
+</h2><p>Let&rsquo;s <a class="link" href="https://github.com/poonai/context-trimming-sample/blob/main/benchmark.py"  target="_blank" rel="noopener"
+    >measure</a> the token usage with context pruning and without context pruning.</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>Agent Type</th>
+          <th>Input Tokens</th>
+          <th>Output Tokens</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Smart Agent (with context pruning)</strong></td>
+          <td>2333</td>
+          <td>309</td>
+      </tr>
+      <tr>
+          <td><strong>Agent (without context pruning)</strong></td>
+          <td>4883</td>
+          <td>368</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>The lower value is better. We reduced token usage by <strong>47%</strong> while getting the same output by pruning unnecessary context.</p>
+<p>Lesser token has the following advatages:</p>
+<ul>
+<li>less hallucination</li>
+<li>less cost</li>
+<li>less response time</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/ai/">AI</a>
+        
+            <a href="/tags/context-engineering/">Context-Engineering</a>
+        
+            <a href="/tags/llm/">Llm</a>
+        
+            <a href="/tags/context-pruning/">Context-Pruning</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 Poonai&#39;s space
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+        </div>
+        <script type="text/javascript" src="/ts/main.ecff16e83482c03c42d6245e0be35573d43c55812826f0b0c05af997a491920c.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

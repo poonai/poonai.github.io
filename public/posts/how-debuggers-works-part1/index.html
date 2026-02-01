@@ -1,152 +1,196 @@
 <!DOCTYPE html>
-<html lang="en-us">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-WXVC1D5RC9', { 'anonymize_ip': false });
-}
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.\n">
+<title>Part 1: DIY debugger in Golang</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/how-debuggers-works-part1/'>
+
+<link rel="stylesheet" href="/scss/style.min.51098b80cc297c94c0f57786d4a04e7372774e5993b60facf53870128a79bf73.css"><meta property='og:title' content="Part 1: DIY debugger in Golang">
+<meta property='og:description' content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.\n">
+<meta property='og:url' content='http://localhost:1313/posts/how-debuggers-works-part1/'>
+<meta property='og:site_name' content='Poonai&#39;s space'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:published_time' content='2021-09-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-09-02T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Part 1: DIY debugger in Golang">
+<meta name="twitter:description" content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.\n">
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WXVC1D5RC9');
+        }
+      </script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
 </script>
-<meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="robots" content="index, follow"><meta name="author" content="">
-<meta name="description" content="Poonai is an independent software developer(Indie Hustler).">
-<link rel="author" type="text/plain" href="/humans.txt">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta name="msapplication-TileImage" content="/mstile-144x144.png">
-<meta name="theme-color" content="#494f5c">
-<meta name="msapplication-TileColor" content="#494f5c">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#494f5c">
-<meta itemprop="name" content="Part 1: DIY debugger in Golang">
-<meta itemprop="description" content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve ."><meta itemprop="datePublished" content="2021-09-02T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2021-09-02T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1443">
-<meta itemprop="keywords" content="" /><meta property="og:title" content="Part 1: DIY debugger in Golang" />
-<meta property="og:description" content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve ." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/posts/how-debuggers-works-part1/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-09-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2021-09-02T00:00:00+00:00" />
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Part 1: DIY debugger in Golang"/>
-<meta name="twitter:description" content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve ."/>
+    <header>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Poonai&#39;s space</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='posts/' >
+                
+                
+                
+                <span>Posts</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='about-me/' >
+                
+                
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
 
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "Part 1: DIY debugger in Golang",
-    "name": "Part 1: DIY debugger in Golang",
-    "description": "The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve .",
-    "keywords": [],
-    "articleBody": "The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve .\nIn this post, I’ll talk about my learning while demystifying the dark art of debugger.\nProblem statement Let’s define the problem statement before coding. I have a sample golang program that prints random ints every second. The goal which I want to achieve is that our debugger program should print breakpoint hit before our sample program prints the random integer.\nHere is the sample program which prints random ints at every second.\n1. package main 2. 3. import ( 4. \"fmt\" 5. \"math/rand\" 6. \"time\" 7. ) 8. 9. func main() { 10. for { 11. variableToTrace := rand.Int() 12. fmt.Println(variableToTrace) 13. time.Sleep(time.Second) 14. } 15. } 16. Solution Now that we know what we want to achieve. Let’s go step by step and solve the problem statement.\nThe first step is to pause the sample program before it prints the random int. That means we have to set the breakpoint at line number 11.\nTo set the breakpoint at line number 11, we must gather the address of instruction at line number 11.\nSome of us know from high school that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language?\nLuckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to the mapping of assembly code to high-level language. For Linux binaries, debug information is usually encoded in the DWARF format.\nDWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: http://www.dwarfstd.org/ DWARF format can be parsed using objdump tool.\nThe below command will output all the addresses of the instruction and it’s mapping to the line number and file name.\nobjdump --dwarf=decodedline ./sample objdump command will output similar to this:\nFile name Line number Starting address View Stmt /home/poonai/debugger-example/sample.go: sample.go 9 0x498200 x sample.go 9 0x498213 x sample.go 10 0x498221 x sample.go 11 0x498223 x sample.go 11 0x498225 sample.go 12 0x498233 x sample.go 12 0x498236 sample.go 13 0x4982be x sample.go 13 0x4982cb sample.go 11 0x4982cd x sample.go 12 0x4982d2 sample.go 9 0x4982d9 x sample.go 9 0x4982de sample.go 9 0x4982e0 x sample.go 9 0x4982e5 x The output clearly states that 0x498223 is the starting address of line number 11 for sample.go file.\nThe next step is to pause the program at the address 0x498223\nTrick to pause the program execution CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address 0x498223 with the data []byte{0xcc} to pause the program.\nIn computing and operating systems, a trap, also known as an exception or a fault, is typically a type of synchronous interrupt caused by an exceptional condition (e.g., breakpoint, division by zero, invalid memory access). source: wikipedia\nDoes that mean we have to rewrite the binary at 0x498223? No, we can write it using ptrace.\nPtrace to rescue ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of “process trace”) one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia\nptrace is a syscall that allows us to rewrite the registers and write the data at the given address.\nNow we know which address to pause and how to find the memory representing lines, and manipulate the memory of the sample program. So, let’s put all this knowledge into action.\nexec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.\nprocess := exec.Command(\"./sample\") process.SysProcAttr = \u0026syscall.SysProcAttr{Ptrace: true, Setpgid: true, Foreground: false} process.Stdout = os.Stdout if err := process.Start(); err != nil { panic(err) } The breakpoint can be set at 0x498223 by replacing the original data with int 3 (0xCC). This can be done by PtracePokeData.\nfunc setBreakpoint(pid int, addr uintptr) []byte { data := make([]byte, 1) if _, err := unix.PtracePeekData(pid, addr, data); err != nil { panic(err) } if _, err := unix.PtracePokeData(pid, addr, []byte{0xCC}); err != nil { panic(err) } return data } You must already be wondering why there is PtracePeekData, other than PtracePokeData. PtracePeekData allows us to read the memory at the given address. I’ll explain later why I’m reading the data at the address 0x498223.\nSince we set the breakpoint we’ll continue the program and wait for the interrupt to happen. This can be done by PtraceCont and Wait4\nif err := unix.PtraceCont(pid, 0); err != nil { panic(err.Error()) } // wait for the interupt to come. var status unix.WaitStatus if _, err := unix.Wait4(pid, \u0026status, 0, nil); err != nil { panic(err.Error()) } fmt.Println(\"breakpoint hit\") After the breakpoint hits, we need the program to continue as usual. Since we already modified the data at 0x498223 the program doesn’t run as usual. So we need to replace the int 3 with original data.\nRemember, we captured the original data at 0x498223 using PtracePeekData while setting the breakpoint. Let’s just revert to the original data at 0x498223.\nif _, err := unix.PtracePokeData(pid, addr, data); err != nil { panic(err.Error()) } Just reverting to original data doesn’t run the program as usual. Because the instruction at 0x498223 is already executed when breakpoint hits. So, we want to tell the CPU to execute the instruction again at 0x498223.\nCPU executes the instruction that the instruction pointer points to. If you have studied microprocessors at university, you might remember.\nSo, that means if we set the instruction pointer to 0x498223 then the CPU will execute the instruction at 0x498223 again.CPU registers can be manipulated usingPtraceGetRegs and PtraceSetRegs.\nregs := \u0026unix.PtraceRegs{} if err := unix.PtraceGetRegs(pid, regs); err != nil { panic(err) } regs.Rip = uint64(addr) if err := unix.PtraceSetRegs(pid, regs); err != nil { panic(err) } Now that we modified the register, if we continue the program then it’ll execute the normal flow. But we want to hit the breakpoint again, so we’ll tell the ptrace to execute only the next instruction and set the breakpoint again. PtraceSingleStep allows us to execute only one instruction.\nfunc resetBreakpoint(pid int, addr uintptr, originaldata []byte) { // revert back to original data if _, err := unix.PtracePokeData(pid, addr, originaldata); err != nil { panic(err.Error()) } // set the instruction pointer to execute the instruction again regs := \u0026unix.PtraceRegs{} if err := unix.PtraceGetRegs(pid, regs); err != nil { panic(err) } regs.Rip = uint64(addr) if err := unix.PtraceSetRegs(pid, regs); err != nil { panic(err) } if err := unix.PtraceSingleStep(pid); err != nil { panic(err) } // wait for it's execution and set the breakpoint again var status unix.WaitStatus if _, err := unix.Wait4(pid, \u0026status, 0, nil); err != nil { panic(err.Error()) } setBreakpoint(pid, addr) } So far we have learned how to manipulate registers and set breakpoints. Let’s put all these into a for loop and drive the program.\npid := process.Process.Pid data := setBreakpoint(pid, 0x498223) for { if err := unix.PtraceCont(pid, 0); err != nil { panic(err.Error()) } // wait for the interrupt to come. var status unix.WaitStatus if _, err := unix.Wait4(pid, \u0026status, 0, nil); err != nil { panic(err.Error()) } fmt.Println(\"breakpoint hit\") // reset the breakpoint resetBreakpoint(pid, 0x498223, data) } Phew, Finally we able to print breakpoint hit before our sample program prints random int.\nbreakpoint hit 6129484611666145821 breakpoint hit 4037200794235010051 breakpoint hit 3916589616287113937 breakpoint hit 6334824724549167320 breakpoint hit 605394647632969758 breakpoint hit 1443635317331776148 breakpoint hit 894385949183117216 You can find the full source code at https://github.com/poonai/debugger-example That’s all for now. Hope you folks learned something new. In the next post, I’ll write how to extract values from the variables by reading DWARF info. You can follow me on Twitter to get notified about part 2.\n",
-    "wordCount" : "1443",
-    "inLanguage": "en",
-    "datePublished": "2021-09-02T00:00:00Z",
-    "dateModified": "2021-09-02T00:00:00Z",
-    "author":{
-        "@type": "Person",
-        "name":  null ,},
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "http://localhost:1313/posts/how-debuggers-works-part1/"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Poonai's space",
-      "description": "Poonai is an independent software developer(Indie Hustler).",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "http://localhost:1313/favicon.ico"
-      }
-    }
-}
-</script><title>Part 1: DIY debugger in Golang</title>
-<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" media="screen" href="http://localhost:1313/css/style.min.65788784967ef394e528967eed8c63658368c6c4d417053ce77fd6c5ba25d364.css" integrity="sha256-ZXiHhJZ+85TlKJZ+7YxjZYNoxsTUFwU853/Wxbol02Q=" crossorigin="anonymous">
-	</head>
-<body id="page">
-	<header id="site-header">
-		<div class="hdr-wrapper section-inner">
-			<div class="hdr-left">
-				<div class="site-branding">
-					<a href="http://localhost:1313/">Poonai&#39;s space</a>
-				</div>
-				<nav class="site-nav hide-in-mobile"><a href="http://localhost:1313/posts/">Posts</a><a href="http://localhost:1313/about-me/">About</a></nav>
-			</div>
-			<div class="hdr-right hdr-icons">
-				<span class="hdr-links hide-in-mobile"><a href="https://twitter.com/poonai_" target="_blank" rel="noopener me" title="X"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-   <path class="st0" d="m21.3 21.1 -11.4 -18.2h-7.2l11.4 18.2zm-18.6 0 7.2 -6.6m4.2 -5 7.2 -6.6" />
-</svg></a><a href="https://github.com/poonai" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-   <path
-      d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-   </path>
-</svg></a><a href="https://huggingface.co/poonai" target="_blank" rel="noopener me" title="Huggingface"><svg class="feather" width="25" height="25" viewBox="0 0 24 24" fill="none"
-   stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-      <title>HuggingFace</title>
-      <path
-         d="M16.781 3.277c2.997 1.704 4.844 4.851 4.844 8.258 0 .995-.155 1.955-.443 2.857a1.332 1.332 0 011.125.4 1.41 1.41 0 01.2 1.723c.204.165.352.385.428.632l.017.062c.06.222.12.69-.2 1.166.244.37.279.836.093 1.236-.255.57-.893 1.018-2.128 1.5l-.202.078-.131.048c-.478.173-.89.295-1.061.345l-.086.024c-.89.243-1.808.375-2.732.394-1.32 0-2.3-.36-2.923-1.067a9.852 9.852 0 01-3.18.018C9.778 21.647 8.802 22 7.494 22a11.249 11.249 0 01-2.541-.343l-.221-.06-.273-.08a16.574 16.574 0 01-1.175-.405c-1.237-.483-1.875-.93-2.13-1.501-.186-.4-.151-.867.093-1.236a1.42 1.42 0 01-.2-1.166c.069-.273.226-.516.447-.694a1.41 1.41 0 01.2-1.722c.233-.248.557-.391.917-.407l.078-.001a9.385 9.385 0 01-.44-2.85c0-3.407 1.847-6.554 4.844-8.258a9.822 9.822 0 019.687 0zM4.188 14.758c.125.687 2.357 2.35 2.14 2.707-.19.315-.796-.239-.948-.386l-.041-.04-.168-.147c-.561-.479-2.304-1.9-2.74-1.432-.43.46.119.859 1.055 1.42l.784.467.136.083c1.045.643 1.12.84.95 1.113-.188.295-3.07-2.1-3.34-1.083-.27 1.011 2.942 1.304 2.744 2.006-.2.7-2.265-1.324-2.685-.537-.425.79 2.913 1.718 2.94 1.725l.16.04.175.042c1.227.284 3.565.65 4.435-.604.673-.973.64-1.709-.248-2.61l-.057-.057c-.945-.928-1.495-2.288-1.495-2.288l-.017-.058-.025-.072c-.082-.22-.284-.639-.63-.584-.46.073-.798 1.21.12 1.933l.05.038c.977.721-.195 1.21-.573.534l-.058-.104-.143-.25c-.463-.799-1.282-2.111-1.739-2.397-.532-.332-.907-.148-.782.541zm14.842-.541c-.533.335-1.563 2.074-1.94 2.751a.613.613 0 01-.687.302.436.436 0 01-.176-.098.303.303 0 01-.049-.06l-.014-.028-.008-.02-.007-.019-.003-.013-.003-.017a.289.289 0 01-.004-.048c0-.12.071-.266.25-.427.026-.024.054-.047.084-.07l.047-.036c.022-.016.043-.032.063-.049.883-.71.573-1.81.131-1.917l-.031-.006-.056-.004a.368.368 0 00-.062.006l-.028.005-.042.014-.039.017-.028.015-.028.019-.036.027-.023.02c-.173.158-.273.428-.31.542l-.016.054s-.53 1.309-1.439 2.234l-.054.054c-.365.358-.596.69-.702 1.018-.143.437-.066.868.21 1.353.055.097.117.195.187.296.882 1.275 3.282.876 4.494.59l.286-.07.25-.074c.276-.084.736-.233 1.2-.42l.188-.077.065-.028.064-.028.124-.056.081-.038c.529-.252.964-.543.994-.827l.001-.036a.299.299 0 00-.037-.139c-.094-.176-.271-.212-.491-.168l-.045.01c-.044.01-.09.024-.136.04l-.097.035-.054.022c-.559.23-1.238.705-1.607.745h.006a.452.452 0 01-.05.003h-.024l-.024-.003-.023-.005c-.068-.016-.116-.06-.14-.142a.22.22 0 01-.005-.1c.062-.345.958-.595 1.713-.91l.066-.028c.528-.224.97-.483.985-.832v-.04a.47.47 0 00-.016-.098c-.048-.18-.175-.251-.36-.251-.785 0-2.55 1.36-2.92 1.36-.025 0-.048-.007-.058-.024a.6.6 0 01-.046-.088c-.1-.238.068-.462 1.06-1.066l.209-.126c.538-.32 1.01-.588 1.341-.831.29-.212.475-.406.503-.6l.003-.028c.008-.113-.038-.227-.147-.344a.266.266 0 00-.07-.054l-.034-.015-.013-.005a.403.403 0 00-.13-.02c-.162 0-.369.07-.595.18-.637.313-1.431.952-1.826 1.285l-.249.215-.033.033c-.08.078-.288.27-.493.386l-.071.037-.041.019a.535.535 0 01-.122.036h.005a.346.346 0 01-.031.003l.01-.001-.013.001c-.079.005-.145-.021-.19-.095a.113.113 0 01-.014-.065c.027-.465 2.034-1.991 2.152-2.642l.009-.048c.1-.65-.271-.817-.791-.493zM11.938 2.984c-4.798 0-8.688 3.829-8.688 8.55 0 .692.083 1.364.24 2.008l.008-.009c.252-.298.612-.46 1.017-.46.355.008.699.117.993.312.22.14.465.384.715.694.261-.372.69-.598 1.15-.605.852 0 1.367.728 1.562 1.383l.047.105.06.127c.192.396.595 1.139 1.143 1.68 1.06 1.04 1.324 2.115.8 3.266a8.865 8.865 0 002.024-.014c-.505-1.12-.26-2.17.74-3.186l.066-.066c.695-.684 1.157-1.69 1.252-1.912.195-.655.708-1.383 1.56-1.383.46.007.889.233 1.15.605.25-.31.495-.553.718-.694a1.87 1.87 0 01.99-.312c.357 0 .682.126.925.36.14-.61.215-1.245.215-1.898 0-4.722-3.89-8.55-8.687-8.55zm1.857 8.926l.439-.212c.553-.264.89-.383.89.152 0 1.093-.771 3.208-3.155 3.262h-.184c-2.325-.052-3.116-2.06-3.156-3.175l-.001-.087c0-1.107 1.452.586 3.25.586.716 0 1.379-.272 1.917-.526zm4.017-3.143c.45 0 .813.358.813.8 0 .441-.364.8-.813.8a.806.806 0 01-.812-.8c0-.442.364-.8.812-.8zm-11.624 0c.448 0 .812.358.812.8 0 .441-.364.8-.812.8a.806.806 0 01-.813-.8c0-.442.364-.8.813-.8zm7.79-.841c.32-.384.846-.54 1.33-.394.483.146.83.564.878 1.06.048.495-.212.97-.659 1.203-.322.168-.447-.477-.767-.585l.002-.003c-.287-.098-.772.362-.925.079a1.215 1.215 0 01.14-1.36zm-4.323 0c.322.384.377.92.14 1.36-.152.283-.64-.177-.925-.079l.003.003c-.108.036-.194.134-.273.24l-.118.165c-.11.15-.22.262-.377.18a1.226 1.226 0 01-.658-1.204c.048-.495.395-.913.878-1.059a1.262 1.262 0 011.33.394z">
-      </path>
-   </svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-   </svg></button>
-			</div>
-		</div>
-	</header>
-	<div id="mobile-menu" class="animated fast">
-		<ul>
-			<li><a href="http://localhost:1313/posts/">Posts</a></li>
-			<li><a href="http://localhost:1313/about-me/">About</a></li>
-		</ul>
-	</div>
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
 
 
-	<main class="site-main section-inner animated fadeIn faster"><article class="thin">
-			<header class="post-header">
-				<div class="post-date"><span>Sep 2, 2021</span></div>
-				<h1>Part 1: DIY debugger in Golang</h1>
-			</header>
-			<div class="post-description">
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-      <polyline points="14 2 14 8 20 8"></polyline>
-      <line x1="16" y1="13" x2="8" y2="13"></line>
-      <line x1="16" y1="17" x2="8" y2="17"></line>
-      <polyline points="10 9 9 9 8 9"></polyline>
-   </svg>1443&nbsp  </p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-      <line x1="16" y1="2" x2="16" y2="6"></line>
-      <line x1="8" y1="2" x2="8" y2="6"></line>
-      <line x1="3" y1="10" x2="21" y2="10"></line>
-   </svg>2021-09-02 00:00 &#43;0000
-</p></div>
-			<hr class="post-end">
-			<div class="content">
-				 <p>The first thing I do when I create a project is to create the debugger launch config at the <code>.vscode</code> folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of <a href="https://github.com/go-delve" target="_blank" rel="noopener">delve</a>
-.</p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/how-debuggers-works-part1/">Part 1: DIY debugger in Golang</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2021-09-02T00:00:00Z'>Thursday, September 2, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    7 minutes read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+    <section class="article-content">
+    
+    
+    <p>The first thing I do when I create a project is to create the debugger launch config at the <code>.vscode</code> folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of <a class="link" href="https://github.com/go-delve"  target="_blank" rel="noopener"
+    >delve</a>.</p>
 <p>In this post, I&rsquo;ll talk about my learning while demystifying the dark art of debugger.</p>
-<h2 id="problem-statement">Problem statement<a href="#problem-statement" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<p>Let&rsquo;s define the problem statement before coding. I have a sample golang program that prints random ints every second. The goal which I want to achieve is that our debugger program should print <code>breakpoint hit</code> before our sample program prints the random integer.</p>
+<h2 id="problem-statement">Problem statement
+</h2><p>Let&rsquo;s define the problem statement before coding. I have a sample golang program that prints random ints every second. The goal which I want to achieve is that our debugger program should print <code>breakpoint hit</code> before our sample program prints the random integer.</p>
 <p>Here is the sample program which prints random ints at every second.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ae81ff">1.</span> <span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ae81ff">1.</span> <span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2.</span> 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">3.</span> <span style="color:#f92672">import</span> (
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">4.</span>  <span style="color:#e6db74">&#34;fmt&#34;</span>
@@ -162,27 +206,35 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">14.</span>     }
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">15.</span> }
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">16.</span> 
-</span></span></code></pre></div><h2 id="solution">Solution<a href="#solution" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<p>Now that we know what we want to achieve. Let&rsquo;s go step by step and solve the problem statement.</p>
+</span></span></code></pre></div><h2 id="solution">Solution
+</h2><p>Now that we know what we want to achieve. Let&rsquo;s go step by step and solve the problem statement.</p>
 <p>The first step is to pause the sample program before it prints the random int. That means we have to set the breakpoint at line number 11.</p>
 <p>To set the breakpoint at line number 11, we must gather the address of instruction at line number 11.</p>
 <p>Some of us know from high school that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language?</p>
-<p><img src="/img/cathow.jpg" alt="cathow"></p>
+<p><img src="/posts/how-debuggers-works-part1/cathow.jpg"
+	width="290"
+	height="174"
+	loading="lazy"
+	
+		alt="cathow"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="400px"
+	
+></p>
 <p>Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to the mapping of assembly code to high-level language.
 For Linux binaries, debug information is usually encoded in the DWARF format.</p>
 <blockquote>
-<p>DWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: <a href="http://www.dwarfstd.org/" target="_blank" rel="noopener">http://www.dwarfstd.org/</a>
-</p>
+<p>DWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: <a class="link" href="http://www.dwarfstd.org/"  target="_blank" rel="noopener"
+    >http://www.dwarfstd.org/</a></p>
 </blockquote>
 <p>DWARF format can be parsed using objdump tool.</p>
 <p>The below command will output all the addresses of the instruction and it&rsquo;s mapping to the line number and file name.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>objdump --dwarf<span style="color:#f92672">=</span>decodedline ./sample
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>objdump --dwarf<span style="color:#f92672">=</span>decodedline ./sample
 </span></span></code></pre></div><p>objdump command will output similar to this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>File name                            Line number    Starting address    View    Stmt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>File name                            Line number    Starting address    View    Stmt
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>/home/poonai/debugger-example/sample.go:
 </span></span><span style="display:flex;"><span>sample.go                                      9            0x498200               x
@@ -202,28 +254,20 @@ For Linux binaries, debug information is usually encoded in the DWARF format.</p
 </span></span><span style="display:flex;"><span>sample.go                                      9            0x4982e5               x
 </span></span></code></pre></div><p>The output clearly states that <code>0x498223</code> is the starting address of line number 11 for sample.go file.</p>
 <p>The next step is to pause the program at the address <code>0x498223</code></p>
-<h2 id="trick-to-pause-the-program-execution">Trick to pause the program execution<a href="#trick-to-pause-the-program-execution" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<p>CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address <code>0x498223</code> with the data []byte{0xcc} to pause the program.</p>
+<h2 id="trick-to-pause-the-program-execution">Trick to pause the program execution
+</h2><p>CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address <code>0x498223</code> with the data []byte{0xcc} to pause the program.</p>
 <blockquote>
 <p>In computing and operating systems, a trap, also known as an exception or a fault, is typically a type of synchronous interrupt caused by an exceptional condition (e.g., breakpoint, division by zero, invalid memory access). source: wikipedia</p>
 </blockquote>
 <p>Does that mean we have to rewrite the binary at <code>0x498223</code>? No, we can write it using ptrace.</p>
-<h2 id="ptrace-to-rescue">Ptrace to rescue<a href="#ptrace-to-rescue" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<blockquote>
+<h2 id="ptrace-to-rescue">Ptrace to rescue
+</h2><blockquote>
 <p>ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of &ldquo;process trace&rdquo;) one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia</p>
 </blockquote>
 <p>ptrace is a syscall that allows us to rewrite the registers and write the data at the given address.</p>
 <p>Now we know which address to pause and how to find the memory representing lines, and manipulate the memory of the sample program. So, let&rsquo;s put all this knowledge into action.</p>
 <p>exec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">process</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#e6db74">&#34;./sample&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">process</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#e6db74">&#34;./sample&#34;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">SysProcAttr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SysProcAttr</span>{<span style="color:#a6e22e">Ptrace</span>: <span style="color:#66d9ef">true</span>, <span style="color:#a6e22e">Setpgid</span>: <span style="color:#66d9ef">true</span>,    
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Foreground</span>: <span style="color:#66d9ef">false</span>}
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>
@@ -231,7 +275,7 @@ For Linux binaries, debug information is usually encoded in the DWARF format.</p
 </span></span><span style="display:flex;"><span>    panic(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>The breakpoint can be set at <code>0x498223</code> by replacing the original data with int 3 (0xCC). This can be done by <code>PtracePokeData</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">setBreakpoint</span>(<span style="color:#a6e22e">pid</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">uintptr</span>) []<span style="color:#66d9ef">byte</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">setBreakpoint</span>(<span style="color:#a6e22e">pid</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">uintptr</span>) []<span style="color:#66d9ef">byte</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1</span>)
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePeekData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">data</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
@@ -243,27 +287,51 @@ For Linux binaries, debug information is usually encoded in the DWARF format.</p
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>You must already be wondering why there is <code>PtracePeekData</code>, other than <code>PtracePokeData</code>. <code>PtracePeekData</code> allows us to read the memory at the given address. I&rsquo;ll explain later why I&rsquo;m reading the data at the address <code>0x498223</code>.</p>
 <p>Since we set the breakpoint we&rsquo;ll continue the program and wait for the interrupt to happen. This can be done by <code>PtraceCont</code> and <code>Wait4</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceCont</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceCont</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>     panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
 </span></span><span style="display:flex;"><span> }
-</span></span><span style="display:flex;"><span> <span style="color:#75715e">// wait for the interupt to come.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">// wait for the interupt to come.</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">Wait4</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">status</span>, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>     panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
 </span></span><span style="display:flex;"><span> }
 </span></span><span style="display:flex;"><span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;breakpoint hit&#34;</span>)
 </span></span></code></pre></div><p>After the breakpoint hits, we need the program to continue as usual. Since we already modified the data at <code>0x498223</code> the program doesn&rsquo;t run as usual. So we need to replace the int 3 with original data.</p>
 <p>Remember, we captured the original data at <code>0x498223</code> using <code>PtracePeekData</code> while setting the breakpoint. Let&rsquo;s just revert to the original data at <code>0x498223</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePokeData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">data</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePokeData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">data</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Just reverting to original data doesn&rsquo;t run the program as usual. Because the instruction at <code>0x498223</code> is already executed when breakpoint hits.
 So, we want to tell the CPU to execute the instruction again at <code>0x498223</code>.</p>
-<p><img src="/img/registersintro.png" alt="registers"></p>
+<p><img src="/posts/how-debuggers-works-part1/registersintro.png"
+	width="1018"
+	height="486"
+	loading="lazy"
+	
+		alt="registers"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="502px"
+	
+></p>
 <p>CPU executes the instruction that the instruction pointer points to. If you have studied microprocessors at university, you might remember.</p>
-<p><img src="/img/dejavu.jfif" alt="dejavu">
+<p><img src="/posts/how-debuggers-works-part1/dejavu.jfif"
+	width="290"
+	height="174"
+	loading="lazy"
+	
+		alt="dejavu"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="400px"
+	
+>
 So, that means if we set the instruction pointer to <code>0x498223</code> then the CPU will execute the instruction at <code>0x498223</code> again.CPU registers can be manipulated using<code>PtraceGetRegs</code> and <code>PtraceSetRegs</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">regs</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceRegs</span>{}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">regs</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceRegs</span>{}
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceGetRegs</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">regs</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>   panic(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>}
@@ -272,13 +340,13 @@ So, that means if we set the instruction pointer to <code>0x498223</code> then t
 </span></span><span style="display:flex;"><span>      panic(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span> }
 </span></span></code></pre></div><p>Now that we modified the register, if we continue the program then it&rsquo;ll execute the normal flow. But we want to hit the breakpoint again, so we&rsquo;ll tell the ptrace to execute only the next instruction and set the breakpoint again. <code>PtraceSingleStep</code> allows us to execute only one instruction.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">resetBreakpoint</span>(<span style="color:#a6e22e">pid</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">uintptr</span>, <span style="color:#a6e22e">originaldata</span> []<span style="color:#66d9ef">byte</span>) {
-</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// revert back to original data
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePokeData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">originaldata</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">resetBreakpoint</span>(<span style="color:#a6e22e">pid</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">uintptr</span>, <span style="color:#a6e22e">originaldata</span> []<span style="color:#66d9ef">byte</span>) {
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// revert back to original data</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePokeData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">originaldata</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set the instruction pointer to execute the instruction again
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">regs</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceRegs</span>{}
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set the instruction pointer to execute the instruction again</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">regs</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceRegs</span>{}
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceGetRegs</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">regs</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>    }
@@ -290,31 +358,31 @@ So, that means if we set the instruction pointer to <code>0x498223</code> then t
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceSingleStep</span>(<span style="color:#a6e22e">pid</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wait for it&#39;s execution and set the breakpoint again
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wait for it&#39;s execution and set the breakpoint again</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">Wait4</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">status</span>, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">setBreakpoint</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>So far we have learned how to manipulate registers and set breakpoints. Let&rsquo;s put all these into a for loop and drive the program.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">pid</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">Process</span>.<span style="color:#a6e22e">Pid</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">pid</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">Process</span>.<span style="color:#a6e22e">Pid</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">setBreakpoint</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0x498223</span>)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceCont</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wait for the interrupt to come.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wait for the interrupt to come.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">Wait4</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">status</span>, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;breakpoint hit&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// reset the breakpoint
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">resetBreakpoint</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0x498223</span>, <span style="color:#a6e22e">data</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// reset the breakpoint</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">resetBreakpoint</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0x498223</span>, <span style="color:#a6e22e">data</span>)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Phew, Finally we able to print <code>breakpoint hit</code> before our sample program prints random int.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>breakpoint hit
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>breakpoint hit
 </span></span><span style="display:flex;"><span>6129484611666145821
 </span></span><span style="display:flex;"><span>breakpoint hit
 </span></span><span style="display:flex;"><span>4037200794235010051
@@ -328,56 +396,114 @@ So, that means if we set the instruction pointer to <code>0x498223</code> then t
 </span></span><span style="display:flex;"><span>1443635317331776148
 </span></span><span style="display:flex;"><span>breakpoint hit
 </span></span><span style="display:flex;"><span>894385949183117216
-</span></span></code></pre></div><p>You can find the full source code at <a href="https://github.com/poonai/debugger-example" target="_blank" rel="noopener">https://github.com/poonai/debugger-example</a>
-</p>
-<p>That&rsquo;s all for now. Hope you folks learned something new. In the next post, I&rsquo;ll write how to extract values from the variables by reading DWARF info. You can follow me on <a href="https://twitter.com/poonai_" target="_blank" rel="noopener">Twitter</a>
- to get notified about part 2.</p>
+</span></span></code></pre></div><p>You can find the full source code at <a class="link" href="https://github.com/poonai/debugger-example"  target="_blank" rel="noopener"
+    >https://github.com/poonai/debugger-example</a></p>
+<p>That&rsquo;s all for now. Hope you folks learned something new. In the next post, I&rsquo;ll write how to extract values from the variables by reading DWARF info. You can follow me on <a class="link" href="https://twitter.com/poonai_"  target="_blank" rel="noopener"
+    >Twitter</a> to get notified about part 2.</p>
 
-			</div>
-			
-		</article>
-		<div class="post-nav thin">
-			<a class="next-post" href="http://localhost:1313/posts/simplest-backpropagation-explainer-without-chain-rule/">
-				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-      <line x1="19" y1="12" x2="5" y2="12"></line>
-      <polyline points="12 19 5 12 12 5"></polyline>
-   </svg>&nbsp;</span><br><span>Simplest backpropagation explainer without chain rule</span>
-			</a>
-			<a class="prev-post" href="http://localhost:1313/posts/differential-privacy/">
-				<span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
-      <line x1="5" y1="12" x2="19" y2="12"></line>
-      <polyline points="12 5 19 12 12 19"></polyline>
-   </svg></span><br><span>Can differential privacy protect our privacy?</span>
-			</a>
-		</div>
-		<div id="comments" class="thin"></div>
-	</main>
-<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+</section>
 
-<script src="https://giscus.app/client.js"
-        data-repo="poonai/poonai.github.io"
-        data-repo-id="MDEwOlJlcG9zaXRvcnkzNTI1NzEyOTg="
-        data-category="General"
-        data-category-id="DIC_kwDOFQPPos4Cpnf0"
-        data-mapping="og:title"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        crossorigin="anonymous"
-        async>
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
 </script>
 
-<p>
-    &copy; 2026 <a href="http://localhost:1313/">Poonai&#39;s space</a>
-    &#183; &#183; Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>
-    &#183; Theme <a href="https://github.com/1bl4z3r/hermit-V2" target="_blank" rel="noopener">Hermit-V2</a></p></footer>
-<script async src="http://localhost:1313/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js" integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin="anonymous"></script><script id="MathJax-script" type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" crossorigin="anonymous"></script>
-<script type="text/javascript" id="MathJax-script-helper" async src="http://localhost:1313/js/mathjax-assistant.min.ca29e9d446b2a6cb6c6e3eb0d47e9693f5c306c146eaccb43047afbf31b07a6f.js" integrity="sha256-yinp1Eaypstsbj6w1H6Wk/XDBsFG6sy0MEevvzGwem8=" crossorigin="anonymous"></script>
+    
 
-</body>
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 Poonai&#39;s space
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+        </div>
+        <script type="text/javascript" src="/ts/main.ecff16e83482c03c42d6245e0be35573d43c55812826f0b0c05af997a491920c.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
 </html>

@@ -23,7 +23,7 @@ The off the shelf models are:
 ## ViT
 This model is an image embedding model. It returns embedding tensor representation for an image. That means, the vector distance between similar image is shorter. The vector distance between lion and cat will shorter than the vector distance between lion and car. Since, the lion and cat are animals.
 
-![image embedding](/img/image_embedding.png)
+![image embedding](./image_embedding.png)
 
 
 
@@ -36,7 +36,7 @@ This model is a text generation model. Given a list of word, it'll predict the n
 
 ## Projection layer.
 
-![vlm architecture](/img/vlm_architecture.png)
+![vlm architecture](./vlm_architecture.png)
 
 This is the key component of our VLM model. This layer transform the image embedding output into a GPT2 textual embedding space. In other words we are converting the images into an intermediate state for the GPT2 to produce meaningful output. 
 
@@ -67,7 +67,7 @@ I've put all the component together and trained it with the dataset. Here is the
 
 Input Image:
 
-![A boy holding image](/img/boy_holding_fish.png)
+![A boy holding image](./boy_holding_fish.png)
 
 Output Text:
 

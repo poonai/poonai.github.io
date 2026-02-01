@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2026-01-31T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/tags/ai/</loc>
     <lastmod>2026-01-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/i-competed-against-anthropic-to-know-my-self-worth/</loc>
+    <loc>http://localhost:1313/post/i-competed-against-anthropic-to-know-my-self-worth/</loc>
     <lastmod>2026-01-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/optimization/</loc>
     <lastmod>2026-01-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2026-01-31T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>http://localhost:1313/post/</loc>
     <lastmod>2026-01-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/</loc>
     <lastmod>2026-01-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/building-visual-language-model/</loc>
+    <loc>http://localhost:1313/post/building-visual-language-model/</loc>
     <lastmod>2025-10-02T11:12:35+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/image/</loc>
@@ -32,7 +32,7 @@
     <loc>http://localhost:1313/tags/natural-language-processing/</loc>
     <lastmod>2025-10-02T11:12:35+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/context-pruning-in-conversational-agent/</loc>
+    <loc>http://localhost:1313/post/context-pruning-in-conversational-agent/</loc>
     <lastmod>2025-09-08T11:12:35+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/context-engineering/</loc>
@@ -41,17 +41,19 @@
     <loc>http://localhost:1313/tags/context-pruning/</loc>
     <lastmod>2025-09-08T11:12:35+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/simplest-backpropagation-explainer-without-chain-rule/</loc>
+    <loc>http://localhost:1313/post/simplest-backpropagation-explainer-without-chain-rule/</loc>
     <lastmod>2025-04-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/how-debuggers-works-part1/</loc>
+    <loc>http://localhost:1313/post/how-debuggers-works-part1/</loc>
     <lastmod>2021-09-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/differential-privacy/</loc>
+    <loc>http://localhost:1313/post/differential-privacy/</loc>
     <lastmod>2021-03-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/about-me/</loc>
+    <loc>http://localhost:1313/page/about/</loc>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
+  </url><url>
+    <loc>http://localhost:1313/page/</loc>
   </url>
 </urlset>
