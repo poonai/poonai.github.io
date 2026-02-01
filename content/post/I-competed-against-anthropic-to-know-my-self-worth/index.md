@@ -7,7 +7,7 @@ tags:
   - AI
   - optimization
 ---
-The whole ego competition started when I received a text message saying, “Anyone here is trying this?” with a blog title: AI-resistant technical tech evaluation. As I read the blog, I was excited to see how far AI agents have caught up with coding tasks, and it also created a subtle fear in me of not being valuable anymore. I bet some of you have already felt that way at some point. Anthropic’s open challenge to beat Claude seemed like an invitation to test my self-worth.
+The whole ego competition started when I received a text message saying, *“Anyone here is trying this?”* with a blog title: **Designing AI-resistant technical tech evaluation**. As I read the blog, I was excited to see how far AI agents have caught up with coding tasks, and it also created a subtle fear in me of not being valuable anymore. I bet some of you have already felt that way at some point. Anthropic’s open challenge to beat Claude seemed like an invitation to test my self-worth.
 
 After the initial glance at the assignment, I was genuinely impressed by the way they designed it. It contains a toy accelerator and a kernel program that needed to be optimized. Interestingly, the toy accelerator comes with tracing and debug functionality. Such level of detail energized me to solve the problem.
 
@@ -90,11 +90,11 @@ undergrad math for 8 months without any sort of connection with tech world. I wa
 Github, Reddit; any sort of connection that would pull me back into the tech echo chamber. At
 that time, I noticed something that most of the mathematicians agree. **Many of the problems are
 solved by rewriting the problem into a different form;** `a^2-1` can be written as `(a+1)(a-1)`. 
-That is your key to optimize further and you can even beat Claude in this game with the
+That is your key to optimize further and you can even beat Claude in this game by
 understanding the structure of the tree.
 
 ### Starting Line
-The interviewing candidates at Anthropic starts at 18532. Because most of the LLM models can figure vectorization at the first pass. Hence, they adjusted the baseline to reflect that.
+The interviewing candidates at Anthropic starts at 18,532. Because most of the LLM models can figure vectorization at the first pass. Hence, they adjusted the baseline to reflect that.
 
 Now, our compute cycle also would be around
 19,000. This marks the official starting line of the game, whatever the cool things we did so 

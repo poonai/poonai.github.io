@@ -50,3 +50,21 @@ name = "Twitter"
 icon = "fab fa-twitter"
 url = "https://twitter.com/poonai_" 
 
+[params.comments]
+    enabled = true
+    provider = "giscus"
+
+    [params.comments.giscus]
+        repo = "poonai/poonai.github.io"
+        repoID = "MDEwOlJlcG9zaXRvcnkzNTI1NzEyOTg="
+        category = "General"
+        categoryID = "DIC_kwDOFQPPos4Cpnf0"
+        mapping = "title"
+        lightTheme = "light"
+        darkTheme = "dark_dimmed"
+        reactionsEnabled = 1
+        emitMetadata = 0
+        inputPosition = "bottom"
+        lang = "en"
+        strict = 0
+        loading = "lazy"
