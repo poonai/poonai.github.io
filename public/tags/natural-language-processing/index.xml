@@ -4,7 +4,7 @@
     <title>Natural-Language-Processing on Poonai&#39;s space</title>
     <link>http://localhost:1313/tags/natural-language-processing/</link>
     <description>Recent content in Natural-Language-Processing on Poonai&#39;s space</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 02 Oct 2025 11:12:35 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/natural-language-processing/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,7 @@
       <link>http://localhost:1313/posts/building-visual-language-model/</link>
       <pubDate>Thu, 02 Oct 2025 11:12:35 +0000</pubDate>
       <guid>http://localhost:1313/posts/building-visual-language-model/</guid>
-      <description>&lt;p&gt;My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&amp;rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a &lt;a href=&#34;https://huggingface.co/datasets/visual-layer/imagenet-1k-vl-enriched&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;dataset&lt;/a&gt;&#xA; with image and it&amp;rsquo;s caption to train.&lt;/p&gt;</description>
+      <description>My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&amp;rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it&amp;rsquo;s caption to train.</description>
     </item>
   </channel>
 </rss>

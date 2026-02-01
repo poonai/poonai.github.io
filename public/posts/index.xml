@@ -1,47 +1,862 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts on Poonai&#39;s space</title>
-    <link>http://localhost:1313/posts/</link>
-    <description>Recent content in Posts on Poonai&#39;s space</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 02 Oct 2025 11:12:35 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Building an Visual Language Model from scratch</title>
-      <link>http://localhost:1313/posts/building-visual-language-model/</link>
-      <pubDate>Thu, 02 Oct 2025 11:12:35 +0000</pubDate>
-      <guid>http://localhost:1313/posts/building-visual-language-model/</guid>
-      <description>&lt;p&gt;My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&amp;rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a &lt;a href=&#34;https://huggingface.co/datasets/visual-layer/imagenet-1k-vl-enriched&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;dataset&lt;/a&gt;&#xA; with image and it&amp;rsquo;s caption to train.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Context Pruning in conversational agents</title>
-      <link>http://localhost:1313/posts/context-pruning-in-conversational-agent/</link>
-      <pubDate>Mon, 08 Sep 2025 11:12:35 +0000</pubDate>
-      <guid>http://localhost:1313/posts/context-pruning-in-conversational-agent/</guid>
-      <description>&lt;h1 id=&#34;my-journey-to-building-agentic-apps&#34;&gt;My Journey to Building Agentic Apps&lt;a href=&#34;#my-journey-to-building-agentic-apps&#34; class=&#34;anchor&#34; aria-hidden=&#34;true&#34;&gt;&lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34;&#xA;      stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34;&gt;&#xA;      &lt;path d=&#34;M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3&#34;&gt;&lt;/path&gt;&#xA;      &lt;line x1=&#34;8&#34; y1=&#34;12&#34; x2=&#34;16&#34; y2=&#34;12&#34;&gt;&lt;/line&gt;&#xA;   &lt;/svg&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;My childhood dream of having a personal &lt;strong&gt;J.A.R.V.I.S&lt;/strong&gt; has come true. The recent advancement in &lt;strong&gt;LLMs (Large Language Models)&lt;/strong&gt; made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps &lt;em&gt;“the right way.”&lt;/em&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Simplest backpropagation explainer without chain rule</title>
-      <link>http://localhost:1313/posts/simplest-backpropagation-explainer-without-chain-rule/</link>
-      <pubDate>Sun, 27 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/simplest-backpropagation-explainer-without-chain-rule/</guid>
-      <description>&lt;p&gt;Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual&#xA;network. I assume that you already know how feed forward neural network works.&lt;/p&gt;&#xA;&lt;p&gt;Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Part 1: DIY debugger in Golang</title>
-      <link>http://localhost:1313/posts/how-debuggers-works-part1/</link>
-      <pubDate>Thu, 02 Sep 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/how-debuggers-works-part1/</guid>
-      <description>&lt;p&gt;The first thing I do when I create a project is to create the debugger launch config at the &lt;code&gt;.vscode&lt;/code&gt; folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of &lt;a href=&#34;https://github.com/go-delve&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;delve&lt;/a&gt;&#xA;.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Can differential privacy protect our privacy?</title>
-      <link>http://localhost:1313/posts/differential-privacy/</link>
-      <pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/differential-privacy/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&amp;rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.&lt;/p&gt;&#xA;&lt;p&gt;Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&amp;rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&amp;rsquo;s app is not present on the user phone).&lt;/p&gt;</description>
-    </item>
-  </channel>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+	<channel>
+		<title>Posts on Poonai&#39;s space</title>
+		<link>http://localhost:1313/posts/</link>
+		<description>Recent content in Posts on Poonai&#39;s space</description>
+		<generator>Hugo -- 0.123.7</generator>
+		<language>en-us</language>
+		<lastBuildDate>Sat, 31 Jan 2026 00:00:00 +0000</lastBuildDate>
+		<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		
+		<item>
+			<title>I competed against Anthropic to know my self-worth</title>
+			<link>http://localhost:1313/posts/i-competed-against-anthropic-to-know-my-self-worth/</link>
+			<pubDate>Sat, 31 Jan 2026 00:00:00 +0000</pubDate><guid>http://localhost:1313/posts/i-competed-against-anthropic-to-know-my-self-worth/</guid>
+			<description><![CDATA[&lt;no value&gt;]]></description><content type="text/html" mode="escaped"><![CDATA[<p><img src="/img/whatsapp_invitation.jpg" alt="whatsapp invitation for an coding challenge">
+The whole ego competition started when I received a text message saying &ldquo;Anyone is trying&rdquo; with a blog title <code>AI resistant technical tech evaluation</code>. As I read the blog, I was excited to see how much AI agents are caught up with coding task and also it created
+subtle fear in me of not being valuable anymore. I bet some of you have already felt that way at some point. Anthropic open challenge to beat claude seemed like an invitation to test my self worth.</p>
+<p>After the intial glance at the assignment, I was geninuely impressed by the way they designed the assignment. It contains a
+toy accelerator and a kernel program that needed to be optimized. Interestingly, the toy accelerator comes with tracing and
+debug functionality. This effort aspires me to do work with such passion.</p>
+<p>Before we optimize the kernel, let us understand what does the kernel do:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">reference_kernel</span>(t: Tree, inp: Input):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Reference implementation of the kernel.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    A parallel tree traversal where at each node we set
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cur_inp_val = myhash(cur_inp_val ^ node_val)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    and then choose the left branch if cur_inp_val is even.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    If we reach the bottom of the tree we wrap around to the top.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> h <span style="color:#f92672">in</span> range(inp<span style="color:#f92672">.</span>rounds):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(inp<span style="color:#f92672">.</span>indices)):
+</span></span><span style="display:flex;"><span>            idx <span style="color:#f92672">=</span> inp<span style="color:#f92672">.</span>indices[i]
+</span></span><span style="display:flex;"><span>            val <span style="color:#f92672">=</span> inp<span style="color:#f92672">.</span>values[i]
+</span></span><span style="display:flex;"><span>            val <span style="color:#f92672">=</span> myhash(val <span style="color:#f92672">^</span> t<span style="color:#f92672">.</span>values[idx])
+</span></span><span style="display:flex;"><span>            idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> idx <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">if</span> val <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>            idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">if</span> idx <span style="color:#f92672">&gt;=</span> len(t<span style="color:#f92672">.</span>values) <span style="color:#66d9ef">else</span> idx
+</span></span><span style="display:flex;"><span>            inp<span style="color:#f92672">.</span>values[i] <span style="color:#f92672">=</span> val
+</span></span><span style="display:flex;"><span>            inp<span style="color:#f92672">.</span>indices[i] <span style="color:#f92672">=</span> idx
+</span></span></code></pre></div><p>It is a good old binary tree traversal with a twist. Each node is hashed with a value. The eveness of the hash will
+determine the path of the traversal. If the hash is even valued, the program traverse left otherwise it traverse right.
+The same traversal logic is replicated to an list of value. Please stare the above python code to get cleaner intiution.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> round <span style="color:#f92672">in</span> range(rounds):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(batch_size):
+</span></span><span style="display:flex;"><span>        i_const <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>scratch_const(i)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># idx = mem[inp_indices_p + i]</span>
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;alu&#34;</span>, (<span style="color:#e6db74">&#34;+&#34;</span>, tmp_addr, self<span style="color:#f92672">.</span>scratch[<span style="color:#e6db74">&#34;inp_indices_p&#34;</span>], i_const)))
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;load&#34;</span>, (<span style="color:#e6db74">&#34;load&#34;</span>, tmp_idx, tmp_addr)))
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;debug&#34;</span>, (<span style="color:#e6db74">&#34;compare&#34;</span>, tmp_idx, (round, i, <span style="color:#e6db74">&#34;idx&#34;</span>))))
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># val = mem[inp_values_p + i]</span>
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;alu&#34;</span>, (<span style="color:#e6db74">&#34;+&#34;</span>, tmp_addr, self<span style="color:#f92672">.</span>scratch[<span style="color:#e6db74">&#34;inp_values_p&#34;</span>], i_const)))
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;load&#34;</span>, (<span style="color:#e6db74">&#34;load&#34;</span>, tmp_val, tmp_addr)))
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;debug&#34;</span>, (<span style="color:#e6db74">&#34;compare&#34;</span>, tmp_val, (round, i, <span style="color:#e6db74">&#34;val&#34;</span>))))
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.....</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.....</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># mem[inp_indices_p + i] = idx</span>
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;alu&#34;</span>, (<span style="color:#e6db74">&#34;+&#34;</span>, tmp_addr, self<span style="color:#f92672">.</span>scratch[<span style="color:#e6db74">&#34;inp_indices_p&#34;</span>], i_const)))
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;store&#34;</span>, (<span style="color:#e6db74">&#34;store&#34;</span>, tmp_addr, tmp_idx)))
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># mem[inp_values_p + i] = val</span>
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;alu&#34;</span>, (<span style="color:#e6db74">&#34;+&#34;</span>, tmp_addr, self<span style="color:#f92672">.</span>scratch[<span style="color:#e6db74">&#34;inp_values_p&#34;</span>], i_const)))
+</span></span><span style="display:flex;"><span>        body<span style="color:#f92672">.</span>append((<span style="color:#e6db74">&#34;store&#34;</span>, (<span style="color:#e6db74">&#34;store&#34;</span>, tmp_addr, tmp_val)))
+</span></span></code></pre></div><p>The provided kernel is exact reimplementation of the python code without any vectorization.
+At this point, I was deluding myself that vectorization would solve the problem. But I discoverd
+my dissappointment only after vectorizing the program. It did not even cut the compute cycle
+by half.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(int(batch_size <span style="color:#f92672">/</span> VLEN)):
+</span></span><span style="display:flex;"><span>    i_const <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>scratch_const(i <span style="color:#f92672">*</span> VLEN)
+</span></span><span style="display:flex;"><span>    batch_slots(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;alu&#34;</span>,
+</span></span><span style="display:flex;"><span>        (<span style="color:#e6db74">&#34;+&#34;</span>, indices_index <span style="color:#f92672">+</span> i, self<span style="color:#f92672">.</span>scratch[<span style="color:#e6db74">&#34;inp_indices_p&#34;</span>], i_const),
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    batch_slots(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;alu&#34;</span>, (<span style="color:#e6db74">&#34;+&#34;</span>, value_index <span style="color:#f92672">+</span> i, self<span style="color:#f92672">.</span>scratch[<span style="color:#e6db74">&#34;inp_values_p&#34;</span>], i_const)
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>flush_slots()
+</span></span></code></pre></div><p>The next obvious optimization is to pack multiple independent vectorized operation as one
+VLIW bundle. VLIW operations are energy efficient and also the key reason to adopt Google&rsquo;s TPU. Essentially, we can batch
+6 operation into one cycle.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>// Before
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#39;valu&#39;</span>: <span style="color:#f92672">[(</span><span style="color:#e6db74">&#39;+&#39;</span>, 600, 16, 24<span style="color:#f92672">)]}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#39;valu&#39;</span>: <span style="color:#f92672">[(</span><span style="color:#e6db74">&#39;+&#39;</span>, 640, 16, 64<span style="color:#f92672">)]}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// After
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#39;valu&#39;</span>: <span style="color:#f92672">[(</span><span style="color:#e6db74">&#39;+&#39;</span>, 600, 16, 24<span style="color:#f92672">)</span>, <span style="color:#f92672">(</span><span style="color:#e6db74">&#39;+&#39;</span>, 608, 16, 32<span style="color:#f92672">)</span>,<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;+&#39;</span>, 616, 16, 40<span style="color:#f92672">)</span>, <span style="color:#f92672">(</span><span style="color:#e6db74">&#39;+&#39;</span>, 624, 16, 48<span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span><span style="color:#e6db74">&#39;+&#39;</span>, 632, 16, 56<span style="color:#f92672">)</span>, <span style="color:#f92672">(</span><span style="color:#e6db74">&#39;+&#39;</span>, 640, 16, 64<span style="color:#f92672">)]}</span>
+</span></span></code></pre></div><p>There were multiple independent operation which can be batched together. Now, the compute cycle would be around
+19,000. This marks the official starting line of the game, whatever the cool things we did so
+far is just an warmup. I&rsquo;m not going to take you to the finish line of the game, that would defeat the purpose
+of the assignment. However, the purpose has been already defeated. The bad actors have released some parts or the full solution. You can check that if you want. But, before that I want you to decide whether you want to be spectator or the player in the game.</p>
+<p>The baseline is 14773 cycles. My kernel version took 3465 cycles and the claude baseline is 2164 cycles, which is 1,301 cycles lesser than mine. The claude version is 1.5x faster. This absolute understanding making the protective nature of my conciousness
+to think otherwise.</p>
+<p>Before we all wrap up, I&rsquo;m begging you to watch this <a href="https://www.youtube.com/shorts/1MOzJuDF1cc" target="_blank" rel="noopener">Youtube shorts</a>
+.</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Building an Visual Language Model from scratch</title>
+			<link>http://localhost:1313/posts/building-visual-language-model/</link>
+			<pubDate>Thu, 02 Oct 2025 11:12:35 +0000</pubDate><guid>http://localhost:1313/posts/building-visual-language-model/</guid>
+			<description><![CDATA[&lt;no value&gt;]]></description><content type="text/html" mode="escaped"><![CDATA[<p>My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a <a href="https://huggingface.co/datasets/visual-layer/imagenet-1k-vl-enriched" target="_blank" rel="noopener">dataset</a>
+ with image and it&rsquo;s caption to train.</p>
+<p>Instead of training all the component from scratch, I&rsquo;m going to use pre existing LLM model and customize to our need. You could ask why did you mention <code>scratch</code> in the title and say the title is
+misleading. In general, this is how VLM are built. Correct me if I&rsquo;m wrong me.</p>
+<p>The off the shelf models are:</p>
+<ul>
+<li><a href="https://huggingface.co/timm/vit_mediumd_patch16_reg4_gap_384.sbb2_e200_in12k_ft_in1k" target="_blank" rel="noopener">ViT - Vision Transformer Image Classification</a>
+</li>
+<li><a href="https://huggingface.co/openai-community/gpt2" target="_blank" rel="noopener">GPT2 - A Text Generation Model</a>
+</li>
+</ul>
+<h2 id="vit">ViT<a href="#vit" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>This model is an image embedding model. It returns embedding tensor representation for an image. That means, the vector distance between similar image is shorter. The vector distance between lion and cat will shorter than the vector distance between lion and car. Since, the lion and cat are animals.</p>
+<p><img src="/img/image_embedding.png" alt="image embedding"></p>
+<h2 id="gpt2">GPT2<a href="#gpt2" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>This model is a text generation model. Given a list of word, it&rsquo;ll predict the next series of words.</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>The sky is</code></td>
+<td><code>The sky is blue</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="projection-layer">Projection layer.<a href="#projection-layer" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p><img src="/img/vlm_architecture.png" alt="vlm architecture"></p>
+<p>This is the key component of our VLM model. This layer transform the image embedding output into a GPT2 textual embedding space. In other words we are converting the images into an intermediate state for the GPT2 to produce meaningful output.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Projection</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, in_features, out_features):
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>network <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(in_features, in_features <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>GELU(),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(in_features <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>, out_features),
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, input):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>network(input)
+</span></span></code></pre></div><p>The tensor output size of ViT mode is <code>512</code> and the tensor input size of gpt2 model is <code>768</code>. This projection layer will convert the ViT output tensor size into gpt2 input tensor size. With training, the image tensor are transformed into a tensor that GPT2 understands.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>self<span style="color:#f92672">.</span>projection <span style="color:#f92672">=</span> Projection(<span style="color:#ae81ff">512</span>,<span style="color:#ae81ff">768</span>)
+</span></span></code></pre></div><h2 id="conclusion">Conclusion<a href="#conclusion" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>I&rsquo;ve put all the component together and trained it with the dataset. Here is the result:</p>
+<p>Input Image:</p>
+<p><img src="/img/boy_holding_fish.png" alt="A boy holding image"></p>
+<p>Output Text:</p>
+<pre tabindex="0"><code>a boy holding a fish in the woods
+</code></pre><p>This project gave me an solid intuition of building a VLM model. In the upcoming days I&rsquo;m aspiring to build a document processing VLM model that beats state-of-the-art(SOTA) benchmarks. You can see
+the entire code <a href="https://github.com/poonai/imagenet-caption" target="_blank" rel="noopener">here</a>
+</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Context Pruning in conversational agents</title>
+			<link>http://localhost:1313/posts/context-pruning-in-conversational-agent/</link>
+			<pubDate>Mon, 08 Sep 2025 11:12:35 +0000</pubDate><guid>http://localhost:1313/posts/context-pruning-in-conversational-agent/</guid>
+			<description><![CDATA[&lt;no value&gt;]]></description><content type="text/html" mode="escaped"><![CDATA[<h1 id="my-journey-to-building-agentic-apps">My Journey to Building Agentic Apps<a href="#my-journey-to-building-agentic-apps" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h1>
+<p>My childhood dream of having a personal <strong>J.A.R.V.I.S</strong> has come true. The recent advancement in <strong>LLMs (Large Language Models)</strong> made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps <em>“the right way.”</em></p>
+<p>The good news is there is no <em>“the right way”</em> yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.</p>
+<hr>
+<h2 id="why-baml">Why BAML?<a href="#why-baml" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>The minimal framework is <strong>BAML</strong>. I&rsquo;ve been using BAML for the past couple of months and am delighted with the developer experience it offers.</p>
+<p>It offers <strong>function-style LLM calling</strong>. All you have to do is define your prompt, input, and output format in BAML language. Then BAML generates type-safe functions that take typed input and return typed output. This is like any other function you use every day.</p>
+<p>As you read the blog, you&rsquo;ll understand how easy BAML is — or you can check their <a href="https://docs.boundaryml.com/guide/introduction/what-is-baml" target="_blank" rel="noopener">docs</a>
+ as well.</p>
+<hr>
+<h2 id="context-engineering">Context Engineering<a href="#context-engineering" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p><strong>Context engineering</strong> is an important skill in terms of agentic application building. It is essentially providing the right context to steer the LLM in the right direction. There are several ways to do context engineering.</p>
+<p>However, I want to demonstrate <strong>context pruning</strong> in conversational agents. An agent that does a lot of tool calls will be ideal to demonstrate the technique. So, I built an agent that solves mathematical equations which require to stitch multiple tool results. The source code can be seen <a href="https://github.com/poonai/context-trimming-sample" target="_blank" rel="noopener">here</a>
+</p>
+<p><strong>Example:</strong><br>
+Solve the quadratic equation: <code>x^2 + 5*x + 6 = 0</code> and find its derivative.</p>
+<p>To answer this question:</p>
+<ul>
+<li>it has to solve an equation with a tool call</li>
+<li>it has to find a derivative with another tool call</li>
+</ul>
+<p>Basically, the agent has to call two tools sequentially to answer the user query. The agent can be implemented by a single prompt. Here is the respective BAML code and prompt for it:</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">class AgentResponse {
+    tools QuandraticSolver  | QuadraticDerivative | QuadraticEvaluator | MessageToUser
+}
+
+function MathChat(message_history: string[]) -&gt; AgentResponse {
+    client OpenRouter
+    prompt #&#34;
+        You&#39;re a helpful Math AI assistant. You have tools to solve equations related to quadratic 
+        equations. The user query could be simple, or complex that requires you to take multiple turns
+        between you and tools to resolve the user query.
+
+        Use message_to_user tools to reply or ask clarification questions to the user.
+
+        &lt;CONVERSATION HISTORY&gt;
+        {% for message in message_history %}
+         {{ message}}  
+        {% endfor %}
+        &lt;/CONVERSATION HISTORY&gt;
+       
+        {{ctx.output_format}}
+    &#34;#
+}
+</code></pre><p>BAML will generate a type-safe Python function where you can pass <code>message_history</code> as input and <code>AgentResponse</code> as output.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> baml_client <span style="color:#f92672">import</span> b
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example of using the BAML-generated MathChat function</span>
+</span></span><span style="display:flex;"><span>message_history <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;{&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;Solve the quadratic equation: x^2 + 5*x + 6 = 0&#39;}&#34;</span>
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Call the BAML-generated function</span>
+</span></span><span style="display:flex;"><span>agent_response <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>MathChat(message_history)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The agent_response will contain a tool call, which could be:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticSolver: To solve the equation</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticDerivative: To find the derivative</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticEvaluator: To evaluate the equation at a specific value</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - MessageToUser: To respond directly to the user</span>
+</span></span></code></pre></div><p>The AI response could be a tool call or a response to the user. The AI responds based on the feedback obtained from the external system. All the interactions are stored in <code>message_history</code> and used as context to decide the flow of the conversation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">chat</span>(self, user_message: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Add user message to history</span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>message_history<span style="color:#f92672">.</span>append({
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;role&#39;</span>: <span style="color:#e6db74">&#39;user&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;msg&#39;</span>: user_message
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Get response from BAML MathChat</span>
+</span></span><span style="display:flex;"><span>        agent_response <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>MathChat([str(message) <span style="color:#66d9ef">for</span> message <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>message_history])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Use the tool and get the response</span>
+</span></span><span style="display:flex;"><span>        tool_response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>use_tool(agent_response)
+</span></span><span style="display:flex;"><span>               
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># If it&#39;s a direct message to the user, return it</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> tool_response[<span style="color:#e6db74">&#39;role&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;assistant&#39;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> tool_response[<span style="color:#e6db74">&#39;msg&#39;</span>]
+</span></span></code></pre></div><hr>
+<h2 id="example-message-history">Example Message History<a href="#example-message-history" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<pre tabindex="0"><code>User: Solve the quadratic equation: x² + 5x + 6 = 0  
+Assistant (PROCESSING): I need to solve this quadratic equation. [Calling `quadratic_solver`]  
+Tool: Solved equation: x² + 5x + 6 = 0. Roots: [-3, -2]  
+Assistant (COMPLETED): The roots of the quadratic equation x² + 5x + 6 = 0 are x = -3 and x = -2.  
+
+User: Find the derivative of: 2x² + 4x − 6  
+Assistant (PROCESSING): I need to find the derivative of this quadratic equation. [Calling `quadratic_derivative`]  
+Tool: Derivative of equation: 2x² + 4x − 6. Result: 4x + 4  
+Assistant (COMPLETED): The derivative of the quadratic equation 2x² + 4x − 6 is 4x + 4.  
+</code></pre><hr>
+<h2 id="pruning-the-context">Pruning the Context<a href="#pruning-the-context" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>The interaction between tool and AI is not always needed to answer future user questions. Since the AI response already encapsulates the context in its response, tool-related messages can be removed when irrelevant.</p>
+<p>However, we can’t always prune immediately. The AI might still be clarifying missing information before solving. Intermediate tool-related messages should be removed <strong>only when not relevant anymore</strong>.</p>
+<h2 id="clarifying-conversation-example">Clarifying Conversation Example<a href="#clarifying-conversation-example" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>Sometimes the AI must clarify before solving. Example:</p>
+<pre tabindex="0"><code>User: Integrate this equation  
+Assistant (PROCESSING): Sure! Could you provide the equation you want me to integrate?  
+
+User: x² + 3x  
+Assistant (PROCESSING): I need to integrate this equation. [Calling `integral_solver`]  
+Tool: Equation received: x² + 3x. Integration requires clarification: definite or indefinite?  
+Assistant (PROCESSING): Do you want me to compute the definite integral (with limits) or the indefinite integral of x² + 3x?  
+
+User: Indefinite integral  
+Assistant (PROCESSING): I need to compute the indefinite integral of this equation. [Calling `integral_solver`]  
+Tool: Result of ∫(x² + 3x) dx = (x³)/3 + (3x²)/2 + C  
+Assistant (COMPLETED): The indefinite integral of x² + 3x is (x³)/3 + (3x²)/2 + C. 
+</code></pre><hr>
+<h2 id="task-status">Task Status<a href="#task-status" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>When to prune context will be decided based on the current phase of the Agent. It could be in <strong>PROCESSING</strong> phase or <strong>COMPLETED</strong> phase. We&rsquo;ll let the LLM itself tell us by adding the <code>task_status</code> flag to <code>message_to_user</code> tool calls.</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">enum TaskStatus {
+    COMPLETED 
+    PROCESSING
+}
+
+class MessageToUser {
+    type &#34;message_to_user&#34; @description(#&#34;
+        DESCRIPTION: MessageToUser is used to respond to the user
+    &#34;#)
+
+    response string @description(#&#34;
+        The assistant response to the user
+    &#34;#)
+
+    task_status TaskStatus
+}
+</code></pre><p><strong>Example pruning logic:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>context_trimming <span style="color:#f92672">and</span> tools<span style="color:#f92672">.</span>task_status <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;COMPLETED&#34;</span>:
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Convert message history to string list for BAML function</span>
+</span></span><span style="display:flex;"><span>    message_history_str <span style="color:#f92672">=</span> [str(message) <span style="color:#66d9ef">for</span> message <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>message_history]
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Call SummarizeContext BAML function</span>
+</span></span><span style="display:flex;"><span>    summarized_context <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>SummarizeContext(message_history_str)
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Replace message history with summarized context</span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>message_history <span style="color:#f92672">=</span> summarized_context
+</span></span></code></pre></div><hr>
+<h2 id="summarization">Summarization<a href="#summarization" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>The pruning logic could be as simple as removing all tool calls, or we can use an LLM to <strong>summarize the context</strong> for us.</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">function SummarizeContext(message_history: string[]) -&gt; string []{
+    client OpenRouter
+    prompt #&#34;
+         Your job is to summarize the user conversation to reduce the token length.
+         Ideas to summarize:
+         - remove intermediate tool calls and tool responses 
+         - summarize the user question and response in concise form
+
+         &lt;EXAMPLE INPUT&gt;
+           {&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;solve x^2 - 5*x + 6 =0 and find derivative&#39;}  
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;I need to solve this quadratic equation&#39;, &#39;tool_name&#39;: &#39;quadratic_solver&#39;, &#39;tool_args&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;}}  
+           {&#39;role&#39;: &#39;tool&#39;, &#39;msg&#39;: &#39;Solved equation: x^2 - 5*x + 6 = 0. Roots: [2, 3]&#39;, &#39;tool_name&#39;: &#39;quadratic_solver&#39;, &#39;metadata&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;, &#39;result&#39;: &#39;[2, 3]&#39;}}  
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;I need to find the derivative of this quadratic equation&#39;, &#39;tool_name&#39;: &#39;quadratic_derivative&#39;, &#39;tool_args&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;}}  
+           {&#39;role&#39;: &#39;tool&#39;, &#39;msg&#39;: &#39;Derivative of equation: x^2 - 5*x + 6 = 0. Result: 2*x - 5&#39;, &#39;tool_name&#39;: &#39;quadratic_derivative&#39;, &#39;metadata&#39;: {&#39;equation&#39;: &#39;x^2 - 5*x + 6 = 0&#39;, &#39;result&#39;: &#39;2*x - 5&#39;}}
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5. If you want me to evaluate the equation or the derivative at a specific x value, please let me know.&#39;, &#39;tool_name&#39;: &#39;message_to_user&#39;}    
+         &lt;/EXAMPLE INPUT&gt;
+
+        &lt;EXAMPLE OUTPUT&gt;
+           {&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;solve x^2 - 5*x + 6 =0 and find derivative&#39;}  
+           {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5.&#39;, &#39;tool_name&#39;: &#39;message_to_user&#39;}    
+        &lt;/EXAMPLE OUTPUT&gt;
+
+        &lt;BAD OUTPUT&gt;
+          &#34;User asked to solve x^2 - 5*x + 6 = 0, find its derivative, and the squares of the roots; assistant provided roots (2, 3), derivative (2*x - 5), and squares (4, 9).&#34;
+        &lt;/BAD OUTPUT&gt;
+
+        &lt;GOOD OUTPUT&gt;
+        {&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;solve x^2 - 5*x + 6 =0 and find derivative&#39;}
+        {&#39;role&#39;: &#39;assistant&#39;, &#39;msg&#39;: &#39;roots (2, 3), derivative (2*x - 5)&#39;, &#39;tool_name&#39;: &#39;message_to_user&#39;} 
+        &lt;/GOOD OUTPUT&gt;
+        
+        &lt;INPUT&gt;
+        {% for message in message_history %}
+         {{ message}}  
+        {% endfor %}
+        &lt;/INPUT&gt;
+        {{ctx.output_format}}
+    &#34;#
+} 
+</code></pre><hr>
+<h2 id="token-usage-comparison">Token Usage Comparison<a href="#token-usage-comparison" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>Let&rsquo;s <a href="https://github.com/poonai/context-trimming-sample/blob/main/benchmark.py" target="_blank" rel="noopener">measure</a>
+ the token usage with context pruning and without context pruning.</p>
+<table>
+<thead>
+<tr>
+<th>Agent Type</th>
+<th>Input Tokens</th>
+<th>Output Tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Smart Agent (with context pruning)</strong></td>
+<td>2333</td>
+<td>309</td>
+</tr>
+<tr>
+<td><strong>Agent (without context pruning)</strong></td>
+<td>4883</td>
+<td>368</td>
+</tr>
+</tbody>
+</table>
+<p>The lower value is better. We reduced token usage by <strong>47%</strong> while getting the same output by pruning unnecessary context.</p>
+<p>Lesser token has the following advatages:</p>
+<ul>
+<li>less hallucination</li>
+<li>less cost</li>
+<li>less response time</li>
+</ul>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Simplest backpropagation explainer without chain rule</title>
+			<link>http://localhost:1313/posts/simplest-backpropagation-explainer-without-chain-rule/</link>
+			<pubDate>Sun, 27 Apr 2025 00:00:00 +0000</pubDate><guid>http://localhost:1313/posts/simplest-backpropagation-explainer-without-chain-rule/</guid>
+			<description><![CDATA[&lt;no value&gt;]]></description><content type="text/html" mode="escaped"><![CDATA[<p>Neural Networks learn to predict by backpropagation. This article aims to help you, build a solid intuition about the concept using a simple example. The ideas we learn here can be expanded for bigger nerual
+network. I assume that you already know how feed forward neural network works.</p>
+<p>Before reading the article further, take a pen and paper. The calculation used in this article can be done in the head. But I still want you to do by hand.</p>
+<blockquote>
+<blockquote>
+<p>&ldquo;Mathematics is not a spectator sport.&rdquo; — George Pólya</p>
+</blockquote>
+</blockquote>
+<h2 id="calculus-the-art-of-change-">Calculus: The Art of Change :<a href="#calculus-the-art-of-change-" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>Derivation is used throughout the backpropogation, so it&rsquo;s crucial for us to revise calculus before reaching our desired goal.  As title suggests, derivation is used to find how change in value of an variable affect the result. In the context of neural network, how change in weights affects the results of neural networks.</p>
+<p>Let&rsquo;s look at a simple equation:</p>
+\[
+y = x^3
+\]
+<p>If we plug in \(x = 2\), we get:</p>
+\[
+y = 2^3 = 8
+\]
+<p>Now, what happens if we slightly increase \(x\) by \(0.01\)? Instead of calculating everything again, we can use the derivative.</p>
+<p>The derivative of \(y\) is:</p>
+\[
+\frac{dy}{dx} = 3x^2
+\]
+\[
+dy = 3x^2 \times dx
+\]
+<p>Substituting \(x = 2\) and \(dx = 0.01\):</p>
+\[
+dy = 3(2)^2 \times 0.01 = 12 \times 0.01 = 0.12
+\]
+<p>So, if \(x\) increases by \(0.01\), \(y\) should increase by about \(0.12\) which is \(8.12\).</p>
+<p>Let&rsquo;s check it:</p>
+<ul>
+<li>At \(x = 2\), \(y = 8\).</li>
+<li>At \(x = 2.01\), plugging into the original equation:</li>
+</ul>
+\[
+y = (2.01)^3 = 8.120601
+\]
+<p>The actual change is about \(8.1206\), which is very close to our estimate of \(8.12\).</p>
+<p><strong>Note:</strong> The derivative is a good approximation function for small changes, does not work well with
+bigger number. Curious?? plug in \(dx = 0.5\) and see yourself.</p>
+<h2 id="no-hidden-layer">No hidden layer<a href="#no-hidden-layer" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>It almost took two days for me to understand backpropagation clearly.
+The idea finally clicked when I removed the hidden layer and made it a simple one-to-one network.
+We&rsquo;ll take the same route to build up intuition, and later we can stack hidden layers to play with multiple weights.</p>
+
+
+    <figure class="center" ><img src="http://localhost:1313/img/one-one.png"alt="one-one-network" width="600"  height="400" /></figure>
+<p>For this simple network, we&rsquo;ll consider the following parameters:</p>
+<ul>
+<li>
+<p>Input \( x = 2 \)</p>
+</li>
+<li>
+<p>Weight \( w = 4 \)</p>
+</li>
+<li>
+<p>Target output \( y = 10 \)</p>
+</li>
+</ul>
+<p>The prediction formula is:</p>
+\[
+\hat{y} = x \times w
+\]
+<p>
+Substituting the values:</p>
+\[
+\hat{y} = 2 \times 4 = 8
+\]
+<p>
+Let&rsquo;s define a cost function to determine the error rate:</p>
+\[
+\text{Cost} = \hat{y} - y = (x \times w) - 10
+\]
+\[
+\text{Cost} = (2 \times 4) - 10 = 8 - 10 = -2
+\]
+<p>
+When the cost approaches zero, the predicted output correlates closely with the target output.
+But in our case, we are off by 2 units.</p>
+<h2 id="how-do-we-decrease-the-cost">How do we decrease the cost?<a href="#how-do-we-decrease-the-cost" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>To reduce the cost, we need to tweak the weight parameter. However, randomly adjusting weights won&rsquo;t help — it would be like searching for a needle in a haystack. Instead, we use the derivative to understand how the weight affects the cost.</p>
+\[
+\frac{dC}{dw} = x = 2
+\]
+<p>The derivative tells us that any change in the weight will change the cost by twice that amount. In other words, if we increase the weight by 1 unit, the cost will change by 2 units.</p>
+<p>Since our current cost is negative, it signals that the weight should be increased.(If the cost were positive, we would need to decrease the weight.) Thus, we increase the weight to \( w = 5 \) to move the cost toward zero.</p>
+<h2 id="with-a-hidden-layer">With a Hidden Layer<a href="#with-a-hidden-layer" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>Let&rsquo;s add a hidden layer to the same simple network:</p>
+<ul>
+<li>Input \( x = 2 \)</li>
+<li>Weight \( w_1 = 4 \)</li>
+<li>Weight \( w_2 = 3 \)</li>
+<li>Target output \( y_{\text{target}} = 10 \)</li>
+</ul>
+
+
+    <figure class="center" ><img src="http://localhost:1313/img/with_hidden.png"alt="hidden-network" width="600"  height="400" /></figure>
+<p>The prediction is given by:</p>
+\[
+\hat{y} = (x \cdot w_1) \cdot w_2
+\]
+<p>Substituting the values:</p>
+\[
+\hat{y} = (2 \times 4) \times 3 = 24
+\]
+<p>The cost is the difference between the prediction and the target:</p>
+\[
+\text{Cost} = \hat{y} - y_{\text{target}} = (x \cdot w_1) \cdot w_2 - 10 = 24 - 10 = 14
+\]
+<p>Now, let&rsquo;s compute the derivatives:</p>
+\[
+\frac{dC}{dw_1} = x \cdot w_2 = 2 \times 3 = 6
+\]
+\[
+\frac{dC}{dw_2} = x \cdot w_1 = 2 \times 4 = 8
+\]
+<p>The derivatives tell us that the \(w_2\) influences the network more than the \(w_1\).</p>
+<p>Now, I want you to <strong>pause reading</strong> and try this quick exercise:</p>
+<ul>
+<li>Increase \( w_1 \) by 0.1 and observe how much \( \hat{y} \) changes.</li>
+<li>Increase \( w_2 \) by 0.1 and observe how much \( \hat{y} \) changes.</li>
+<li>Verify that changing \( w_2 \) causes a bigger change in the output than changing \( w_1 \).</li>
+</ul>
+<h2 id="how-do-computers-adjust-weights">How Do Computers Adjust Weights?<a href="#how-do-computers-adjust-weights" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>In our first simple network, we manually found the correct weight using our intelligence.<br>
+However, computers work much more rudimentary — they adjust the weights using the corresponding derivatives.</p>
+<p>The idea is simple:</p>
+<ul>
+<li><strong>Weights with higher influence</strong> (higher derivative) are adjusted more.</li>
+<li><strong>Weights with lower influence</strong> are adjusted less.</li>
+</ul>
+<p>But here&rsquo;s the catch:<br>
+If the derivative values are large, the weights can change abruptly — causing the cost to fluctuate wildly.<br>
+This phenomenon is known as the <strong>exploding gradient problem</strong>.</p>
+<p>To prevent this, we multiply the derivative by a small number called the <strong>learning rate</strong> (e.g., \( 0.01 \)) to ensure smoother learning:</p>
+\[
+w_1 = w_1 - \text{learning_rate} \times \frac{dC}{dw_1}
+\]
+\[
+w_2 = w_2 - \text{learning_rate} \times \frac{dC}{dw_2}
+\]
+<p>By training the model over a large number of samples, the weights are <strong>gradually smoothened</strong> toward their optimal values, leading to better predictions.</p>
+<h2 id="last-words">Last Words<a href="#last-words" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>I&rsquo;ve intentionally avoided the chain rule to wrap the core idea in our head. There are a lot of examples out in the wild that use chain rule. Here, is one of my <a href="https://www.youtube.com/watch?v=sIX_9n-1UbM" target="_blank" rel="noopener">personal favorite</a>
+</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Part 1: DIY debugger in Golang</title>
+			<link>http://localhost:1313/posts/how-debuggers-works-part1/</link>
+			<pubDate>Thu, 02 Sep 2021 00:00:00 +0000</pubDate><guid>http://localhost:1313/posts/how-debuggers-works-part1/</guid>
+			<description><![CDATA[&lt;no value&gt;]]></description><content type="text/html" mode="escaped"><![CDATA[<p>The first thing I do when I create a project is to create the debugger launch config at the <code>.vscode</code> folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of <a href="https://github.com/go-delve" target="_blank" rel="noopener">delve</a>
+.</p>
+<p>In this post, I&rsquo;ll talk about my learning while demystifying the dark art of debugger.</p>
+<h2 id="problem-statement">Problem statement<a href="#problem-statement" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>Let&rsquo;s define the problem statement before coding. I have a sample golang program that prints random ints every second. The goal which I want to achieve is that our debugger program should print <code>breakpoint hit</code> before our sample program prints the random integer.</p>
+<p>Here is the sample program which prints random ints at every second.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ae81ff">1.</span> <span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2.</span> 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3.</span> <span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">4.</span>  <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">5.</span>  <span style="color:#e6db74">&#34;math/rand&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">6.</span>  <span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">7.</span> )
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">8.</span> 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">9.</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10.</span>     <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">11.</span>         <span style="color:#a6e22e">variableToTrace</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>()
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">12.</span>         <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">variableToTrace</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">13.</span>         <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">14.</span>     }
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">15.</span> }
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">16.</span> 
+</span></span></code></pre></div><h2 id="solution">Solution<a href="#solution" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>Now that we know what we want to achieve. Let&rsquo;s go step by step and solve the problem statement.</p>
+<p>The first step is to pause the sample program before it prints the random int. That means we have to set the breakpoint at line number 11.</p>
+<p>To set the breakpoint at line number 11, we must gather the address of instruction at line number 11.</p>
+<p>Some of us know from high school that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language?</p>
+<p><img src="/img/cathow.jpg" alt="cathow"></p>
+<p>Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to the mapping of assembly code to high-level language.
+For Linux binaries, debug information is usually encoded in the DWARF format.</p>
+<blockquote>
+<p>DWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: <a href="http://www.dwarfstd.org/" target="_blank" rel="noopener">http://www.dwarfstd.org/</a>
+</p>
+</blockquote>
+<p>DWARF format can be parsed using objdump tool.</p>
+<p>The below command will output all the addresses of the instruction and it&rsquo;s mapping to the line number and file name.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>objdump --dwarf<span style="color:#f92672">=</span>decodedline ./sample
+</span></span></code></pre></div><p>objdump command will output similar to this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>File name                            Line number    Starting address    View    Stmt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/home/poonai/debugger-example/sample.go:
+</span></span><span style="display:flex;"><span>sample.go                                      9            0x498200               x
+</span></span><span style="display:flex;"><span>sample.go                                      9            0x498213               x
+</span></span><span style="display:flex;"><span>sample.go                                     10            0x498221               x
+</span></span><span style="display:flex;"><span>sample.go                                     11            0x498223               x
+</span></span><span style="display:flex;"><span>sample.go                                     11            0x498225        
+</span></span><span style="display:flex;"><span>sample.go                                     12            0x498233               x
+</span></span><span style="display:flex;"><span>sample.go                                     12            0x498236        
+</span></span><span style="display:flex;"><span>sample.go                                     13            0x4982be               x
+</span></span><span style="display:flex;"><span>sample.go                                     13            0x4982cb        
+</span></span><span style="display:flex;"><span>sample.go                                     11            0x4982cd               x
+</span></span><span style="display:flex;"><span>sample.go                                     12            0x4982d2        
+</span></span><span style="display:flex;"><span>sample.go                                      9            0x4982d9               x
+</span></span><span style="display:flex;"><span>sample.go                                      9            0x4982de        
+</span></span><span style="display:flex;"><span>sample.go                                      9            0x4982e0               x
+</span></span><span style="display:flex;"><span>sample.go                                      9            0x4982e5               x
+</span></span></code></pre></div><p>The output clearly states that <code>0x498223</code> is the starting address of line number 11 for sample.go file.</p>
+<p>The next step is to pause the program at the address <code>0x498223</code></p>
+<h2 id="trick-to-pause-the-program-execution">Trick to pause the program execution<a href="#trick-to-pause-the-program-execution" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<p>CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address <code>0x498223</code> with the data []byte{0xcc} to pause the program.</p>
+<blockquote>
+<p>In computing and operating systems, a trap, also known as an exception or a fault, is typically a type of synchronous interrupt caused by an exceptional condition (e.g., breakpoint, division by zero, invalid memory access). source: wikipedia</p>
+</blockquote>
+<p>Does that mean we have to rewrite the binary at <code>0x498223</code>? No, we can write it using ptrace.</p>
+<h2 id="ptrace-to-rescue">Ptrace to rescue<a href="#ptrace-to-rescue" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h2>
+<blockquote>
+<p>ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of &ldquo;process trace&rdquo;) one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia</p>
+</blockquote>
+<p>ptrace is a syscall that allows us to rewrite the registers and write the data at the given address.</p>
+<p>Now we know which address to pause and how to find the memory representing lines, and manipulate the memory of the sample program. So, let&rsquo;s put all this knowledge into action.</p>
+<p>exec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">process</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#e6db74">&#34;./sample&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">SysProcAttr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SysProcAttr</span>{<span style="color:#a6e22e">Ptrace</span>: <span style="color:#66d9ef">true</span>, <span style="color:#a6e22e">Setpgid</span>: <span style="color:#66d9ef">true</span>,    
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Foreground</span>: <span style="color:#66d9ef">false</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">Start</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The breakpoint can be set at <code>0x498223</code> by replacing the original data with int 3 (0xCC). This can be done by <code>PtracePokeData</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">setBreakpoint</span>(<span style="color:#a6e22e">pid</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">uintptr</span>) []<span style="color:#66d9ef">byte</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePeekData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">data</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePokeData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, []<span style="color:#66d9ef">byte</span>{<span style="color:#ae81ff">0xCC</span>}); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">data</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>You must already be wondering why there is <code>PtracePeekData</code>, other than <code>PtracePokeData</code>. <code>PtracePeekData</code> allows us to read the memory at the given address. I&rsquo;ll explain later why I&rsquo;m reading the data at the address <code>0x498223</code>.</p>
+<p>Since we set the breakpoint we&rsquo;ll continue the program and wait for the interrupt to happen. This can be done by <code>PtraceCont</code> and <code>Wait4</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceCont</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>     panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span> }
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">// wait for the interupt to come.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">Wait4</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">status</span>, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>     panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span> }
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;breakpoint hit&#34;</span>)
+</span></span></code></pre></div><p>After the breakpoint hits, we need the program to continue as usual. Since we already modified the data at <code>0x498223</code> the program doesn&rsquo;t run as usual. So we need to replace the int 3 with original data.</p>
+<p>Remember, we captured the original data at <code>0x498223</code> using <code>PtracePeekData</code> while setting the breakpoint. Let&rsquo;s just revert to the original data at <code>0x498223</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePokeData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">data</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Just reverting to original data doesn&rsquo;t run the program as usual. Because the instruction at <code>0x498223</code> is already executed when breakpoint hits.
+So, we want to tell the CPU to execute the instruction again at <code>0x498223</code>.</p>
+<p><img src="/img/registersintro.png" alt="registers"></p>
+<p>CPU executes the instruction that the instruction pointer points to. If you have studied microprocessors at university, you might remember.</p>
+<p><img src="/img/dejavu.jfif" alt="dejavu">
+So, that means if we set the instruction pointer to <code>0x498223</code> then the CPU will execute the instruction at <code>0x498223</code> again.CPU registers can be manipulated using<code>PtraceGetRegs</code> and <code>PtraceSetRegs</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">regs</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceRegs</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceGetRegs</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">regs</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>   panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">regs</span>.<span style="color:#a6e22e">Rip</span> = uint64(<span style="color:#a6e22e">addr</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceSetRegs</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">regs</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>      panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><p>Now that we modified the register, if we continue the program then it&rsquo;ll execute the normal flow. But we want to hit the breakpoint again, so we&rsquo;ll tell the ptrace to execute only the next instruction and set the breakpoint again. <code>PtraceSingleStep</code> allows us to execute only one instruction.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">resetBreakpoint</span>(<span style="color:#a6e22e">pid</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">addr</span> <span style="color:#66d9ef">uintptr</span>, <span style="color:#a6e22e">originaldata</span> []<span style="color:#66d9ef">byte</span>) {
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// revert back to original data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtracePokeData</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">originaldata</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set the instruction pointer to execute the instruction again
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">regs</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceRegs</span>{}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceGetRegs</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">regs</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">regs</span>.<span style="color:#a6e22e">Rip</span> = uint64(<span style="color:#a6e22e">addr</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceSetRegs</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">regs</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceSingleStep</span>(<span style="color:#a6e22e">pid</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wait for it&#39;s execution and set the breakpoint again
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">Wait4</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">status</span>, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">setBreakpoint</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#a6e22e">addr</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>So far we have learned how to manipulate registers and set breakpoints. Let&rsquo;s put all these into a for loop and drive the program.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">pid</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">Process</span>.<span style="color:#a6e22e">Pid</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">setBreakpoint</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0x498223</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">PtraceCont</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wait for the interrupt to come.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">status</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">WaitStatus</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unix</span>.<span style="color:#a6e22e">Wait4</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">status</span>, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;breakpoint hit&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// reset the breakpoint
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">resetBreakpoint</span>(<span style="color:#a6e22e">pid</span>, <span style="color:#ae81ff">0x498223</span>, <span style="color:#a6e22e">data</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Phew, Finally we able to print <code>breakpoint hit</code> before our sample program prints random int.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>breakpoint hit
+</span></span><span style="display:flex;"><span>6129484611666145821
+</span></span><span style="display:flex;"><span>breakpoint hit
+</span></span><span style="display:flex;"><span>4037200794235010051
+</span></span><span style="display:flex;"><span>breakpoint hit
+</span></span><span style="display:flex;"><span>3916589616287113937
+</span></span><span style="display:flex;"><span>breakpoint hit
+</span></span><span style="display:flex;"><span>6334824724549167320
+</span></span><span style="display:flex;"><span>breakpoint hit
+</span></span><span style="display:flex;"><span>605394647632969758
+</span></span><span style="display:flex;"><span>breakpoint hit
+</span></span><span style="display:flex;"><span>1443635317331776148
+</span></span><span style="display:flex;"><span>breakpoint hit
+</span></span><span style="display:flex;"><span>894385949183117216
+</span></span></code></pre></div><p>You can find the full source code at <a href="https://github.com/poonai/debugger-example" target="_blank" rel="noopener">https://github.com/poonai/debugger-example</a>
+</p>
+<p>That&rsquo;s all for now. Hope you folks learned something new. In the next post, I&rsquo;ll write how to extract values from the variables by reading DWARF info. You can follow me on <a href="https://twitter.com/poonai_" target="_blank" rel="noopener">Twitter</a>
+ to get notified about part 2.</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Can differential privacy protect our privacy?</title>
+			<link>http://localhost:1313/posts/differential-privacy/</link>
+			<pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate><guid>http://localhost:1313/posts/differential-privacy/</guid>
+			<description><![CDATA[&lt;no value&gt;]]></description><content type="text/html" mode="escaped"><![CDATA[<p>I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.</p>
+<p>Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&rsquo;s app is not present on the user phone).</p>
+<p>I decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to <a href="https://docs-assets.developer.apple.com/ml-research/papers/learning-with-privacy-at-scale.pdf" target="_blank" rel="noopener">Apple's paper</a>
+. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.</p>
+<p>Usually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small <a href="https://github.com/poonai/diffrential_privacy/blob/master/cms_test.go#L30" target="_blank" rel="noopener">experiment</a>
+ to estimate the popular view on a project management app to validate the paper.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#75715e">// we are tracking what view users are using in their project management app.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 6k users are using list view.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">6000</span>, <span style="color:#e6db74">&#34;list&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 9k user using board view.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">9000</span>, <span style="color:#e6db74">&#34;board&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2k user using calendar view.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">2000</span>, <span style="color:#e6db74">&#34;calendar&#34;</span>)
+</span></span></code></pre></div><p>The variance between the actual inference and the inference calculated via differential privacy is not that large.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for list&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;list&#34;</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for board&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;board&#34;</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for calendar&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;calendar&#34;</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// output
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// estimate for list 6572.1029024055715
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// estimate for board 9154.186791339975
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// estimate for calendar 1157.801902649071
+</span></span></span></code></pre></div><p>I presented it to my friend and asked him whether his company would consider using such tech.</p>
+<p>Unfortunately, the inference of users&rsquo; behaviour alone is not enough, they would also want to send notifications based on certain events.</p>
+<p>For example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the <a href="https://docs.moengage.com/docs/tracking-user-attributes#default-user-attributes" target="_blank" rel="noopener">user level</a>
+.</p>
+<p>Companies don&rsquo;t just want analytics, they also want to target the user. which reminds me of the quote from the movie <code>The Social Dilemma</code></p>
+<blockquote>
+<p>We want to psychologically figure out how to manipulate you as fast as possible</p>
+</blockquote>
+<h3 id="closing-thoughts">Closing Thoughts:<a href="#closing-thoughts" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+   </svg></a></h3>
+<p>Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies&rsquo; needs. There are some use cases, where I think differential privacy can be deployed.</p>
+<ul>
+<li>customers&rsquo; sensitive data can be tracked.</li>
+<li>privacy-focused applications.</li>
+</ul>
+<p>I would love to hear where else differential-privacy can be plugged in. <a href="https://twitter.com/poonai_" target="_blank" rel="noopener">My profile</a>
+ if anyone wants to reach out.</p>
+]]></content>
+		</item>
+		
+	</channel>
 </rss>

@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-WXVC1D5RC9');
-        }
-      </script><meta charset="UTF-8">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-WXVC1D5RC9', { 'anonymize_ip': false });
+}
+</script>
+<meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="robots" content="index, follow"><meta name="author" content="">
@@ -27,32 +24,20 @@
 <meta name="theme-color" content="#494f5c">
 <meta name="msapplication-TileColor" content="#494f5c">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#494f5c">
+<meta itemprop="name" content="Building an Visual Language Model from scratch">
+<meta itemprop="description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it&rsquo;s caption to train."><meta itemprop="datePublished" content="2025-10-02T11:12:35+00:00" />
+<meta itemprop="dateModified" content="2025-10-02T11:12:35+00:00" />
+<meta itemprop="wordCount" content="410"><meta itemprop="image" content="http://localhost:1313/public/img/banner.png" />
+<meta itemprop="keywords" content="ai,image,llm,natural-language-processing," /><meta property="og:title" content="Building an Visual Language Model from scratch" />
+<meta property="og:description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it&rsquo;s caption to train." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/building-visual-language-model/" /><meta property="og:image" content="http://localhost:1313/public/img/banner.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2025-10-02T11:12:35+00:00" />
+<meta property="article:modified_time" content="2025-10-02T11:12:35+00:00" />
 
-  <meta itemprop="name" content="Building an Visual Language Model from scratch">
-  <meta itemprop="description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train.">
-  <meta itemprop="datePublished" content="2025-10-02T11:12:35+00:00">
-  <meta itemprop="dateModified" content="2025-10-02T11:12:35+00:00">
-  <meta itemprop="wordCount" content="410">
-  <meta itemprop="image" content="http://localhost:1313/public/img/banner.png">
-  <meta itemprop="keywords" content="Ai,Image,Llm,Natural-Language-Processing"><meta property="og:url" content="http://localhost:1313/posts/building-visual-language-model/">
-  <meta property="og:site_name" content="Poonai&#39;s space">
-  <meta property="og:title" content="Building an Visual Language Model from scratch">
-  <meta property="og:description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train.">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-10-02T11:12:35+00:00">
-    <meta property="article:modified_time" content="2025-10-02T11:12:35+00:00">
-    <meta property="article:tag" content="Ai">
-    <meta property="article:tag" content="Image">
-    <meta property="article:tag" content="Llm">
-    <meta property="article:tag" content="Natural-Language-Processing">
-    <meta property="og:image" content="http://localhost:1313/public/img/banner.png">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="http://localhost:1313/public/img/banner.png">
-  <meta name="twitter:title" content="Building an Visual Language Model from scratch">
-  <meta name="twitter:description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train.">
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:1313/public/img/banner.png" /><meta name="twitter:title" content="Building an Visual Language Model from scratch"/>
+<meta name="twitter:description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it&rsquo;s caption to train."/>
 
 <script type="application/ld+json">
 {
@@ -60,7 +45,7 @@
     "@type": "BlogPosting",
     "headline": "Building an Visual Language Model from scratch",
     "name": "Building an Visual Language Model from scratch",
-    "description": "My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I\u0026rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it\u0026rsquo;s caption to train.\n",
+    "description": "My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I\u0026rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it\u0026rsquo;s caption to train.",
     "keywords": ["ai", "image", "llm", "natural-language-processing"],
     "articleBody": "My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train.\nInstead of training all the component from scratch, I’m going to use pre existing LLM model and customize to our need. You could ask why did you mention scratch in the title and say the title is misleading. In general, this is how VLM are built. Correct me if I’m wrong me.\nThe off the shelf models are:\nViT - Vision Transformer Image Classification GPT2 - A Text Generation Model ViT This model is an image embedding model. It returns embedding tensor representation for an image. That means, the vector distance between similar image is shorter. The vector distance between lion and cat will shorter than the vector distance between lion and car. Since, the lion and cat are animals.\nGPT2 This model is a text generation model. Given a list of word, it’ll predict the next series of words.\nInput Output The sky is The sky is blue Projection layer. This is the key component of our VLM model. This layer transform the image embedding output into a GPT2 textual embedding space. In other words we are converting the images into an intermediate state for the GPT2 to produce meaningful output.\nclass Projection(nn.Module): def __init__(self, in_features, out_features): super().__init__() self.network = nn.Sequential( nn.Linear(in_features, in_features * 3), nn.GELU(), nn.Linear(in_features * 3, out_features), ) def forward(self, input): return self.network(input) The tensor output size of ViT mode is 512 and the tensor input size of gpt2 model is 768. This projection layer will convert the ViT output tensor size into gpt2 input tensor size. With training, the image tensor are transformed into a tensor that GPT2 understands.\nself.projection = Projection(512,768) Conclusion I’ve put all the component together and trained it with the dataset. Here is the result:\nInput Image:\nOutput Text:\na boy holding a fish in the woods This project gave me an solid intuition of building a VLM model. In the upcoming days I’m aspiring to build a document processing VLM model that beats state-of-the-art(SOTA) benchmarks. You can see the entire code here ",
     "wordCount" : "410",
@@ -86,7 +71,7 @@
     }
 }
 </script><title>Building an Visual Language Model from scratch</title>
-<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" media="screen" href="http://localhost:1313/css/style.min.1d5e86b69027527165c1868ba9414e4f249d833c415c30599d408c4cacf7f529.css" integrity="sha256-HV6GtpAnUnFlwYaLqUFOTySdgzxBXDBZnUCMTKz39Sk=" crossorigin="anonymous">
+<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" media="screen" href="http://localhost:1313/css/style.min.65788784967ef394e528967eed8c63658368c6c4d417053ce77fd6c5ba25d364.css" integrity="sha256-ZXiHhJZ+85TlKJZ+7YxjZYNoxsTUFwU853/Wxbol02Q=" crossorigin="anonymous">
 	<style>.bg-img {background-image: url('http://localhost:1313/public/img/banner.png');}</style></head>
 <body id="page">
 	<header id="site-header">
@@ -189,18 +174,18 @@ misleading. In general, this is how VLM are built. Correct me if I&rsquo;m wrong
    </svg></a></h2>
 <p>This model is a text generation model. Given a list of word, it&rsquo;ll predict the next series of words.</p>
 <table>
-  <thead>
-      <tr>
-          <th>Input</th>
-          <th>Output</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>The sky is</code></td>
-          <td><code>The sky is blue</code></td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>The sky is</code></td>
+<td><code>The sky is blue</code></td>
+</tr>
+</tbody>
 </table>
 <h2 id="projection-layer">Projection layer.<a href="#projection-layer" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
@@ -210,8 +195,8 @@ misleading. In general, this is how VLM are built. Correct me if I&rsquo;m wrong
 <p><img src="/img/vlm_architecture.png" alt="vlm architecture"></p>
 <p>This is the key component of our VLM model. This layer transform the image embedding output into a GPT2 textual embedding space. In other words we are converting the images into an intermediate state for the GPT2 to produce meaningful output.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Projection</span>(nn<span style="color:#f92672">.</span>Module):
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, in_features, out_features):
-</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, in_features, out_features):
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>network <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
 </span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(in_features, in_features <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>),
 </span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>GELU(),
@@ -240,6 +225,13 @@ the entire code <a href="https://github.com/poonai/imagenet-caption" target="_bl
 			
 		</article>
 		<div class="post-nav thin">
+			<a class="next-post" href="http://localhost:1313/posts/i-competed-against-anthropic-to-know-my-self-worth/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+   </svg>&nbsp;</span><br><span>I competed against Anthropic to know my self-worth</span>
+			</a>
 			<a class="prev-post" href="http://localhost:1313/posts/context-pruning-in-conversational-agent/">
 				<span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
@@ -269,7 +261,7 @@ the entire code <a href="https://github.com/poonai/imagenet-caption" target="_bl
 </script>
 
 <p>
-    &copy; 2025 <a href="http://localhost:1313/">Poonai&#39;s space</a>
+    &copy; 2026 <a href="http://localhost:1313/">Poonai&#39;s space</a>
     &#183; &#183; Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>
     &#183; Theme <a href="https://github.com/1bl4z3r/hermit-V2" target="_blank" rel="noopener">Hermit-V2</a></p></footer>
 <script async src="http://localhost:1313/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js" integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin="anonymous"></script><script id="MathJax-script" type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" crossorigin="anonymous"></script>

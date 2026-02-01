@@ -2,7 +2,7 @@ baseURL = "https://poonai.xyz"
 languageCode = "en-us"
 defaultContentLanguage = "en"
 title = "Poonai's space"
-theme = "hermit-V2"
+theme = "hugo-theme-stack"
 
 [services.googleAnalytics]
 id = "G-WXVC1D5RC9"
@@ -16,6 +16,7 @@ id = "G-WXVC1D5RC9"
     dateformShort   = "Jan 2"
     dateformNum     = "2006-01-02"
     dateformNumTime = "2006-01-02 15:04 -0700"
+    IsMultilingual = false
     global_mathjax = true
     [[params.socialLinks]]
       name = "x"

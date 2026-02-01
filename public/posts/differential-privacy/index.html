@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en-us">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&rsquo;s app is not present on the user phone).\n">
+<title>Can differential privacy protect our privacy?</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/differential-privacy/'>
+
+<link rel="stylesheet" href="/scss/style.min.51098b80cc297c94c0f57786d4a04e7372774e5993b60facf53870128a79bf73.css"><meta property='og:title' content="Can differential privacy protect our privacy?">
+<meta property='og:description' content="I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&rsquo;s app is not present on the user phone).\n">
+<meta property='og:url' content='http://localhost:1313/posts/differential-privacy/'>
+<meta property='og:site_name' content='Poonai&#39;s space'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:published_time' content='2021-03-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-03-29T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Can differential privacy protect our privacy?">
+<meta name="twitter:description" content="I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&rsquo;s app is not present on the user phone).\n">
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script>
       <script>
         var doNotTrack = false;
-        if ( false ) {
+        if ( true ) {
           var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
           var doNotTrack = (dnt == "1" || dnt == "yes");
         }
@@ -14,146 +26,171 @@
           gtag('js', new Date());
           gtag('config', 'G-WXVC1D5RC9');
         }
-      </script><meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="robots" content="index, follow"><meta name="author" content="">
-<meta name="description" content="Poonai is an independent software developer(Indie Hustler).">
-<link rel="author" type="text/plain" href="/humans.txt">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta name="msapplication-TileImage" content="/mstile-144x144.png">
-<meta name="theme-color" content="#494f5c">
-<meta name="msapplication-TileColor" content="#494f5c">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#494f5c">
+      </script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
 
-  <meta itemprop="name" content="Can differential privacy protect our privacy?">
-  <meta itemprop="description" content="I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.
-Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).">
-  <meta itemprop="datePublished" content="2021-03-29T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2021-03-29T00:00:00+00:00">
-  <meta itemprop="wordCount" content="447"><meta property="og:url" content="http://localhost:1313/posts/differential-privacy/">
-  <meta property="og:site_name" content="Poonai&#39;s space">
-  <meta property="og:title" content="Can differential privacy protect our privacy?">
-  <meta property="og:description" content="I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.
-Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2021-03-29T00:00:00+00:00">
-    <meta property="article:modified_time" content="2021-03-29T00:00:00+00:00">
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
 
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Can differential privacy protect our privacy?">
-  <meta name="twitter:description" content="I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.
-Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).">
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
 
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "Can differential privacy protect our privacy?",
-    "name": "Can differential privacy protect our privacy?",
-    "description": "I\u0026rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I\u0026rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user\u0026rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor\u0026rsquo;s app is not present on the user phone).\n",
-    "keywords": [],
-    "articleBody": "I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.\nRecently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).\nI decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to Apple's paper . This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.\nUsually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small experiment to estimate the popular view on a project management app to validate the paper.\n// we are tracking what view users are using in their project management app. // 6k users are using list view. track(6000, \"list\") // 9k user using board view. track(9000, \"board\") // 2k user using calendar view. track(2000, \"calendar\") The variance between the actual inference and the inference calculated via differential privacy is not that large.\nfmt.Println(\"estimate for list\", server.Estimate([]byte(\"list\"))) fmt.Println(\"estimate for board\", server.Estimate([]byte(\"board\"))) fmt.Println(\"estimate for calendar\", server.Estimate([]byte(\"calendar\"))) // output // estimate for list 6572.1029024055715 // estimate for board 9154.186791339975 // estimate for calendar 1157.801902649071 I presented it to my friend and asked him whether his company would consider using such tech.\nUnfortunately, the inference of users’ behaviour alone is not enough, they would also want to send notifications based on certain events.\nFor example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the user level .\nCompanies don’t just want analytics, they also want to target the user. which reminds me of the quote from the movie The Social Dilemma\nWe want to psychologically figure out how to manipulate you as fast as possible\nClosing Thoughts: Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies’ needs. There are some use cases, where I think differential privacy can be deployed.\ncustomers’ sensitive data can be tracked. privacy-focused applications. I would love to hear where else differential-privacy can be plugged in. My profile if anyone wants to reach out.\n",
-    "wordCount" : "447",
-    "inLanguage": "en",
-    "datePublished": "2021-03-29T00:00:00Z",
-    "dateModified": "2021-03-29T00:00:00Z",
-    "author":{
-        "@type": "Person",
-        "name":  null ,},
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "http://localhost:1313/posts/differential-privacy/"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Poonai's space",
-      "description": "Poonai is an independent software developer(Indie Hustler).",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "http://localhost:1313/favicon.ico"
-      }
-    }
-}
-</script><title>Can differential privacy protect our privacy?</title>
-<link rel="stylesheet dns-prefetch preconnect preload prefetch" as="style" media="screen" href="http://localhost:1313/css/style.min.1d5e86b69027527165c1868ba9414e4f249d833c415c30599d408c4cacf7f529.css" integrity="sha256-HV6GtpAnUnFlwYaLqUFOTySdgzxBXDBZnUCMTKz39Sk=" crossorigin="anonymous">
-	</head>
-<body id="page">
-	<header id="site-header">
-		<div class="hdr-wrapper section-inner">
-			<div class="hdr-left">
-				<div class="site-branding">
-					<a href="http://localhost:1313/">Poonai&#39;s space</a>
-				</div>
-				<nav class="site-nav hide-in-mobile"><a href="http://localhost:1313/posts/">Posts</a><a href="http://localhost:1313/about-me/">About</a></nav>
-			</div>
-			<div class="hdr-right hdr-icons">
-				<span class="hdr-links hide-in-mobile"><a href="https://twitter.com/poonai_" target="_blank" rel="noopener me" title="X"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-   <path class="st0" d="m21.3 21.1 -11.4 -18.2h-7.2l11.4 18.2zm-18.6 0 7.2 -6.6m4.2 -5 7.2 -6.6" />
-</svg></a><a href="https://github.com/poonai" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
-   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-   <path
-      d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-   </path>
-</svg></a><a href="https://huggingface.co/poonai" target="_blank" rel="noopener me" title="Huggingface"><svg class="feather" width="25" height="25" viewBox="0 0 24 24" fill="none"
-   stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-      <title>HuggingFace</title>
-      <path
-         d="M16.781 3.277c2.997 1.704 4.844 4.851 4.844 8.258 0 .995-.155 1.955-.443 2.857a1.332 1.332 0 011.125.4 1.41 1.41 0 01.2 1.723c.204.165.352.385.428.632l.017.062c.06.222.12.69-.2 1.166.244.37.279.836.093 1.236-.255.57-.893 1.018-2.128 1.5l-.202.078-.131.048c-.478.173-.89.295-1.061.345l-.086.024c-.89.243-1.808.375-2.732.394-1.32 0-2.3-.36-2.923-1.067a9.852 9.852 0 01-3.18.018C9.778 21.647 8.802 22 7.494 22a11.249 11.249 0 01-2.541-.343l-.221-.06-.273-.08a16.574 16.574 0 01-1.175-.405c-1.237-.483-1.875-.93-2.13-1.501-.186-.4-.151-.867.093-1.236a1.42 1.42 0 01-.2-1.166c.069-.273.226-.516.447-.694a1.41 1.41 0 01.2-1.722c.233-.248.557-.391.917-.407l.078-.001a9.385 9.385 0 01-.44-2.85c0-3.407 1.847-6.554 4.844-8.258a9.822 9.822 0 019.687 0zM4.188 14.758c.125.687 2.357 2.35 2.14 2.707-.19.315-.796-.239-.948-.386l-.041-.04-.168-.147c-.561-.479-2.304-1.9-2.74-1.432-.43.46.119.859 1.055 1.42l.784.467.136.083c1.045.643 1.12.84.95 1.113-.188.295-3.07-2.1-3.34-1.083-.27 1.011 2.942 1.304 2.744 2.006-.2.7-2.265-1.324-2.685-.537-.425.79 2.913 1.718 2.94 1.725l.16.04.175.042c1.227.284 3.565.65 4.435-.604.673-.973.64-1.709-.248-2.61l-.057-.057c-.945-.928-1.495-2.288-1.495-2.288l-.017-.058-.025-.072c-.082-.22-.284-.639-.63-.584-.46.073-.798 1.21.12 1.933l.05.038c.977.721-.195 1.21-.573.534l-.058-.104-.143-.25c-.463-.799-1.282-2.111-1.739-2.397-.532-.332-.907-.148-.782.541zm14.842-.541c-.533.335-1.563 2.074-1.94 2.751a.613.613 0 01-.687.302.436.436 0 01-.176-.098.303.303 0 01-.049-.06l-.014-.028-.008-.02-.007-.019-.003-.013-.003-.017a.289.289 0 01-.004-.048c0-.12.071-.266.25-.427.026-.024.054-.047.084-.07l.047-.036c.022-.016.043-.032.063-.049.883-.71.573-1.81.131-1.917l-.031-.006-.056-.004a.368.368 0 00-.062.006l-.028.005-.042.014-.039.017-.028.015-.028.019-.036.027-.023.02c-.173.158-.273.428-.31.542l-.016.054s-.53 1.309-1.439 2.234l-.054.054c-.365.358-.596.69-.702 1.018-.143.437-.066.868.21 1.353.055.097.117.195.187.296.882 1.275 3.282.876 4.494.59l.286-.07.25-.074c.276-.084.736-.233 1.2-.42l.188-.077.065-.028.064-.028.124-.056.081-.038c.529-.252.964-.543.994-.827l.001-.036a.299.299 0 00-.037-.139c-.094-.176-.271-.212-.491-.168l-.045.01c-.044.01-.09.024-.136.04l-.097.035-.054.022c-.559.23-1.238.705-1.607.745h.006a.452.452 0 01-.05.003h-.024l-.024-.003-.023-.005c-.068-.016-.116-.06-.14-.142a.22.22 0 01-.005-.1c.062-.345.958-.595 1.713-.91l.066-.028c.528-.224.97-.483.985-.832v-.04a.47.47 0 00-.016-.098c-.048-.18-.175-.251-.36-.251-.785 0-2.55 1.36-2.92 1.36-.025 0-.048-.007-.058-.024a.6.6 0 01-.046-.088c-.1-.238.068-.462 1.06-1.066l.209-.126c.538-.32 1.01-.588 1.341-.831.29-.212.475-.406.503-.6l.003-.028c.008-.113-.038-.227-.147-.344a.266.266 0 00-.07-.054l-.034-.015-.013-.005a.403.403 0 00-.13-.02c-.162 0-.369.07-.595.18-.637.313-1.431.952-1.826 1.285l-.249.215-.033.033c-.08.078-.288.27-.493.386l-.071.037-.041.019a.535.535 0 01-.122.036h.005a.346.346 0 01-.031.003l.01-.001-.013.001c-.079.005-.145-.021-.19-.095a.113.113 0 01-.014-.065c.027-.465 2.034-1.991 2.152-2.642l.009-.048c.1-.65-.271-.817-.791-.493zM11.938 2.984c-4.798 0-8.688 3.829-8.688 8.55 0 .692.083 1.364.24 2.008l.008-.009c.252-.298.612-.46 1.017-.46.355.008.699.117.993.312.22.14.465.384.715.694.261-.372.69-.598 1.15-.605.852 0 1.367.728 1.562 1.383l.047.105.06.127c.192.396.595 1.139 1.143 1.68 1.06 1.04 1.324 2.115.8 3.266a8.865 8.865 0 002.024-.014c-.505-1.12-.26-2.17.74-3.186l.066-.066c.695-.684 1.157-1.69 1.252-1.912.195-.655.708-1.383 1.56-1.383.46.007.889.233 1.15.605.25-.31.495-.553.718-.694a1.87 1.87 0 01.99-.312c.357 0 .682.126.925.36.14-.61.215-1.245.215-1.898 0-4.722-3.89-8.55-8.687-8.55zm1.857 8.926l.439-.212c.553-.264.89-.383.89.152 0 1.093-.771 3.208-3.155 3.262h-.184c-2.325-.052-3.116-2.06-3.156-3.175l-.001-.087c0-1.107 1.452.586 3.25.586.716 0 1.379-.272 1.917-.526zm4.017-3.143c.45 0 .813.358.813.8 0 .441-.364.8-.813.8a.806.806 0 01-.812-.8c0-.442.364-.8.812-.8zm-11.624 0c.448 0 .812.358.812.8 0 .441-.364.8-.812.8a.806.806 0 01-.813-.8c0-.442.364-.8.813-.8zm7.79-.841c.32-.384.846-.54 1.33-.394.483.146.83.564.878 1.06.048.495-.212.97-.659 1.203-.322.168-.447-.477-.767-.585l.002-.003c-.287-.098-.772.362-.925.079a1.215 1.215 0 01.14-1.36zm-4.323 0c.322.384.377.92.14 1.36-.152.283-.64-.177-.925-.079l.003.003c-.108.036-.194.134-.273.24l-.118.165c-.11.15-.22.262-.377.18a1.226 1.226 0 01-.658-1.204c.048-.495.395-.913.878-1.059a1.262 1.262 0 011.33.394z">
-      </path>
-   </svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-   </svg></button>
-			</div>
-		</div>
-	</header>
-	<div id="mobile-menu" class="animated fast">
-		<ul>
-			<li><a href="http://localhost:1313/posts/">Posts</a></li>
-			<li><a href="http://localhost:1313/about-me/">About</a></li>
-		</ul>
-	</div>
+    <header>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Poonai&#39;s space</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='posts/' >
+                
+                
+                
+                <span>Posts</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='about-me/' >
+                
+                
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
 
 
-	<main class="site-main section-inner animated fadeIn faster"><article class="thin">
-			<header class="post-header">
-				<div class="post-date"><span>Mar 29, 2021</span></div>
-				<h1>Can differential privacy protect our privacy?</h1>
-			</header>
-			<div class="post-description">
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-      <polyline points="14 2 14 8 20 8"></polyline>
-      <line x1="16" y1="13" x2="8" y2="13"></line>
-      <line x1="16" y1="17" x2="8" y2="17"></line>
-      <polyline points="10 9 9 9 8 9"></polyline>
-   </svg>447&nbsp  </p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-      <line x1="16" y1="2" x2="16" y2="6"></line>
-      <line x1="8" y1="2" x2="8" y2="6"></line>
-      <line x1="3" y1="10" x2="21" y2="10"></line>
-   </svg>2021-03-29 00:00 &#43;0000
-</p></div>
-			<hr class="post-end">
-			<div class="content">
-				 <p>I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.</p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/differential-privacy/">Can differential privacy protect our privacy?</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2021-03-29T00:00:00Z'>Monday, March 29, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minutes read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+    <section class="article-content">
+    
+    
+    <p>I&rsquo;m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I&rsquo;ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.</p>
 <p>Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user&rsquo;s geolocation to the user-installed app names(maybe to hike the price if the competitor&rsquo;s app is not present on the user phone).</p>
-<p>I decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to <a href="https://docs-assets.developer.apple.com/ml-research/papers/learning-with-privacy-at-scale.pdf" target="_blank" rel="noopener">Apple's paper</a>
-. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.</p>
-<p>Usually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small <a href="https://github.com/poonai/diffrential_privacy/blob/master/cms_test.go#L30" target="_blank" rel="noopener">experiment</a>
- to estimate the popular view on a project management app to validate the paper.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#75715e">// we are tracking what view users are using in their project management app.</span>
+<p>I decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to <a class="link" href="https://docs-assets.developer.apple.com/ml-research/papers/learning-with-privacy-at-scale.pdf"  target="_blank" rel="noopener"
+    >Apple's paper</a>. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.</p>
+<p>Usually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small <a class="link" href="https://github.com/poonai/diffrential_privacy/blob/master/cms_test.go#L30"  target="_blank" rel="noopener"
+    >experiment</a> to estimate the popular view on a project management app to validate the paper.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#75715e">// we are tracking what view users are using in their project management app.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 6k users are using list view.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">6000</span>, <span style="color:#e6db74">&#34;list&#34;</span>)
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 9k user using board view.</span>
@@ -161,7 +198,7 @@ Recently, one of my friends explained to me the kind of events they track in the
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2k user using calendar view.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">track</span>(<span style="color:#ae81ff">2000</span>, <span style="color:#e6db74">&#34;calendar&#34;</span>)
 </span></span></code></pre></div><p>The variance between the actual inference and the inference calculated via differential privacy is not that large.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for list&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;list&#34;</span>)))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for list&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;list&#34;</span>)))
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for board&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;board&#34;</span>)))
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;estimate for calendar&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Estimate</span>([]byte(<span style="color:#e6db74">&#34;calendar&#34;</span>)))
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// output</span>
@@ -170,62 +207,124 @@ Recently, one of my friends explained to me the kind of events they track in the
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// estimate for calendar 1157.801902649071</span>
 </span></span></code></pre></div><p>I presented it to my friend and asked him whether his company would consider using such tech.</p>
 <p>Unfortunately, the inference of users&rsquo; behaviour alone is not enough, they would also want to send notifications based on certain events.</p>
-<p>For example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the <a href="https://docs.moengage.com/docs/tracking-user-attributes#default-user-attributes" target="_blank" rel="noopener">user level</a>
-.</p>
+<p>For example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the <a class="link" href="https://docs.moengage.com/docs/tracking-user-attributes#default-user-attributes"  target="_blank" rel="noopener"
+    >user level</a>.</p>
 <p>Companies don&rsquo;t just want analytics, they also want to target the user. which reminds me of the quote from the movie <code>The Social Dilemma</code></p>
 <blockquote>
-<p>We want to psychologically figure out how to manipulate you as fast as possible</p></blockquote>
-<h3 id="closing-thoughts">Closing Thoughts:<a href="#closing-thoughts" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h3>
-<p>Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies&rsquo; needs. There are some use cases, where I think differential privacy can be deployed.</p>
+<p>We want to psychologically figure out how to manipulate you as fast as possible</p>
+</blockquote>
+<h3 id="closing-thoughts">Closing Thoughts:
+</h3><p>Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies&rsquo; needs. There are some use cases, where I think differential privacy can be deployed.</p>
 <ul>
 <li>customers&rsquo; sensitive data can be tracked.</li>
 <li>privacy-focused applications.</li>
 </ul>
-<p>I would love to hear where else differential-privacy can be plugged in. <a href="https://twitter.com/poonai_" target="_blank" rel="noopener">My profile</a>
- if anyone wants to reach out.</p>
+<p>I would love to hear where else differential-privacy can be plugged in. <a class="link" href="https://twitter.com/poonai_"  target="_blank" rel="noopener"
+    >My profile</a> if anyone wants to reach out.</p>
 
-			</div>
-			
-		</article>
-		<div class="post-nav thin">
-			<a class="next-post" href="http://localhost:1313/posts/how-debuggers-works-part1/">
-				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-      <line x1="19" y1="12" x2="5" y2="12"></line>
-      <polyline points="12 19 5 12 12 5"></polyline>
-   </svg>&nbsp;</span><br><span>Part 1: DIY debugger in Golang</span>
-			</a>
-		</div>
-		<div id="comments" class="thin"></div>
-	</main>
-<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+</section>
 
-<script src="https://giscus.app/client.js"
-        data-repo="poonai/poonai.github.io"
-        data-repo-id="MDEwOlJlcG9zaXRvcnkzNTI1NzEyOTg="
-        data-category="General"
-        data-category-id="DIC_kwDOFQPPos4Cpnf0"
-        data-mapping="og:title"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        crossorigin="anonymous"
-        async>
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
 </script>
 
-<p>
-    &copy; 2025 <a href="http://localhost:1313/">Poonai&#39;s space</a>
-    &#183; &#183; Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>
-    &#183; Theme <a href="https://github.com/1bl4z3r/hermit-V2" target="_blank" rel="noopener">Hermit-V2</a></p></footer>
-<script async src="http://localhost:1313/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js" integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin="anonymous"></script><script id="MathJax-script" type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" crossorigin="anonymous"></script>
-<script type="text/javascript" id="MathJax-script-helper" async src="http://localhost:1313/js/mathjax-assistant.min.ca29e9d446b2a6cb6c6e3eb0d47e9693f5c306c146eaccb43047afbf31b07a6f.js" integrity="sha256-yinp1Eaypstsbj6w1H6Wk/XDBsFG6sy0MEevvzGwem8=" crossorigin="anonymous"></script>
+    
 
-</body>
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 Poonai&#39;s space
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+        </div>
+        <script type="text/javascript" src="/ts/main.ecff16e83482c03c42d6245e0be35573d43c55812826f0b0c05af997a491920c.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
 </html>
