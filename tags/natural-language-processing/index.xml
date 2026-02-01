@@ -1,2 +1,91 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Natural-Language-Processing on Poonai's space</title><link>https://poonai.xyz/tags/natural-language-processing/</link><description>Recent content in Natural-Language-Processing on Poonai's space</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 02 Oct 2025 11:12:35 +0000</lastBuildDate><atom:link href="https://poonai.xyz/tags/natural-language-processing/index.xml" rel="self" type="application/rss+xml"/><item><title>Building an Visual Language Model from scratch</title><link>https://poonai.xyz/posts/building-visual-language-model/</link><pubDate>Thu, 02 Oct 2025 11:12:35 +0000</pubDate><guid>https://poonai.xyz/posts/building-visual-language-model/</guid><description>&lt;p&gt;My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&amp;rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a &lt;a href="https://huggingface.co/datasets/visual-layer/imagenet-1k-vl-enriched" target="_blank" rel="noopener"&gt;dataset&lt;/a&gt;
- with image and it&amp;rsquo;s caption to train.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Natural-Language-Processing on Poonai's space</title><link>https://poonai.xyz/tags/natural-language-processing/</link><description>Recent content in Natural-Language-Processing on Poonai's space</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 02 Oct 2025 11:12:35 +0000</lastBuildDate><atom:link href="https://poonai.xyz/tags/natural-language-processing/index.xml" rel="self" type="application/rss+xml"/><item><title>Building an Visual Language Model from scratch</title><link>https://poonai.xyz/post/building-visual-language-model/</link><pubDate>Thu, 02 Oct 2025 11:12:35 +0000</pubDate><guid>https://poonai.xyz/post/building-visual-language-model/</guid><description>&lt;p&gt;My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I&amp;rsquo;m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a &lt;a class="link" href="https://huggingface.co/datasets/visual-layer/imagenet-1k-vl-enriched" target="_blank" rel="noopener"
+ &gt;dataset&lt;/a&gt; with image and it&amp;rsquo;s caption to train.&lt;/p&gt;
+&lt;p&gt;Instead of training all the component from scratch, I&amp;rsquo;m going to use pre existing LLM model and customize to our need. You could ask why did you mention &lt;code&gt;scratch&lt;/code&gt; in the title and say the title is
+misleading. In general, this is how VLM are built. Correct me if I&amp;rsquo;m wrong me.&lt;/p&gt;
+&lt;p&gt;The off the shelf models are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://huggingface.co/timm/vit_mediumd_patch16_reg4_gap_384.sbb2_e200_in12k_ft_in1k" target="_blank" rel="noopener"
+ &gt;ViT - Vision Transformer Image Classification&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://huggingface.co/openai-community/gpt2" target="_blank" rel="noopener"
+ &gt;GPT2 - A Text Generation Model&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="vit"&gt;ViT
+&lt;/h2&gt;&lt;p&gt;This model is an image embedding model. It returns embedding tensor representation for an image. That means, the vector distance between similar image is shorter. The vector distance between lion and cat will shorter than the vector distance between lion and car. Since, the lion and cat are animals.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://poonai.xyz/post/building-visual-language-model/image_embedding.png"
+	width="538"
+	height="359"
+	loading="lazy"
+	
+		alt="image embedding"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="149"
+		data-flex-basis="359px"
+	
+&gt;&lt;/p&gt;
+&lt;h2 id="gpt2"&gt;GPT2
+&lt;/h2&gt;&lt;p&gt;This model is a text generation model. Given a list of word, it&amp;rsquo;ll predict the next series of words.&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;Input&lt;/th&gt;
+ &lt;th&gt;Output&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;The sky is&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;The sky is blue&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="projection-layer"&gt;Projection layer.
+&lt;/h2&gt;&lt;p&gt;&lt;img src="https://poonai.xyz/post/building-visual-language-model/vlm_architecture.png"
+	width="614"
+	height="409"
+	loading="lazy"
+	
+		alt="vlm architecture"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="360px"
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This is the key component of our VLM model. This layer transform the image embedding output into a GPT2 textual embedding space. In other words we are converting the images into an intermediate state for the GPT2 to produce meaningful output.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Projection&lt;/span&gt;(nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Module):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;__init__&lt;/span&gt;(self, in_features, out_features):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; super()&lt;span style="color:#f92672"&gt;.&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;__init__&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; self&lt;span style="color:#f92672"&gt;.&lt;/span&gt;network &lt;span style="color:#f92672"&gt;=&lt;/span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Sequential(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Linear(in_features, in_features &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;GELU(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; nn&lt;span style="color:#f92672"&gt;.&lt;/span&gt;Linear(in_features &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, out_features),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; )
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;forward&lt;/span&gt;(self, input):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; self&lt;span style="color:#f92672"&gt;.&lt;/span&gt;network(input)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The tensor output size of ViT mode is &lt;code&gt;512&lt;/code&gt; and the tensor input size of gpt2 model is &lt;code&gt;768&lt;/code&gt;. This projection layer will convert the ViT output tensor size into gpt2 input tensor size. With training, the image tensor are transformed into a tensor that GPT2 understands.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;self&lt;span style="color:#f92672"&gt;.&lt;/span&gt;projection &lt;span style="color:#f92672"&gt;=&lt;/span&gt; Projection(&lt;span style="color:#ae81ff"&gt;512&lt;/span&gt;,&lt;span style="color:#ae81ff"&gt;768&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;I&amp;rsquo;ve put all the component together and trained it with the dataset. Here is the result:&lt;/p&gt;
+&lt;p&gt;Input Image:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://poonai.xyz/post/building-visual-language-model/boy_holding_fish.png"
+	width="500"
+	height="375"
+	loading="lazy"
+	
+		alt="A boy holding image"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="320px"
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Output Text:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;a boy holding a fish in the woods
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This project gave me an solid intuition of building a VLM model. In the upcoming days I&amp;rsquo;m aspiring to build a document processing VLM model that beats state-of-the-art(SOTA) benchmarks. You can see
+the entire code &lt;a class="link" href="https://github.com/poonai/imagenet-caption" target="_blank" rel="noopener"
+ &gt;here&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

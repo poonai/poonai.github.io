@@ -1,5 +1,212 @@
-<!doctype html><html lang=en-us><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script><script>var dnt,doNotTrack=!1;if(!1&&(dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes"),!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-WXVC1D5RC9")}</script><meta charset=UTF-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=robots content="index, follow"><meta name=author content><meta name=description content="Poonai is an independent software developer(Indie Hustler)."><link rel=author type=text/plain href=/humans.txt><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta name=msapplication-TileImage content="/mstile-144x144.png"><meta name=theme-color content="#494f5c"><meta name=msapplication-TileColor content="#494f5c"><link rel=mask-icon href=/safari-pinned-tab.svg color=#494f5c><meta itemprop=name content="Context Pruning in conversational agents"><meta itemprop=description content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”"><meta itemprop=datePublished content="2025-09-08T11:12:35+00:00"><meta itemprop=dateModified content="2025-09-08T11:12:35+00:00"><meta itemprop=wordCount content="1520"><meta itemprop=keywords content="Ai,Context-Engineering,Llm,Context-Pruning"><meta property="og:url" content="https://poonai.xyz/posts/context-pruning-in-conversational-agent/"><meta property="og:site_name" content="Poonai's space"><meta property="og:title" content="Context Pruning in conversational agents"><meta property="og:description" content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-09-08T11:12:35+00:00"><meta property="article:modified_time" content="2025-09-08T11:12:35+00:00"><meta property="article:tag" content="Ai"><meta property="article:tag" content="Context-Engineering"><meta property="article:tag" content="Llm"><meta property="article:tag" content="Context-Pruning"><meta name=twitter:card content="summary"><meta name=twitter:title content="Context Pruning in conversational agents"><meta name=twitter:description content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Context Pruning in conversational agents","name":"Context Pruning in conversational agents","description":"My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\n","keywords":["ai","context-engineering","llm","context-pruning"],"articleBody":"My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\nThe good news is there is no “the right way” yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I’m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.\nWhy BAML? The minimal framework is BAML. I’ve been using BAML for the past couple of months and am delighted with the developer experience it offers.\nIt offers function-style LLM calling. All you have to do is define your prompt, input, and output format in BAML language. Then BAML generates type-safe functions that take typed input and return typed output. This is like any other function you use every day.\nAs you read the blog, you’ll understand how easy BAML is — or you can check their docs as well.\nContext Engineering Context engineering is an important skill in terms of agentic application building. It is essentially providing the right context to steer the LLM in the right direction. There are several ways to do context engineering.\nHowever, I want to demonstrate context pruning in conversational agents. An agent that does a lot of tool calls will be ideal to demonstrate the technique. So, I built an agent that solves mathematical equations which require to stitch multiple tool results. The source code can be seen here Example:\nSolve the quadratic equation: x^2 + 5*x + 6 = 0 and find its derivative.\nTo answer this question:\nit has to solve an equation with a tool call it has to find a derivative with another tool call Basically, the agent has to call two tools sequentially to answer the user query. The agent can be implemented by a single prompt. Here is the respective BAML code and prompt for it:\nclass AgentResponse { tools QuandraticSolver | QuadraticDerivative | QuadraticEvaluator | MessageToUser } function MathChat(message_history: string[]) -\u003e AgentResponse { client OpenRouter prompt #\" You're a helpful Math AI assistant. You have tools to solve equations related to quadratic equations. The user query could be simple, or complex that requires you to take multiple turns between you and tools to resolve the user query. Use message_to_user tools to reply or ask clarification questions to the user. {% for message in message_history %} {{ message}} {% endfor %} {{ctx.output_format}} \"# } BAML will generate a type-safe Python function where you can pass message_history as input and AgentResponse as output.\nExample:\nfrom baml_client import b # Example of using the BAML-generated MathChat function message_history = [ \"{'role': 'user', 'msg': 'Solve the quadratic equation: x^2 + 5*x + 6 = 0'}\" ] # Call the BAML-generated function agent_response = b.MathChat(message_history) # The agent_response will contain a tool call, which could be: # - QuadraticSolver: To solve the equation # - QuadraticDerivative: To find the derivative # - QuadraticEvaluator: To evaluate the equation at a specific value # - MessageToUser: To respond directly to the user The AI response could be a tool call or a response to the user. The AI responds based on the feedback obtained from the external system. All the interactions are stored in message_history and used as context to decide the flow of the conversation.\ndef chat(self, user_message: str) -\u003e str: # Add user message to history self.message_history.append({ 'role': 'user', 'msg': user_message }) while True: # Get response from BAML MathChat agent_response = b.MathChat([str(message) for message in self.message_history]) # Use the tool and get the response tool_response = self.use_tool(agent_response) # If it's a direct message to the user, return it if tool_response['role'] == 'assistant': return tool_response['msg'] Example Message History User: Solve the quadratic equation: x² + 5x + 6 = 0 Assistant (PROCESSING): I need to solve this quadratic equation. [Calling `quadratic_solver`] Tool: Solved equation: x² + 5x + 6 = 0. Roots: [-3, -2] Assistant (COMPLETED): The roots of the quadratic equation x² + 5x + 6 = 0 are x = -3 and x = -2. User: Find the derivative of: 2x² + 4x − 6 Assistant (PROCESSING): I need to find the derivative of this quadratic equation. [Calling `quadratic_derivative`] Tool: Derivative of equation: 2x² + 4x − 6. Result: 4x + 4 Assistant (COMPLETED): The derivative of the quadratic equation 2x² + 4x − 6 is 4x + 4. Pruning the Context The interaction between tool and AI is not always needed to answer future user questions. Since the AI response already encapsulates the context in its response, tool-related messages can be removed when irrelevant.\nHowever, we can’t always prune immediately. The AI might still be clarifying missing information before solving. Intermediate tool-related messages should be removed only when not relevant anymore.\nClarifying Conversation Example Sometimes the AI must clarify before solving. Example:\nUser: Integrate this equation Assistant (PROCESSING): Sure! Could you provide the equation you want me to integrate? User: x² + 3x Assistant (PROCESSING): I need to integrate this equation. [Calling `integral_solver`] Tool: Equation received: x² + 3x. Integration requires clarification: definite or indefinite? Assistant (PROCESSING): Do you want me to compute the definite integral (with limits) or the indefinite integral of x² + 3x? User: Indefinite integral Assistant (PROCESSING): I need to compute the indefinite integral of this equation. [Calling `integral_solver`] Tool: Result of ∫(x² + 3x) dx = (x³)/3 + (3x²)/2 + C Assistant (COMPLETED): The indefinite integral of x² + 3x is (x³)/3 + (3x²)/2 + C. Task Status When to prune context will be decided based on the current phase of the Agent. It could be in PROCESSING phase or COMPLETED phase. We’ll let the LLM itself tell us by adding the task_status flag to message_to_user tool calls.\nenum TaskStatus { COMPLETED PROCESSING } class MessageToUser { type \"message_to_user\" @description(#\" DESCRIPTION: MessageToUser is used to respond to the user \"#) response string @description(#\" The assistant response to the user \"#) task_status TaskStatus } Example pruning logic:\nif self.context_trimming and tools.task_status == \"COMPLETED\": # Convert message history to string list for BAML function message_history_str = [str(message) for message in self.message_history] # Call SummarizeContext BAML function summarized_context = b.SummarizeContext(message_history_str) # Replace message history with summarized context self.message_history = summarized_context Summarization The pruning logic could be as simple as removing all tool calls, or we can use an LLM to summarize the context for us.\nfunction SummarizeContext(message_history: string[]) -\u003e string []{ client OpenRouter prompt #\" Your job is to summarize the user conversation to reduce the token length. Ideas to summarize: - remove intermediate tool calls and tool responses - summarize the user question and response in concise form {'role': 'user', 'msg': 'solve x^2 - 5*x + 6 =0 and find derivative'} {'role': 'assistant', 'msg': 'I need to solve this quadratic equation', 'tool_name': 'quadratic_solver', 'tool_args': {'equation': 'x^2 - 5*x + 6 = 0'}} {'role': 'tool', 'msg': 'Solved equation: x^2 - 5*x + 6 = 0. Roots: [2, 3]', 'tool_name': 'quadratic_solver', 'metadata': {'equation': 'x^2 - 5*x + 6 = 0', 'result': '[2, 3]'}} {'role': 'assistant', 'msg': 'I need to find the derivative of this quadratic equation', 'tool_name': 'quadratic_derivative', 'tool_args': {'equation': 'x^2 - 5*x + 6 = 0'}} {'role': 'tool', 'msg': 'Derivative of equation: x^2 - 5*x + 6 = 0. Result: 2*x - 5', 'tool_name': 'quadratic_derivative', 'metadata': {'equation': 'x^2 - 5*x + 6 = 0', 'result': '2*x - 5'}} {'role': 'assistant', 'msg': 'The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5. If you want me to evaluate the equation or the derivative at a specific x value, please let me know.', 'tool_name': 'message_to_user'} {'role': 'user', 'msg': 'solve x^2 - 5*x + 6 =0 and find derivative'} {'role': 'assistant', 'msg': 'The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5.', 'tool_name': 'message_to_user'} \"User asked to solve x^2 - 5*x + 6 = 0, find its derivative, and the squares of the roots; assistant provided roots (2, 3), derivative (2*x - 5), and squares (4, 9).\" {'role': 'user', 'msg': 'solve x^2 - 5*x + 6 =0 and find derivative'} {'role': 'assistant', 'msg': 'roots (2, 3), derivative (2*x - 5)', 'tool_name': 'message_to_user'} {% for message in message_history %} {{ message}} {% endfor %} {{ctx.output_format}} \"# } Token Usage Comparison Let’s measure the token usage with context pruning and without context pruning.\nAgent Type Input Tokens Output Tokens Smart Agent (with context pruning) 2333 309 Agent (without context pruning) 4883 368 The lower value is better. We reduced token usage by 47% while getting the same output by pruning unnecessary context.\nLesser token has the following advatages:\nless hallucination less cost less response time ","wordCount":"1520","inLanguage":"en","datePublished":"2025-09-08T11:12:35Z","dateModified":"2025-09-08T11:12:35Z","author":{"@type":"Person","name":null},"mainEntityOfPage":{"@type":"WebPage","@id":"https://poonai.xyz/posts/context-pruning-in-conversational-agent/"},"publisher":{"@type":"Organization","name":"Poonai's space","description":"Poonai is an independent software developer(Indie Hustler).","logo":{"@type":"ImageObject","url":"https://poonai.xyz/favicon.ico"}}}</script><title>Context Pruning in conversational agents</title><link rel="stylesheet dns-prefetch preconnect preload prefetch" as=style media=screen href=https://poonai.xyz/css/style.min.1d5e86b69027527165c1868ba9414e4f249d833c415c30599d408c4cacf7f529.css integrity="sha256-HV6GtpAnUnFlwYaLqUFOTySdgzxBXDBZnUCMTKz39Sk=" crossorigin=anonymous></head><body id=page><header id=site-header><div class="hdr-wrapper section-inner"><div class=hdr-left><div class=site-branding><a href=https://poonai.xyz/>Poonai's space</a></div><nav class="site-nav hide-in-mobile"><a href=https://poonai.xyz/posts/>Posts</a><a href=https://poonai.xyz/about-me/>About</a></nav></div><div class="hdr-right hdr-icons"><span class="hdr-links hide-in-mobile"><a href=https://twitter.com/poonai_ target=_blank rel="noopener me" title=X><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="st0" d="m21.3 21.1L9.9 2.9H2.7l11.4 18.2zm-18.6.0 7.2-6.6m4.2-5 7.2-6.6"/></svg></a><a href=https://github.com/poonai target=_blank rel="noopener me" title=Github><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://huggingface.co/poonai target=_blank rel="noopener me" title=Huggingface><svg class="feather" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><title>HuggingFace</title><path d="M16.781 3.277c2.997 1.704 4.844 4.851 4.844 8.258.0.995-.155 1.955-.443 2.857a1.332 1.332.0 011.125.4 1.41 1.41.0 01.2 1.723c.204.165.352.385.428.632l.017.062c.06.222.12.69-.2 1.166.244.37.279.836.093 1.236-.255.57-.893 1.018-2.128 1.5l-.202.078-.131.048c-.478.173-.89.295-1.061.345l-.086.024c-.89.243-1.808.375-2.732.394-1.32.0-2.3-.36-2.923-1.067a9.852 9.852.0 01-3.18.018C9.778 21.647 8.802 22 7.494 22a11.249 11.249.0 01-2.541-.343l-.221-.06-.273-.08a16.574 16.574.0 01-1.175-.405c-1.237-.483-1.875-.93-2.13-1.501-.186-.4-.151-.867.093-1.236a1.42 1.42.0 01-.2-1.166c.069-.273.226-.516.447-.694a1.41 1.41.0 01.2-1.722c.233-.248.557-.391.917-.407l.078-.001a9.385 9.385.0 01-.44-2.85c0-3.407 1.847-6.554 4.844-8.258a9.822 9.822.0 019.687.0zM4.188 14.758c.125.687 2.357 2.35 2.14 2.707-.19.315-.796-.239-.948-.386l-.041-.04-.168-.147c-.561-.479-2.304-1.9-2.74-1.432-.43.46.119.859 1.055 1.42l.784.467.136.083c1.045.643 1.12.84.95 1.113-.188.295-3.07-2.1-3.34-1.083-.27 1.011 2.942 1.304 2.744 2.006-.2.7-2.265-1.324-2.685-.537-.425.79 2.913 1.718 2.94 1.725l.16.04.175.042c1.227.284 3.565.65 4.435-.604.673-.973.64-1.709-.248-2.61l-.057-.057c-.945-.928-1.495-2.288-1.495-2.288l-.017-.058-.025-.072c-.082-.22-.284-.639-.63-.584-.46.073-.798 1.21.12 1.933l.05.038c.977.721-.195 1.21-.573.534l-.058-.104-.143-.25c-.463-.799-1.282-2.111-1.739-2.397-.532-.332-.907-.148-.782.541zm14.842-.541c-.533.335-1.563 2.074-1.94 2.751a.613.613.0 01-.687.302.436.436.0 01-.176-.098.303.303.0 01-.049-.06l-.014-.028-.008-.02-.007-.019-.003-.013-.003-.017a.289.289.0 01-.004-.048c0-.12.071-.266.25-.427.026-.024.054-.047.084-.07l.047-.036c.022-.016.043-.032.063-.049.883-.71.573-1.81.131-1.917l-.031-.006-.056-.004a.368.368.0 00-.062.006l-.028.005-.042.014-.039.017-.028.015-.028.019-.036.027-.023.02c-.173.158-.273.428-.31.542l-.016.054s-.53 1.309-1.439 2.234l-.054.054c-.365.358-.596.69-.702 1.018-.143.437-.066.868.21 1.353.055.097.117.195.187.296.882 1.275 3.282.876 4.494.59l.286-.07.25-.074c.276-.084.736-.233 1.2-.42l.188-.077.065-.028.064-.028.124-.056.081-.038c.529-.252.964-.543.994-.827l.001-.036a.299.299.0 00-.037-.139c-.094-.176-.271-.212-.491-.168l-.045.01c-.044.01-.09.024-.136.04l-.097.035-.054.022c-.559.23-1.238.705-1.607.745h.006a.452.452.0 01-.05.003h-.024l-.024-.003-.023-.005c-.068-.016-.116-.06-.14-.142a.22.22.0 01-.005-.1c.062-.345.958-.595 1.713-.91l.066-.028c.528-.224.97-.483.985-.832v-.04a.47.47.0 00-.016-.098c-.048-.18-.175-.251-.36-.251-.785.0-2.55 1.36-2.92 1.36-.025.0-.048-.007-.058-.024a.6.6.0 01-.046-.088c-.1-.238.068-.462 1.06-1.066l.209-.126c.538-.32 1.01-.588 1.341-.831.29-.212.475-.406.503-.6l.003-.028c.008-.113-.038-.227-.147-.344a.266.266.0 00-.07-.054l-.034-.015-.013-.005a.403.403.0 00-.13-.02c-.162.0-.369.07-.595.18-.637.313-1.431.952-1.826 1.285l-.249.215-.033.033c-.08.078-.288.27-.493.386l-.071.037-.041.019a.535.535.0 01-.122.036h.005a.346.346.0 01-.031.003l.01-.001-.013.001c-.079.005-.145-.021-.19-.095a.113.113.0 01-.014-.065c.027-.465 2.034-1.991 2.152-2.642l.009-.048c.1-.65-.271-.817-.791-.493zM11.938 2.984c-4.798.0-8.688 3.829-8.688 8.55.0.692.083 1.364.24 2.008l.008-.009c.252-.298.612-.46 1.017-.46.355.008.699.117.993.312.22.14.465.384.715.694.261-.372.69-.598 1.15-.605.852.0 1.367.728 1.562 1.383l.047.105.06.127c.192.396.595 1.139 1.143 1.68 1.06 1.04 1.324 2.115.8 3.266a8.865 8.865.0 002.024-.014c-.505-1.12-.26-2.17.74-3.186l.066-.066c.695-.684 1.157-1.69 1.252-1.912.195-.655.708-1.383 1.56-1.383.46.007.889.233 1.15.605.25-.31.495-.553.718-.694a1.87 1.87.0 01.99-.312c.357.0.682.126.925.36.14-.61.215-1.245.215-1.898.0-4.722-3.89-8.55-8.687-8.55zm1.857 8.926.439-.212c.553-.264.89-.383.89.152.0 1.093-.771 3.208-3.155 3.262h-.184c-2.325-.052-3.116-2.06-3.156-3.175l-.001-.087c0-1.107 1.452.586 3.25.586.716.0 1.379-.272 1.917-.526zm4.017-3.143c.45.0.813.358.813.8.0.441-.364.8-.813.8a.806.806.0 01-.812-.8c0-.442.364-.8.812-.8zm-11.624.0c.448.0.812.358.812.8.0.441-.364.8-.812.8a.806.806.0 01-.813-.8c0-.442.364-.8.813-.8zm7.79-.841c.32-.384.846-.54 1.33-.394.483.146.83.564.878 1.06.048.495-.212.97-.659 1.203-.322.168-.447-.477-.767-.585l.002-.003c-.287-.098-.772.362-.925.079a1.215 1.215.0 01.14-1.36zm-4.323.0c.322.384.377.92.14 1.36-.152.283-.64-.177-.925-.079l.003.003c-.108.036-.194.134-.273.24l-.118.165c-.11.15-.22.262-.377.18a1.226 1.226.0 01-.658-1.204c.048-.495.395-.913.878-1.059a1.262 1.262.0 011.33.394z"/></svg></a></span><button id=menu-btn class=hdr-btn title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></div></header><div id=mobile-menu class="animated fast"><ul><li><a href=https://poonai.xyz/posts/>Posts</a></li><li><a href=https://poonai.xyz/about-me/>About</a></li></ul></div><main class="site-main section-inner animated fadeIn faster"><article class=thin><header class=post-header><div class=post-date><span>Sep 8, 2025</span></div><h1>Context Pruning in conversational agents</h1></header><div class=post-description><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://poonai.xyz/tags/ai>ai</a></span><span class=tag><a href=https://poonai.xyz/tags/context-engineering>context-engineering</a></span><span class=tag><a href=https://poonai.xyz/tags/llm>llm</a></span><span class=tag><a href=https://poonai.xyz/tags/context-pruning>context-pruning</a></span></p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>1520&nbsp</p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2025-09-08 11:12 +0000</p></div><hr class=post-end><div class=content><h1 id=my-journey-to-building-agentic-apps>My Journey to Building Agentic Apps<a href=#my-journey-to-building-agentic-apps class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h1><p>My childhood dream of having a personal <strong>J.A.R.V.I.S</strong> has come true. The recent advancement in <strong>LLMs (Large Language Models)</strong> made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps <em>“the right way.”</em></p><p>The good news is there is no <em>“the right way”</em> yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.</p><hr><h2 id=why-baml>Why BAML?<a href=#why-baml class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>The minimal framework is <strong>BAML</strong>. I&rsquo;ve been using BAML for the past couple of months and am delighted with the developer experience it offers.</p><p>It offers <strong>function-style LLM calling</strong>. All you have to do is define your prompt, input, and output format in BAML language. Then BAML generates type-safe functions that take typed input and return typed output. This is like any other function you use every day.</p><p>As you read the blog, you&rsquo;ll understand how easy BAML is — or you can check their <a href=https://docs.boundaryml.com/guide/introduction/what-is-baml target=_blank rel=noopener>docs</a>
-as well.</p><hr><h2 id=context-engineering>Context Engineering<a href=#context-engineering class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p><strong>Context engineering</strong> is an important skill in terms of agentic application building. It is essentially providing the right context to steer the LLM in the right direction. There are several ways to do context engineering.</p><p>However, I want to demonstrate <strong>context pruning</strong> in conversational agents. An agent that does a lot of tool calls will be ideal to demonstrate the technique. So, I built an agent that solves mathematical equations which require to stitch multiple tool results. The source code can be seen <a href=https://github.com/poonai/context-trimming-sample target=_blank rel=noopener>here</a></p><p><strong>Example:</strong><br>Solve the quadratic equation: <code>x^2 + 5*x + 6 = 0</code> and find its derivative.</p><p>To answer this question:</p><ul><li>it has to solve an equation with a tool call</li><li>it has to find a derivative with another tool call</li></ul><p>Basically, the agent has to call two tools sequentially to answer the user query. The agent can be implemented by a single prompt. Here is the respective BAML code and prompt for it:</p><pre tabindex=0><code class=language-baml data-lang=baml>class AgentResponse {
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\nThe good news is there is no “the right way” yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.\n">
+<title>Context Pruning in conversational agents</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/context-pruning-in-conversational-agent/'>
+
+<link rel="stylesheet" href="/scss/style.min.51098b80cc297c94c0f57786d4a04e7372774e5993b60facf53870128a79bf73.css"><meta property='og:title' content="Context Pruning in conversational agents">
+<meta property='og:description' content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\nThe good news is there is no “the right way” yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.\n">
+<meta property='og:url' content='http://localhost:1313/posts/context-pruning-in-conversational-agent/'>
+<meta property='og:site_name' content='Poonai&#39;s space'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='ai' /><meta property='article:tag' content='context-engineering' /><meta property='article:tag' content='llm' /><meta property='article:tag' content='context-pruning' /><meta property='article:published_time' content='2025-09-08T11:12:35&#43;00:00'/><meta property='article:modified_time' content='2025-09-08T11:12:35&#43;00:00'/>
+<meta name="twitter:title" content="Context Pruning in conversational agents">
+<meta name="twitter:description" content="My Journey to Building Agentic Apps My childhood dream of having a personal J.A.R.V.I.S has come true. The recent advancement in LLMs (Large Language Models) made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps “the right way.”\nThe good news is there is no “the right way” yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.\n">
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WXVC1D5RC9"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WXVC1D5RC9');
+        }
+      </script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Poonai&#39;s space</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='posts/' >
+                
+                
+                
+                <span>Posts</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='about-me/' >
+                
+                
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/context-pruning-in-conversational-agent/">Context Pruning in conversational agents</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2025-09-08T11:12:35Z'>Monday, September 8, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    8 minutes read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+    <section class="article-content">
+    
+    
+    <h1 id="my-journey-to-building-agentic-apps">My Journey to Building Agentic Apps
+</h1><p>My childhood dream of having a personal <strong>J.A.R.V.I.S</strong> has come true. The recent advancement in <strong>LLMs (Large Language Models)</strong> made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps <em>“the right way.”</em></p>
+<p>The good news is there is no <em>“the right way”</em> yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I&rsquo;m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.</p>
+<hr>
+<h2 id="why-baml">Why BAML?
+</h2><p>The minimal framework is <strong>BAML</strong>. I&rsquo;ve been using BAML for the past couple of months and am delighted with the developer experience it offers.</p>
+<p>It offers <strong>function-style LLM calling</strong>. All you have to do is define your prompt, input, and output format in BAML language. Then BAML generates type-safe functions that take typed input and return typed output. This is like any other function you use every day.</p>
+<p>As you read the blog, you&rsquo;ll understand how easy BAML is — or you can check their <a class="link" href="https://docs.boundaryml.com/guide/introduction/what-is-baml"  target="_blank" rel="noopener"
+    >docs</a> as well.</p>
+<hr>
+<h2 id="context-engineering">Context Engineering
+</h2><p><strong>Context engineering</strong> is an important skill in terms of agentic application building. It is essentially providing the right context to steer the LLM in the right direction. There are several ways to do context engineering.</p>
+<p>However, I want to demonstrate <strong>context pruning</strong> in conversational agents. An agent that does a lot of tool calls will be ideal to demonstrate the technique. So, I built an agent that solves mathematical equations which require to stitch multiple tool results. The source code can be seen <a class="link" href="https://github.com/poonai/context-trimming-sample"  target="_blank" rel="noopener"
+    >here</a></p>
+<p><strong>Example:</strong><br>
+Solve the quadratic equation: <code>x^2 + 5*x + 6 = 0</code> and find its derivative.</p>
+<p>To answer this question:</p>
+<ul>
+<li>it has to solve an equation with a tool call</li>
+<li>it has to find a derivative with another tool call</li>
+</ul>
+<p>Basically, the agent has to call two tools sequentially to answer the user query. The agent can be implemented by a single prompt. Here is the respective BAML code and prompt for it:</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">class AgentResponse {
     tools QuandraticSolver  | QuadraticDerivative | QuadraticEvaluator | MessageToUser
 }
 
@@ -21,39 +228,44 @@ function MathChat(message_history: string[]) -&gt; AgentResponse {
         {{ctx.output_format}}
     &#34;#
 }
-</code></pre><p>BAML will generate a type-safe Python function where you can pass <code>message_history</code> as input and <code>AgentResponse</code> as output.</p><p><strong>Example:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> baml_client <span style=color:#f92672>import</span> b
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Example of using the BAML-generated MathChat function</span>
-</span></span><span style=display:flex><span>message_history <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;{&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;Solve the quadratic equation: x^2 + 5*x + 6 = 0&#39;}&#34;</span>
-</span></span><span style=display:flex><span>]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Call the BAML-generated function</span>
-</span></span><span style=display:flex><span>agent_response <span style=color:#f92672>=</span> b<span style=color:#f92672>.</span>MathChat(message_history)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># The agent_response will contain a tool call, which could be:</span>
-</span></span><span style=display:flex><span><span style=color:#75715e># - QuadraticSolver: To solve the equation</span>
-</span></span><span style=display:flex><span><span style=color:#75715e># - QuadraticDerivative: To find the derivative</span>
-</span></span><span style=display:flex><span><span style=color:#75715e># - QuadraticEvaluator: To evaluate the equation at a specific value</span>
-</span></span><span style=display:flex><span><span style=color:#75715e># - MessageToUser: To respond directly to the user</span>
-</span></span></code></pre></div><p>The AI response could be a tool call or a response to the user. The AI responds based on the feedback obtained from the external system. All the interactions are stored in <code>message_history</code> and used as context to decide the flow of the conversation.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>chat</span>(self, user_message: str) <span style=color:#f92672>-&gt;</span> str:
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Add user message to history</span>
-</span></span><span style=display:flex><span>    self<span style=color:#f92672>.</span>message_history<span style=color:#f92672>.</span>append({
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;role&#39;</span>: <span style=color:#e6db74>&#39;user&#39;</span>,
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;msg&#39;</span>: user_message
-</span></span><span style=display:flex><span>    })
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:
-</span></span><span style=display:flex><span>        <span style=color:#75715e># Get response from BAML MathChat</span>
-</span></span><span style=display:flex><span>        agent_response <span style=color:#f92672>=</span> b<span style=color:#f92672>.</span>MathChat([str(message) <span style=color:#66d9ef>for</span> message <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>message_history])
-</span></span><span style=display:flex><span>        
-</span></span><span style=display:flex><span>        <span style=color:#75715e># Use the tool and get the response</span>
-</span></span><span style=display:flex><span>        tool_response <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>use_tool(agent_response)
-</span></span><span style=display:flex><span>               
-</span></span><span style=display:flex><span>        <span style=color:#75715e># If it&#39;s a direct message to the user, return it</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> tool_response[<span style=color:#e6db74>&#39;role&#39;</span>] <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;assistant&#39;</span>:
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> tool_response[<span style=color:#e6db74>&#39;msg&#39;</span>]
-</span></span></code></pre></div><hr><h2 id=example-message-history>Example Message History<a href=#example-message-history class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><pre tabindex=0><code>User: Solve the quadratic equation: x² + 5x + 6 = 0  
+</code></pre><p>BAML will generate a type-safe Python function where you can pass <code>message_history</code> as input and <code>AgentResponse</code> as output.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> baml_client <span style="color:#f92672">import</span> b
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example of using the BAML-generated MathChat function</span>
+</span></span><span style="display:flex;"><span>message_history <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;{&#39;role&#39;: &#39;user&#39;, &#39;msg&#39;: &#39;Solve the quadratic equation: x^2 + 5*x + 6 = 0&#39;}&#34;</span>
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Call the BAML-generated function</span>
+</span></span><span style="display:flex;"><span>agent_response <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>MathChat(message_history)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The agent_response will contain a tool call, which could be:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticSolver: To solve the equation</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticDerivative: To find the derivative</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - QuadraticEvaluator: To evaluate the equation at a specific value</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - MessageToUser: To respond directly to the user</span>
+</span></span></code></pre></div><p>The AI response could be a tool call or a response to the user. The AI responds based on the feedback obtained from the external system. All the interactions are stored in <code>message_history</code> and used as context to decide the flow of the conversation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">chat</span>(self, user_message: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Add user message to history</span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>message_history<span style="color:#f92672">.</span>append({
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;role&#39;</span>: <span style="color:#e6db74">&#39;user&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;msg&#39;</span>: user_message
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Get response from BAML MathChat</span>
+</span></span><span style="display:flex;"><span>        agent_response <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>MathChat([str(message) <span style="color:#66d9ef">for</span> message <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>message_history])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Use the tool and get the response</span>
+</span></span><span style="display:flex;"><span>        tool_response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>use_tool(agent_response)
+</span></span><span style="display:flex;"><span>               
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># If it&#39;s a direct message to the user, return it</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> tool_response[<span style="color:#e6db74">&#39;role&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;assistant&#39;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> tool_response[<span style="color:#e6db74">&#39;msg&#39;</span>]
+</span></span></code></pre></div><hr>
+<h2 id="example-message-history">Example Message History
+</h2><pre tabindex="0"><code>User: Solve the quadratic equation: x² + 5x + 6 = 0  
 Assistant (PROCESSING): I need to solve this quadratic equation. [Calling `quadratic_solver`]  
 Tool: Solved equation: x² + 5x + 6 = 0. Roots: [-3, -2]  
 Assistant (COMPLETED): The roots of the quadratic equation x² + 5x + 6 = 0 are x = -3 and x = -2.  
@@ -62,7 +274,13 @@ User: Find the derivative of: 2x² + 4x − 6
 Assistant (PROCESSING): I need to find the derivative of this quadratic equation. [Calling `quadratic_derivative`]  
 Tool: Derivative of equation: 2x² + 4x − 6. Result: 4x + 4  
 Assistant (COMPLETED): The derivative of the quadratic equation 2x² + 4x − 6 is 4x + 4.  
-</code></pre><hr><h2 id=pruning-the-context>Pruning the Context<a href=#pruning-the-context class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>The interaction between tool and AI is not always needed to answer future user questions. Since the AI response already encapsulates the context in its response, tool-related messages can be removed when irrelevant.</p><p>However, we can’t always prune immediately. The AI might still be clarifying missing information before solving. Intermediate tool-related messages should be removed <strong>only when not relevant anymore</strong>.</p><h2 id=clarifying-conversation-example>Clarifying Conversation Example<a href=#clarifying-conversation-example class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>Sometimes the AI must clarify before solving. Example:</p><pre tabindex=0><code>User: Integrate this equation  
+</code></pre><hr>
+<h2 id="pruning-the-context">Pruning the Context
+</h2><p>The interaction between tool and AI is not always needed to answer future user questions. Since the AI response already encapsulates the context in its response, tool-related messages can be removed when irrelevant.</p>
+<p>However, we can’t always prune immediately. The AI might still be clarifying missing information before solving. Intermediate tool-related messages should be removed <strong>only when not relevant anymore</strong>.</p>
+<h2 id="clarifying-conversation-example">Clarifying Conversation Example
+</h2><p>Sometimes the AI must clarify before solving. Example:</p>
+<pre tabindex="0"><code>User: Integrate this equation  
 Assistant (PROCESSING): Sure! Could you provide the equation you want me to integrate?  
 
 User: x² + 3x  
@@ -74,7 +292,10 @@ User: Indefinite integral
 Assistant (PROCESSING): I need to compute the indefinite integral of this equation. [Calling `integral_solver`]  
 Tool: Result of ∫(x² + 3x) dx = (x³)/3 + (3x²)/2 + C  
 Assistant (COMPLETED): The indefinite integral of x² + 3x is (x³)/3 + (3x²)/2 + C. 
-</code></pre><hr><h2 id=task-status>Task Status<a href=#task-status class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>When to prune context will be decided based on the current phase of the Agent. It could be in <strong>PROCESSING</strong> phase or <strong>COMPLETED</strong> phase. We&rsquo;ll let the LLM itself tell us by adding the <code>task_status</code> flag to <code>message_to_user</code> tool calls.</p><pre tabindex=0><code class=language-baml data-lang=baml>enum TaskStatus {
+</code></pre><hr>
+<h2 id="task-status">Task Status
+</h2><p>When to prune context will be decided based on the current phase of the Agent. It could be in <strong>PROCESSING</strong> phase or <strong>COMPLETED</strong> phase. We&rsquo;ll let the LLM itself tell us by adding the <code>task_status</code> flag to <code>message_to_user</code> tool calls.</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">enum TaskStatus {
     COMPLETED 
     PROCESSING
 }
@@ -90,17 +311,21 @@ class MessageToUser {
 
     task_status TaskStatus
 }
-</code></pre><p><strong>Example pruning logic:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>context_trimming <span style=color:#f92672>and</span> tools<span style=color:#f92672>.</span>task_status <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;COMPLETED&#34;</span>:
-</span></span><span style=display:flex><span>                
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Convert message history to string list for BAML function</span>
-</span></span><span style=display:flex><span>    message_history_str <span style=color:#f92672>=</span> [str(message) <span style=color:#66d9ef>for</span> message <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>message_history]
-</span></span><span style=display:flex><span>                
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Call SummarizeContext BAML function</span>
-</span></span><span style=display:flex><span>    summarized_context <span style=color:#f92672>=</span> b<span style=color:#f92672>.</span>SummarizeContext(message_history_str)
-</span></span><span style=display:flex><span>                
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Replace message history with summarized context</span>
-</span></span><span style=display:flex><span>    self<span style=color:#f92672>.</span>message_history <span style=color:#f92672>=</span> summarized_context
-</span></span></code></pre></div><hr><h2 id=summarization>Summarization<a href=#summarization class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>The pruning logic could be as simple as removing all tool calls, or we can use an LLM to <strong>summarize the context</strong> for us.</p><pre tabindex=0><code class=language-baml data-lang=baml>function SummarizeContext(message_history: string[]) -&gt; string []{
+</code></pre><p><strong>Example pruning logic:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>context_trimming <span style="color:#f92672">and</span> tools<span style="color:#f92672">.</span>task_status <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;COMPLETED&#34;</span>:
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Convert message history to string list for BAML function</span>
+</span></span><span style="display:flex;"><span>    message_history_str <span style="color:#f92672">=</span> [str(message) <span style="color:#66d9ef">for</span> message <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>message_history]
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Call SummarizeContext BAML function</span>
+</span></span><span style="display:flex;"><span>    summarized_context <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>SummarizeContext(message_history_str)
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Replace message history with summarized context</span>
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>message_history <span style="color:#f92672">=</span> summarized_context
+</span></span></code></pre></div><hr>
+<h2 id="summarization">Summarization
+</h2><p>The pruning logic could be as simple as removing all tool calls, or we can use an LLM to <strong>summarize the context</strong> for us.</p>
+<pre tabindex="0"><code class="language-baml" data-lang="baml">function SummarizeContext(message_history: string[]) -&gt; string []{
     client OpenRouter
     prompt #&#34;
          Your job is to summarize the user conversation to reduce the token length.
@@ -139,8 +364,154 @@ class MessageToUser {
         {{ctx.output_format}}
     &#34;#
 } 
-</code></pre><hr><h2 id=token-usage-comparison>Token Usage Comparison<a href=#token-usage-comparison class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>Let&rsquo;s <a href=https://github.com/poonai/context-trimming-sample/blob/main/benchmark.py target=_blank rel=noopener>measure</a>
-the token usage with context pruning and without context pruning.</p><table><thead><tr><th>Agent Type</th><th>Input Tokens</th><th>Output Tokens</th></tr></thead><tbody><tr><td><strong>Smart Agent (with context pruning)</strong></td><td>2333</td><td>309</td></tr><tr><td><strong>Agent (without context pruning)</strong></td><td>4883</td><td>368</td></tr></tbody></table><p>The lower value is better. We reduced token usage by <strong>47%</strong> while getting the same output by pruning unnecessary context.</p><p>Lesser token has the following advatages:</p><ul><li>less hallucination</li><li>less cost</li><li>less response time</li></ul></div></article><div class="post-nav thin"><a class=next-post href=https://poonai.xyz/posts/building-visual-language-model/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;</span><br><span>Building an Visual Language Model from scratch</span>
-</a><a class=prev-post href=https://poonai.xyz/posts/simplest-backpropagation-explainer-without-chain-rule/><span class=post-nav-label>&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>Simplest backpropagation explainer without chain rule</span></a></div><div id=comments class=thin></div></main><footer id=site-footer class="section-inner thin animated fadeIn faster"><script src=https://giscus.app/client.js data-repo=poonai/poonai.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzNTI1NzEyOTg=" data-category=General data-category-id=DIC_kwDOFQPPos4Cpnf0 data-mapping=og:title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-theme=preferred_color_scheme data-lang=en crossorigin=anonymous async></script><p>&copy; 2025 <a href=https://poonai.xyz/>Poonai's space</a>
-&#183; &#183; Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>
-&#183; Theme <a href=https://github.com/1bl4z3r/hermit-V2 target=_blank rel=noopener>Hermit-V2</a></p></footer><script async src=https://poonai.xyz/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin=anonymous></script><script id=MathJax-script type=text/javascript async src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js crossorigin=anonymous></script><script type=text/javascript id=MathJax-script-helper async src=https://poonai.xyz/js/mathjax-assistant.min.ca29e9d446b2a6cb6c6e3eb0d47e9693f5c306c146eaccb43047afbf31b07a6f.js integrity="sha256-yinp1Eaypstsbj6w1H6Wk/XDBsFG6sy0MEevvzGwem8=" crossorigin=anonymous></script></body></html>
+</code></pre><hr>
+<h2 id="token-usage-comparison">Token Usage Comparison
+</h2><p>Let&rsquo;s <a class="link" href="https://github.com/poonai/context-trimming-sample/blob/main/benchmark.py"  target="_blank" rel="noopener"
+    >measure</a> the token usage with context pruning and without context pruning.</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>Agent Type</th>
+          <th>Input Tokens</th>
+          <th>Output Tokens</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Smart Agent (with context pruning)</strong></td>
+          <td>2333</td>
+          <td>309</td>
+      </tr>
+      <tr>
+          <td><strong>Agent (without context pruning)</strong></td>
+          <td>4883</td>
+          <td>368</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>The lower value is better. We reduced token usage by <strong>47%</strong> while getting the same output by pruning unnecessary context.</p>
+<p>Lesser token has the following advatages:</p>
+<ul>
+<li>less hallucination</li>
+<li>less cost</li>
+<li>less response time</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/ai/">Ai</a>
+        
+            <a href="/tags/context-engineering/">Context-Engineering</a>
+        
+            <a href="/tags/llm/">Llm</a>
+        
+            <a href="/tags/context-pruning/">Context-Pruning</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 Poonai&#39;s space
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+        </div>
+        <script type="text/javascript" src="/ts/main.ecff16e83482c03c42d6245e0be35573d43c55812826f0b0c05af997a491920c.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
