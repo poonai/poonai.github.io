@@ -85,7 +85,7 @@ flush_slots()
 
 The next obvious optimization is to pack multiple independent vectorized operations into one VLIW bundle. VLIW operations are energy efficient and are also a key reason behind Google’s TPU adoption. Essentially, we can batch six operations into one cycle. There were multiple independent operations that can be batched together. One of them is `indices` and `values` offset calculation.
 
-I'm going to take a tiny detour to say something else which is also useful here. I was quietly studying
+A tiny detour to say something else which is also useful here. I was quietly studying
 undergrad math for 8 months without any sort of connection with tech world. I was away from 
 Github, Reddit; any sort of connection that would pull me back into the tech echo chamber. At
 that time, I noticed something that most of the mathematicians agree. **Many of the problems are
