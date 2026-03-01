@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Can differential privacy protect our privacy? | Poonai’s space</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Can differential privacy protect our privacy?" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users." />
+<meta property="og:description" content="I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users." />
+<link rel="canonical" href="https://poonai.xyz/2021/03/29/can-differential-privacy-protect-our-privacy.html" />
+<meta property="og:url" content="https://poonai.xyz/2021/03/29/can-differential-privacy-protect-our-privacy.html" />
+<meta property="og:site_name" content="Poonai’s space" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-29T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Can differential privacy protect our privacy?" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-03-29T00:00:00+00:00","datePublished":"2021-03-29T00:00:00+00:00","description":"I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.","headline":"Can differential privacy protect our privacy?","mainEntityOfPage":{"@type":"WebPage","@id":"https://poonai.xyz/2021/03/29/can-differential-privacy-protect-our-privacy.html"},"url":"https://poonai.xyz/2021/03/29/can-differential-privacy-protect-our-privacy.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://poonai.xyz/feed.xml" title="Poonai&apos;s space" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Poonai&#39;s space</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Can differential privacy protect our privacy?</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-03-29T00:00:00+00:00" itemprop="datePublished">Mar 29, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>I’m a mediocre engineer who does systems work and never had experience in the typical user-facing software space. I’ve contributed to software that scales but never really had a chance to experience the vibe of serving millions of users.</p>
+
+<p>Recently, one of my friends explained to me the kind of events they track in their startup. I felt sick after hearing about the kind of events that they track, which are typically very personal to the user. Companies collect data ranging from the user’s geolocation to the user-installed app names(maybe to hike the price if the competitor’s app is not present on the user phone).</p>
+
+<p>I decided to dig deeper and see whether any privacy-friendly tracking solution exists and, that took me to <a href="https://docs-assets.developer.apple.com/ml-research/papers/learning-with-privacy-at-scale.pdf">Apple’s paper</a>. This paper explains how Apple leveraged count-min-sketch with some noise to deduce the inference of user behaviour, without hindering user privacy.</p>
+
+<p>Usually, researchers have their own real-world assumptions which may not be applicable everywhere. I ran a small <a href="https://github.com/poonai/diffrential_privacy/blob/master/cms_test.go#L30">experiment</a> to estimate the popular view on a project management app to validate the paper.</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c">// we are tracking what view users are using in their project management app.</span>
+    <span class="c">// 6k users are using list view.</span>
+    <span class="n">track</span><span class="p">(</span><span class="m">6000</span><span class="p">,</span> <span class="s">"list"</span><span class="p">)</span>
+    <span class="c">// 9k user using board view.</span>
+    <span class="n">track</span><span class="p">(</span><span class="m">9000</span><span class="p">,</span> <span class="s">"board"</span><span class="p">)</span>
+    <span class="c">// 2k user using calendar view.</span>
+    <span class="n">track</span><span class="p">(</span><span class="m">2000</span><span class="p">,</span> <span class="s">"calendar"</span><span class="p">)</span>
+</code></pre></div></div>
+<p>The variance between the actual inference and the inference calculated via differential privacy is not that large.</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"estimate for list"</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">Estimate</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="s">"list"</span><span class="p">)))</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"estimate for board"</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">Estimate</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="s">"board"</span><span class="p">)))</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"estimate for calendar"</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">Estimate</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="s">"calendar"</span><span class="p">)))</span>
+    <span class="c">// output</span>
+    <span class="c">// estimate for list 6572.1029024055715</span>
+    <span class="c">// estimate for board 9154.186791339975</span>
+    <span class="c">// estimate for calendar 1157.8019026490715</span>
+</code></pre></div></div>
+
+<p>I presented it to my friend and asked him whether his company would consider using such tech.</p>
+
+<p>Unfortunately, the inference of users’ behaviour alone is not enough, they would also want to send notifications based on certain events.</p>
+
+<p>For example, if the user dropped off on a certain app screen without performing an action, the tracking system should be able to send a notification, which nudges the user to complete the action. Apparently, the tracking service tracks events at the <a href="https://docs.moengage.com/docs/tracking-user-attributes#default-user-attributes">user level</a>.</p>
+
+<p>Companies don’t just want analytics, they also want to target the user. which reminds me of the quote from the movie <code class="language-plaintext highlighter-rouge">The Social Dilemma</code></p>
+<blockquote>
+  <p>We want to psychologically figure out how to manipulate you as fast as possible</p>
+</blockquote>
+
+<h3 id="closing-thoughts">Closing Thoughts:</h3>
+<p>Differential Privacy looks good on paper but differential privacy alone is not enough to cater to big companies’ needs. There are some use cases, where I think differential privacy can be deployed.</p>
+<ul>
+  <li>customers’ sensitive data can be tracked.</li>
+  <li>privacy-focused applications.</li>
+</ul>
+
+<p>I would love to hear where else differential-privacy can be plugged in. <a href="https://twitter.com/poonai_">My profile</a> if anyone wants to reach out.</p>
+
+  </div><a class="u-url" href="/2021/03/29/can-differential-privacy-protect-our-privacy.html" hidden></a>
+</article>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Poonai&#39;s space</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Poonai&#39;s space</li><li><a class="u-email" href="mailto:rbalajis25@gmail.com">rbalajis25@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/poonai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">poonai</span></a></li><li><a href="https://www.twitter.com/poonai_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">poonai_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Place to express my learnings</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

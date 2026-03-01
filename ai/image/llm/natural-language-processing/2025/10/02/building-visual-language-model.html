@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Building an Visual Language Model from scratch | Poonai’s space</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Building an Visual Language Model from scratch" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train." />
+<meta property="og:description" content="My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train." />
+<link rel="canonical" href="https://poonai.xyz/ai/image/llm/natural-language-processing/2025/10/02/building-visual-language-model.html" />
+<meta property="og:url" content="https://poonai.xyz/ai/image/llm/natural-language-processing/2025/10/02/building-visual-language-model.html" />
+<meta property="og:site_name" content="Poonai’s space" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-10-02T11:12:35+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building an Visual Language Model from scratch" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-10-02T11:12:35+00:00","datePublished":"2025-10-02T11:12:35+00:00","description":"My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a dataset with image and it’s caption to train.","headline":"Building an Visual Language Model from scratch","mainEntityOfPage":{"@type":"WebPage","@id":"https://poonai.xyz/ai/image/llm/natural-language-processing/2025/10/02/building-visual-language-model.html"},"url":"https://poonai.xyz/ai/image/llm/natural-language-processing/2025/10/02/building-visual-language-model.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://poonai.xyz/feed.xml" title="Poonai&apos;s space" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Poonai&#39;s space</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Building an Visual Language Model from scratch</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-10-02T11:12:35+00:00" itemprop="datePublished">Oct 2, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>My initial aim was to build a document processing model. But the idea was far fetched for my skill at the time. So, I settled down for building a toy version of visual language model for better understanding of VLM. I’m documenting my intuition for the benefit of myself and others. My model will receive image as an input and return its caption as an output. Luckily, I found a <a href="https://huggingface.co/datasets/visual-layer/imagenet-1k-vl-enriched">dataset</a> with image and it’s caption to train.</p>
+
+<p>Instead of training all the component from scratch, I’m going to use pre existing LLM model and customize to our need. You could ask why did you mention <code class="language-plaintext highlighter-rouge">scratch</code> in the title and say the title is 
+misleading. In general, this is how VLM are built. Correct me if I’m wrong me.</p>
+
+<p>The off the shelf models are:</p>
+<ul>
+  <li><a href="https://huggingface.co/timm/vit_mediumd_patch16_reg4_gap_384.sbb2_e200_in12k_ft_in1k">ViT - Vision Transformer Image Classification</a></li>
+  <li><a href="https://huggingface.co/openai-community/gpt2">GPT2 - A Text Generation Model</a></li>
+</ul>
+
+<h2 id="vit">ViT</h2>
+<p>This model is an image embedding model. It returns embedding tensor representation for an image. That means, the vector distance between similar image is shorter. The vector distance between lion and cat will shorter than the vector distance between lion and car. Since, the lion and cat are animals.</p>
+
+<p><img src="/assets/images/image_embedding.png" alt="image embedding" /></p>
+
+<h2 id="gpt2">GPT2</h2>
+<p>This model is a text generation model. Given a list of word, it’ll predict the next series of words.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">The sky is</code></td>
+      <td><code class="language-plaintext highlighter-rouge">The sky is blue</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="projection-layer">Projection layer.</h2>
+
+<p><img src="/assets/images/vlm_architecture.png" alt="vlm architecture" /></p>
+
+<p>This is the key component of our VLM model. This layer transform the image embedding output into a GPT2 textual embedding space. In other words we are converting the images into an intermediate state for the GPT2 to produce meaningful output.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Projection</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">in_features</span><span class="p">,</span> <span class="n">out_features</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="n">in_features</span> <span class="o">*</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">GELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="n">in_features</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">out_features</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">network</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The tensor output size of ViT mode is <code class="language-plaintext highlighter-rouge">512</code> and the tensor input size of gpt2 model is <code class="language-plaintext highlighter-rouge">768</code>. This projection layer will convert the ViT output tensor size into gpt2 input tensor size. With training, the image tensor are transformed into a tensor that GPT2 understands.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">self</span><span class="p">.</span><span class="n">projection</span> <span class="o">=</span> <span class="nc">Projection</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span><span class="mi">768</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I’ve put all the component together and trained it with the dataset. Here is the result:</p>
+
+<p>Input Image:</p>
+
+<p><img src="/assets/images/boy_holding_fish.png" alt="A boy holding image" /></p>
+
+<p>Output Text:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a boy holding a fish in the woods
+</code></pre></div></div>
+
+<p>This project gave me an solid intuition of building a VLM model. In the upcoming days I’m aspiring to build a document processing VLM model that beats state-of-the-art(SOTA) benchmarks. You can see
+the entire code <a href="https://github.com/poonai/imagenet-caption">here</a></p>
+
+  </div><a class="u-url" href="/ai/image/llm/natural-language-processing/2025/10/02/building-visual-language-model.html" hidden></a>
+</article>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Poonai&#39;s space</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Poonai&#39;s space</li><li><a class="u-email" href="mailto:rbalajis25@gmail.com">rbalajis25@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/poonai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">poonai</span></a></li><li><a href="https://www.twitter.com/poonai_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">poonai_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Place to express my learnings</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

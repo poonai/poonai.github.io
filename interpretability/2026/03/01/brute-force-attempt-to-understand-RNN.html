@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>brute force attempt to understand RNN | Poonai’s space</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="brute force attempt to understand RNN" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="As of today, it’s not feasible to fully understand LLM. Therefore, scientists are hypothesizing that studying a toy model would help us to understand the big model. I came across such toy model released by ARC and I tried to understand their understanding." />
+<meta property="og:description" content="As of today, it’s not feasible to fully understand LLM. Therefore, scientists are hypothesizing that studying a toy model would help us to understand the big model. I came across such toy model released by ARC and I tried to understand their understanding." />
+<link rel="canonical" href="https://poonai.xyz/interpretability/2026/03/01/brute-force-attempt-to-understand-RNN.html" />
+<meta property="og:url" content="https://poonai.xyz/interpretability/2026/03/01/brute-force-attempt-to-understand-RNN.html" />
+<meta property="og:site_name" content="Poonai’s space" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-01T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="brute force attempt to understand RNN" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-03-01T00:00:00+00:00","datePublished":"2026-03-01T00:00:00+00:00","description":"As of today, it’s not feasible to fully understand LLM. Therefore, scientists are hypothesizing that studying a toy model would help us to understand the big model. I came across such toy model released by ARC and I tried to understand their understanding.","headline":"brute force attempt to understand RNN","mainEntityOfPage":{"@type":"WebPage","@id":"https://poonai.xyz/interpretability/2026/03/01/brute-force-attempt-to-understand-RNN.html"},"url":"https://poonai.xyz/interpretability/2026/03/01/brute-force-attempt-to-understand-RNN.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://poonai.xyz/feed.xml" title="Poonai&apos;s space" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Poonai&#39;s space</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">brute force attempt to understand RNN</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2026-03-01T00:00:00+00:00" itemprop="datePublished">Mar 1, 2026
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>As of today, it’s not feasible to fully understand LLM. Therefore, scientists are hypothesizing that studying a toy model would help us to understand the big model. I came across such <a href="https://www.lesswrong.com/posts/x8BbjZqooS4LFXS8Z/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters">toy model</a> released by ARC and I tried to understand their understanding.</p>
+
+<p>As an Mechanistic Interpretability enthusiast, I were curious to study the model by myself and it’s an attempt to explain the understanding in my words and I also think it’s beneficial to have multiple explanation for same thing.</p>
+
+<h2 id="problem-setup">Problem Setup</h2>
+<p>ARC released multiple toy model, trained to do different algorithmic task. However, I chose a model named <code class="language-plaintext highlighter-rouge">argmax2</code> which is trained to predict the second highest number from the input sequence. eg: <code class="language-plaintext highlighter-rouge">3</code> is the second largest number among the input sequence <code class="language-plaintext highlighter-rouge">[3,4]</code>. It is an RNN based model with different parameter size. But we chose the one with 2 hidden size and 2 input sequence to start with.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">init_state</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">init_state</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c1"># initial hidden state set to zero
+</span>        <span class="n">h</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">new_zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">hidden_size</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">init_state</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">xt</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">t</span> <span class="p">:</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># shape of i2h and h2h are: (2,1) and (2,2)
+</span>        <span class="n">h</span> <span class="o">=</span> <span class="n">th</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">functional</span><span class="p">.</span><span class="nf">relu</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">i2h</span><span class="p">(</span><span class="n">xt</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="nf">h2h</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+    <span class="c1"># shape of output: (2,2)
+</span>    <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">output</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The chosen <code class="language-plaintext highlighter-rouge">argmax2</code> model returns two neuron and the neuron with the highest value is the position of second highest number among the inputs. The below example takes <code class="language-plaintext highlighter-rouge">[3,4]</code> as input and return <code class="language-plaintext highlighter-rouge">[0.4,0.1]</code> since 3 is the second highest number.</p>
+
+\[\text{Input} =
+\begin{bmatrix}
+x_0 \\
+x_1
+\end{bmatrix} = 
+\begin{bmatrix}
+3 \\
+4
+\end{bmatrix}
+\qquad
+\text{Output} =
+\begin{bmatrix}
+0.4 \\
+0.1
+\end{bmatrix}\]
+
+<p>We asked ourself a question; What makes the \(output_{00}&gt; output_{10}\). It’s obvious that answering the question would answer <strong>how model works</strong></p>
+<h2 id="sheer-brute-force">Sheer Brute Force</h2>
+
+<p>To answer the question, we must know what’s going inside the model. RNN calculates hidden state for each time step. the hidden state is calculated based on the current input entry and the previous hidden state, with number of time step decided by the length of the sequence.</p>
+
+<p><img src="/assets/images/rnn.png" alt="rnn" /></p>
+
+<p>In our model, there are two entries in the input sequence so we calculate two hidden state to uncover the working of the model.</p>
+
+<h4 id="hidden-state-1">Hidden state 1:</h4>
+
+\[h_1 = ReLU(W_{hh}.h_0 + W_{hi}.{x_0}); W_{hi} = \begin{bmatrix} hi_{00} \\ -hi_{01} \end{bmatrix}\]
+
+<p>Here \(h_0 = 0\), since there is no previous hidden state for the current step.</p>
+
+\[h_1 = ReLU(\begin{bmatrix} 
+x_0.hi_{00} \\
+-x_0.hi_{01}
+\end{bmatrix}); \text{ where } ReLU(x) = max(0,x)\]
+
+\[h_1 = \begin{cases}
+\begin{bmatrix} x_0.hi_{00} \\ 0 \end{bmatrix} \text{ ; } x_0&gt; 0 \\
+\begin{bmatrix} 0 \\ x_0.hi_{01} \end{bmatrix} \text{ ; } x_0&lt; 0
+\end{cases}\]
+
+<p>The first neuron is activated when \(x_0 &gt;0\) and second neuron is activated when \(x_0&lt;0\), while the other neuron of the each case are zero. \(h_1\) itself is not giving us any valuable information. However, we can infer that <code class="language-plaintext highlighter-rouge">ReLu</code> converting the function into piecewise function based on the signs of the input.</p>
+<h4 id="hidden-state-2">Hidden state 2:</h4>
+<p>We have directly jumped to result of \(h_2\) without showing the intermediate steps. Including those intermediate step would make this post unnecessarily long without adding any substance. The detailed steps are in <a href="https://drive.google.com/drive/folders/13ELZoA2F1h_YAj41v1xN5IpkRlHiMrSt?usp=sharing">my notes</a>, please check that if that is of your interest. Here, two cases in \(h_1\) further branched into six cases when deriving \(h_2\). It is sufficient to discuss only the two cases from those six cases to explain the entire model. Since other cases also express similar behavior.</p>
+
+\[h_2 = \begin{cases} 
+\begin{bmatrix} 
+0 \\
+	-1.48.x_1 + 2.09.x_0 
+\end{bmatrix} \text{ ; } x_0 &gt; 0 \text{ ; } 0.7.x_1 &lt; 2.x_1 &lt; x_0 \\
+\begin{bmatrix} 
+1.61.x_1 - 0.58..x_0 \\
+	-1.48.x_1 + 2.09.x_0 
+\end{bmatrix} \text{ ; } x_0 &gt; 0 \text{ ; } 0.7.x_1 &lt; x_0 &lt; 2.x_1 \\
+\text{ ... } \\ 
+\text{ ... } \\
+\text{ ... }
+\end{cases}\]
+
+<h4 id="first-case">First case:</h4>
+<p>I plotted the first case to analyze it visually and It unfolded series of insights on itself:</p>
+
+<p style="text-align: center;"><img src="/assets/images/rnn_piecewise_case_1.png" alt="piecewise case 1" /></p>
+
+<ul>
+  <li>first case of \(h_2\) carved a region in first quadrant and the entire fourth quadrant.</li>
+  <li>\(x_0\) is always greater than \(x_1\) for all the coordinates belongs to that region. try to pick a coordinate in the shaded region and see for yourself.</li>
+  <li>in \(h_2\), the second neuron is active, while the first neuron is inactive.</li>
+</ul>
+
+<p>We can conclude that model is trying to learn region where it can tell, \(x_0\) is always greater/lesser than \(x_1\) But, this technique could only work when anyone of the neuron is in active state and the other neuron is in inactive state. Therefore, we’ll analyze the second case where both the neurons are active.</p>
+
+<h4 id="second-case">Second case:</h4>
+<p>The second case of the piecewise function spans the region in first quadrant, around the line \(x_0=x_1\).</p>
+
+<p style="text-align: center;"><img src="/assets/images/rnn_piecewise_case_2.png" alt="piecewise case 2" /></p>
+
+<p>It also worth to note that, \(x_0\) is always lesser than \(x_1\) in any of the coordinates above the line \(x_0=x_1\). Conversely, in the other side of the line \(x_0=x_1\),  \(x_0\) is always greater than \(x_1\). So, let’s plug the coordinates from both side to gain insights about this case:</p>
+
+<ul>
+  <li>coordinate above the line \(x_0=x_1\):</li>
+</ul>
+
+\[\text{Input} =
+\begin{bmatrix}
+x_0 \\
+x_1
+\end{bmatrix} = 
+\begin{bmatrix}
+1.5 \\
+2
+\end{bmatrix}
+\qquad
+h_2 =
+\begin{bmatrix}
+4.09 \\
+0.175
+\end{bmatrix}\]
+
+<ul>
+  <li>coordinate below the line \(x_0=x_1\):</li>
+</ul>
+
+\[\text{Input} =
+\begin{bmatrix}
+x_0 \\
+x_1
+\end{bmatrix} = 
+\begin{bmatrix}
+5 \\
+3
+\end{bmatrix}
+\qquad
+h_2 =
+\begin{bmatrix}
+1.93 \\
+6.01
+\end{bmatrix}\]
+
+<ul>
+  <li>coordinate around the line \(x_0=x_1\):</li>
+</ul>
+
+\[\text{Input} =
+\begin{bmatrix}
+x_0 \\
+x_1
+\end{bmatrix} = 
+\begin{bmatrix}
+4.9 \\
+5.1
+\end{bmatrix}
+\qquad
+h_2 =
+\begin{bmatrix}
+5.3 \\
+2.6
+\end{bmatrix}\]
+
+<p>If the output of the different coordinate sparked any insight in you, then you are in the right track. In then second case of \(h_2\), first neuron is always greater than second neuron when \(x_0&gt;x_1\) and inversely when \(x_0&lt;x_1\). But also an error state, for the coordinate along the line \(x_0=x_1\), where model doesn’t know how to predict.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>From the discussed cases of \(h_2\), we can say that model is dividing the space into the region, where it can say which of the entry is greater/smaller among the input sequence. I did this experiment to deeply understand the method which was described in the post by the ARC. As I invested more time on this, I was intrigued by several questions and each of the question itself a separate research direction. I’m glad that I did this experiment and also feeling thankful to the ARC team for releasing the toy model. Otherwise, I wouldn’t have had opportunity to work on this experiment. The current brute force method will not work for slightly bigger model. Next, I’m on to learn other mathematical tools like torus to study bigger models!!</p>
+
+  </div><a class="u-url" href="/interpretability/2026/03/01/brute-force-attempt-to-understand-RNN.html" hidden></a>
+</article>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Poonai&#39;s space</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Poonai&#39;s space</li><li><a class="u-email" href="mailto:rbalajis25@gmail.com">rbalajis25@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/poonai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">poonai</span></a></li><li><a href="https://www.twitter.com/poonai_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">poonai_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Place to express my learnings</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

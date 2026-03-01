@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Part 1: DIY debugger in Golang | Poonai’s space</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Part 1: DIY debugger in Golang" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve." />
+<meta property="og:description" content="The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve." />
+<link rel="canonical" href="https://poonai.xyz/2021/09/02/part-1-diy-debugger-in-golang.html" />
+<meta property="og:url" content="https://poonai.xyz/2021/09/02/part-1-diy-debugger-in-golang.html" />
+<meta property="og:site_name" content="Poonai’s space" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-09-02T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Part 1: DIY debugger in Golang" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-09-02T00:00:00+00:00","datePublished":"2021-09-02T00:00:00+00:00","description":"The first thing I do when I create a project is to create the debugger launch config at the .vscode folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of delve.","headline":"Part 1: DIY debugger in Golang","mainEntityOfPage":{"@type":"WebPage","@id":"https://poonai.xyz/2021/09/02/part-1-diy-debugger-in-golang.html"},"url":"https://poonai.xyz/2021/09/02/part-1-diy-debugger-in-golang.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://poonai.xyz/feed.xml" title="Poonai&apos;s space" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Poonai&#39;s space</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Part 1: DIY debugger in Golang</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-09-02T00:00:00+00:00" itemprop="datePublished">Sep 2, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The first thing I do when I create a project is to create the debugger launch config at the <code class="language-plaintext highlighter-rouge">.vscode</code> folder. Debuggers help me to avoid putting print statements and building the program again. I always wondered how a debugger can stop the program on the line number I want and be able to inspect variables. Debugger workings have always been dark magic for me. At last, I managed to learn dark art by reading several articles and groking the source code of <a href="https://github.com/go-delve">delve</a>.</p>
+
+<p>In this post, I’ll talk about my learning while demystifying the dark art of debugger.</p>
+
+<h2 id="problem-statement">Problem statement</h2>
+<p>Let’s define the problem statement before coding. I have a sample golang program that prints random ints every second. The goal which I want to achieve is that our debugger program should print <code class="language-plaintext highlighter-rouge">breakpoint hit</code> before our sample program prints the random integer.</p>
+
+<p>Here is the sample program which prints random ints at every second.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="m">1.</span> <span class="k">package</span> <span class="n">main</span>
+<span class="m">2.</span> 
+<span class="m">3.</span> <span class="k">import</span> <span class="p">(</span>
+<span class="m">4.</span>  <span class="s">"fmt"</span>
+<span class="m">5.</span>  <span class="s">"math/rand"</span>
+<span class="m">6.</span>  <span class="s">"time"</span>
+<span class="m">7.</span> <span class="p">)</span>
+<span class="m">8.</span> 
+<span class="m">9.</span> <span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="m">10.</span>     <span class="k">for</span> <span class="p">{</span>
+<span class="m">11.</span>         <span class="n">variableToTrace</span> <span class="o">:=</span> <span class="n">rand</span><span class="o">.</span><span class="n">Int</span><span class="p">()</span>
+<span class="m">12.</span>         <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">variableToTrace</span><span class="p">)</span>
+<span class="m">13.</span>         <span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span>
+<span class="m">14.</span>     <span class="p">}</span>
+<span class="m">15.</span> <span class="p">}</span>
+<span class="m">16.</span> 
+</code></pre></div></div>
+<h2 id="solution">Solution</h2>
+<p>Now that we know what we want to achieve. Let’s go step by step and solve the problem statement.</p>
+
+<p>The first step is to pause the sample program before it prints the random int. That means we have to set the breakpoint at line number 11.</p>
+
+<p>To set the breakpoint at line number 11, we must gather the address of instruction at line number 11.</p>
+
+<p>Some of us know from high school that all high-level language is converted into assembly language at the end. So, how do we find the address of the instruction in the assembly language?</p>
+
+<p><img src="/assets/images/cathow.jpg" alt="cathow" /></p>
+
+<p>Luckily, compilers add debug information along with the optimized assembly instruction on the output binary. Debug information contains information related to the mapping of assembly code to high-level language.
+For Linux binaries, debug information is usually encoded in the DWARF format.</p>
+
+<blockquote>
+  <p>DWARF is a debugging file format used by many compilers and debuggers to support source level debugging. It addresses the requirements of a number of procedural languages, such as C, C++, and Fortran, and is designed to be extensible to other languages. DWARF is architecture independent and applicable to any processor or operating system. It is widely used on Unix, Linux and other operating systems, as well as in stand-alone environments. source: http://www.dwarfstd.org/</p>
+</blockquote>
+
+<p>DWARF format can be parsed using objdump tool.</p>
+
+<p>The below command will output all the addresses of the instruction and it’s mapping to the line number and file name.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>objdump <span class="nt">--dwarf</span><span class="o">=</span>decodedline ./sample
+</code></pre></div></div>
+
+<p>objdump command will output similar to this:</p>
+<pre><code class="language-txt">File name                            Line number    Starting address    View    Stmt
+
+/home/poonai/debugger-example/sample.go:
+sample.go                                      9            0x498200               x
+sample.go                                      9            0x498213               x
+sample.go                                     10            0x498221               x
+sample.go                                     11            0x498223               x
+sample.go                                     11            0x498225        
+sample.go                                     12            0x498233               x
+sample.go                                     12            0x498236        
+sample.go                                     13            0x4982be               x
+sample.go                                     13            0x4982cb        
+sample.go                                     11            0x4982cd               x
+sample.go                                     12            0x4982d2        
+sample.go                                      9            0x4982d9               x
+sample.go                                      9            0x4982de        
+sample.go                                      9            0x4982e0               x
+sample.go                                      9            0x4982e5               x
+</code></pre>
+<p>The output clearly states that <code class="language-plaintext highlighter-rouge">0x498223</code> is the starting address of line number 11 for sample.go file.</p>
+
+<p>The next step is to pause the program at the address <code class="language-plaintext highlighter-rouge">0x498223</code></p>
+
+<h2 id="trick-to-pause-the-program-execution">Trick to pause the program execution</h2>
+<p>CPU will interrupt the program whenever it sees data int 3. So, we just have to rewrite the data at the address <code class="language-plaintext highlighter-rouge">0x498223</code> with the data []byte{0xcc} to pause the program.</p>
+<blockquote>
+  <p>In computing and operating systems, a trap, also known as an exception or a fault, is typically a type of synchronous interrupt caused by an exceptional condition (e.g., breakpoint, division by zero, invalid memory access). source: wikipedia</p>
+</blockquote>
+
+<p>Does that mean we have to rewrite the binary at <code class="language-plaintext highlighter-rouge">0x498223</code>? No, we can write it using ptrace.</p>
+
+<h2 id="ptrace-to-rescue">Ptrace to rescue</h2>
+<blockquote>
+  <p>ptrace is a system call found in Unix and several Unix-like operating systems. By using ptrace (the name is an abbreviation of “process trace”) one process can control another, enabling the controller to inspect and manipulate the internal state of its target. ptrace is used by debuggers and other code-analysis tools, mostly as aids to software development. source:wikipedia</p>
+</blockquote>
+
+<p>ptrace is a syscall that allows us to rewrite the registers and write the data at the given address.</p>
+
+<p>Now we know which address to pause and how to find the memory representing lines, and manipulate the memory of the sample program. So, let’s put all this knowledge into action.</p>
+
+<p>exec a process by setting Ptrace flag to true, so that we can use ptrace on the execed process.</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">process</span> <span class="o">:=</span> <span class="n">exec</span><span class="o">.</span><span class="n">Command</span><span class="p">(</span><span class="s">"./sample"</span><span class="p">)</span>
+<span class="n">process</span><span class="o">.</span><span class="n">SysProcAttr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">syscall</span><span class="o">.</span><span class="n">SysProcAttr</span><span class="p">{</span><span class="n">Ptrace</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span> <span class="n">Setpgid</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span>    
+<span class="n">Foreground</span><span class="o">:</span> <span class="no">false</span><span class="p">}</span>
+<span class="n">process</span><span class="o">.</span><span class="n">Stdout</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">Stdout</span>
+<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">process</span><span class="o">.</span><span class="n">Start</span><span class="p">();</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>The breakpoint can be set at <code class="language-plaintext highlighter-rouge">0x498223</code> by replacing the original data with int 3 (0xCC). This can be done by <code class="language-plaintext highlighter-rouge">PtracePokeData</code>.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">setBreakpoint</span><span class="p">(</span><span class="n">pid</span> <span class="kt">int</span><span class="p">,</span> <span class="n">addr</span> <span class="kt">uintptr</span><span class="p">)</span> <span class="p">[]</span><span class="kt">byte</span> <span class="p">{</span>
+    <span class="n">data</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtracePeekData</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtracePokeData</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">{</span><span class="m">0xCC</span><span class="p">});</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">data</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>You must already be wondering why there is <code class="language-plaintext highlighter-rouge">PtracePeekData</code>, other than <code class="language-plaintext highlighter-rouge">PtracePokeData</code>. <code class="language-plaintext highlighter-rouge">PtracePeekData</code> allows us to read the memory at the given address. I’ll explain later why I’m reading the data at the address <code class="language-plaintext highlighter-rouge">0x498223</code>.</p>
+
+<p>Since we set the breakpoint we’ll continue the program and wait for the interrupt to happen. This can be done by <code class="language-plaintext highlighter-rouge">PtraceCont</code> and <code class="language-plaintext highlighter-rouge">Wait4</code></p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtraceCont</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+     <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+ <span class="p">}</span>
+ <span class="c">// wait for the interupt to come.</span>
+ <span class="k">var</span> <span class="n">status</span> <span class="n">unix</span><span class="o">.</span><span class="n">WaitStatus</span>
+ <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">Wait4</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="no">nil</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+     <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+ <span class="p">}</span>
+ <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"breakpoint hit"</span><span class="p">)</span>
+</code></pre></div></div>
+<p>After the breakpoint hits, we need the program to continue as usual. Since we already modified the data at <code class="language-plaintext highlighter-rouge">0x498223</code> the program doesn’t run as usual. So we need to replace the int 3 with original data.</p>
+
+<p>Remember, we captured the original data at <code class="language-plaintext highlighter-rouge">0x498223</code> using <code class="language-plaintext highlighter-rouge">PtracePeekData</code> while setting the breakpoint. Let’s just revert to the original data at <code class="language-plaintext highlighter-rouge">0x498223</code>.</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtracePokeData</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Just reverting to original data doesn’t run the program as usual. Because the instruction at <code class="language-plaintext highlighter-rouge">0x498223</code> is already executed when breakpoint hits. 
+So, we want to tell the CPU to execute the instruction again at <code class="language-plaintext highlighter-rouge">0x498223</code>.</p>
+
+<p><img src="/assets/images/registersintro.png" alt="registers" /></p>
+
+<p>CPU executes the instruction that the instruction pointer points to. If you have studied microprocessors at university, you might remember.</p>
+
+<p><img src="/assets/images/dejavu.jfif" alt="dejavu" />
+So, that means if we set the instruction pointer to <code class="language-plaintext highlighter-rouge">0x498223</code> then the CPU will execute the instruction at <code class="language-plaintext highlighter-rouge">0x498223</code> again.CPU registers can be manipulated using<code class="language-plaintext highlighter-rouge">PtraceGetRegs</code> and <code class="language-plaintext highlighter-rouge">PtraceSetRegs</code>.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">regs</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">unix</span><span class="o">.</span><span class="n">PtraceRegs</span><span class="p">{}</span>
+<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtraceGetRegs</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">regs</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+   <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">regs</span><span class="o">.</span><span class="n">Rip</span> <span class="o">=</span> <span class="kt">uint64</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtraceSetRegs</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">regs</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+      <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+ <span class="p">}</span>
+</code></pre></div></div>
+<p>Now that we modified the register, if we continue the program then it’ll execute the normal flow. But we want to hit the breakpoint again, so we’ll tell the ptrace to execute only the next instruction and set the breakpoint again. <code class="language-plaintext highlighter-rouge">PtraceSingleStep</code> allows us to execute only one instruction.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">resetBreakpoint</span><span class="p">(</span><span class="n">pid</span> <span class="kt">int</span><span class="p">,</span> <span class="n">addr</span> <span class="kt">uintptr</span><span class="p">,</span> <span class="n">originaldata</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c">// revert back to original data</span>
+    <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtracePokeData</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">originaldata</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="c">// set the instruction pointer to execute the instruction again</span>
+    <span class="n">regs</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">unix</span><span class="o">.</span><span class="n">PtraceRegs</span><span class="p">{}</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtraceGetRegs</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">regs</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">regs</span><span class="o">.</span><span class="n">Rip</span> <span class="o">=</span> <span class="kt">uint64</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtraceSetRegs</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">regs</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtraceSingleStep</span><span class="p">(</span><span class="n">pid</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c">// wait for it's execution and set the breakpoint again</span>
+    <span class="k">var</span> <span class="n">status</span> <span class="n">unix</span><span class="o">.</span><span class="n">WaitStatus</span>
+    <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">Wait4</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="no">nil</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="n">setBreakpoint</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>So far we have learned how to manipulate registers and set breakpoints. Let’s put all these into a for loop and drive the program.</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pid</span> <span class="o">:=</span> <span class="n">process</span><span class="o">.</span><span class="n">Process</span><span class="o">.</span><span class="n">Pid</span>
+<span class="n">data</span> <span class="o">:=</span> <span class="n">setBreakpoint</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="m">0x498223</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">PtraceCont</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="c">// wait for the interrupt to come.</span>
+    <span class="k">var</span> <span class="n">status</span> <span class="n">unix</span><span class="o">.</span><span class="n">WaitStatus</span>
+    <span class="k">if</span> <span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">unix</span><span class="o">.</span><span class="n">Wait4</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="no">nil</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"breakpoint hit"</span><span class="p">)</span>
+    <span class="c">// reset the breakpoint</span>
+    <span class="n">resetBreakpoint</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="m">0x498223</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Phew, Finally we able to print <code class="language-plaintext highlighter-rouge">breakpoint hit</code> before our sample program prints random int.</p>
+
+<pre><code class="language-txt">breakpoint hit
+6129484611666145821
+breakpoint hit
+4037200794235010051
+breakpoint hit
+3916589616287113937
+breakpoint hit
+6334824724549167320
+breakpoint hit
+605394647632969758
+breakpoint hit
+1443635317331776148
+breakpoint hit
+894385949183117216
+</code></pre>
+
+<p>You can find the full source code at https://github.com/poonai/debugger-example</p>
+
+<p>That’s all for now. Hope you folks learned something new. In the next post, I’ll write how to extract values from the variables by reading DWARF info. You can follow me on <a href="https://twitter.com/poonai_">Twitter</a> to get notified about part 2.</p>
+
+
+  </div><a class="u-url" href="/2021/09/02/part-1-diy-debugger-in-golang.html" hidden></a>
+</article>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Poonai&#39;s space</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Poonai&#39;s space</li><li><a class="u-email" href="mailto:rbalajis25@gmail.com">rbalajis25@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/poonai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">poonai</span></a></li><li><a href="https://www.twitter.com/poonai_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">poonai_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Place to express my learnings</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

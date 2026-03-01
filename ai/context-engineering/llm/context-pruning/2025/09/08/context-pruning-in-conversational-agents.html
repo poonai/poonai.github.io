@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Context Pruning in conversational agents | Poonai’s space</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Context Pruning in conversational agents" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My Journey to Building Agentic Apps" />
+<meta property="og:description" content="My Journey to Building Agentic Apps" />
+<link rel="canonical" href="https://poonai.xyz/ai/context-engineering/llm/context-pruning/2025/09/08/context-pruning-in-conversational-agents.html" />
+<meta property="og:url" content="https://poonai.xyz/ai/context-engineering/llm/context-pruning/2025/09/08/context-pruning-in-conversational-agents.html" />
+<meta property="og:site_name" content="Poonai’s space" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-09-08T11:12:35+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Context Pruning in conversational agents" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-08T11:12:35+00:00","datePublished":"2025-09-08T11:12:35+00:00","description":"My Journey to Building Agentic Apps","headline":"Context Pruning in conversational agents","mainEntityOfPage":{"@type":"WebPage","@id":"https://poonai.xyz/ai/context-engineering/llm/context-pruning/2025/09/08/context-pruning-in-conversational-agents.html"},"url":"https://poonai.xyz/ai/context-engineering/llm/context-pruning/2025/09/08/context-pruning-in-conversational-agents.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://poonai.xyz/feed.xml" title="Poonai&apos;s space" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Poonai&#39;s space</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Context Pruning in conversational agents</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-09-08T11:12:35+00:00" itemprop="datePublished">Sep 8, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="my-journey-to-building-agentic-apps">My Journey to Building Agentic Apps</h1>
+
+<p>My childhood dream of having a personal <strong>J.A.R.V.I.S</strong> has come true. The recent advancement in <strong>LLMs (Large Language Models)</strong> made me look at it as everyone. As an industry, we all are figuring out how to build agentic apps <em>“the right way.”</em></p>
+
+<p>The good news is there is no <em>“the right way”</em> yet, and the bad news is the same. Since there is no right way, we are seeing a huge influx of frameworks showing up every day, and I’m skeptical about the practical usage of such frameworks. So, my action plan is to use a minimal framework and borrow concepts from those frameworks to build AI apps.</p>
+
+<hr />
+
+<h2 id="why-baml">Why BAML?</h2>
+
+<p>The minimal framework is <strong>BAML</strong>. I’ve been using BAML for the past couple of months and am delighted with the developer experience it offers.</p>
+
+<p>It offers <strong>function-style LLM calling</strong>. All you have to do is define your prompt, input, and output format in BAML language. Then BAML generates type-safe functions that take typed input and return typed output. This is like any other function you use every day.</p>
+
+<p>As you read the blog, you’ll understand how easy BAML is — or you can check their <a href="https://docs.boundaryml.com/guide/introduction/what-is-baml">docs</a> as well.</p>
+
+<hr />
+
+<h2 id="context-engineering">Context Engineering</h2>
+
+<p><strong>Context engineering</strong> is an important skill in terms of agentic application building. It is essentially providing the right context to steer the LLM in the right direction. There are several ways to do context engineering.</p>
+
+<p>However, I want to demonstrate <strong>context pruning</strong> in conversational agents. An agent that does a lot of tool calls will be ideal to demonstrate the technique. So, I built an agent that solves mathematical equations which require to stitch multiple tool results. The source code can be seen <a href="https://github.com/poonai/context-trimming-sample">here</a></p>
+
+<p><strong>Example:</strong><br />
+Solve the quadratic equation: <code class="language-plaintext highlighter-rouge">x^2 + 5*x + 6 = 0</code> and find its derivative.</p>
+
+<p>To answer this question:</p>
+<ul>
+  <li>it has to solve an equation with a tool call</li>
+  <li>it has to find a derivative with another tool call</li>
+</ul>
+
+<p>Basically, the agent has to call two tools sequentially to answer the user query. The agent can be implemented by a single prompt. Here is the respective BAML code and prompt for it:</p>
+
+<pre><code class="language-baml">class AgentResponse {
+    tools QuandraticSolver  | QuadraticDerivative | QuadraticEvaluator | MessageToUser
+}
+
+function MathChat(message_history: string[]) -&gt; AgentResponse {
+    client OpenRouter
+    prompt #"
+        You're a helpful Math AI assistant. You have tools to solve equations related to quadratic 
+        equations. The user query could be simple, or complex that requires you to take multiple turns
+        between you and tools to resolve the user query.
+
+        Use message_to_user tools to reply or ask clarification questions to the user.
+
+        &lt;CONVERSATION HISTORY&gt;
+        
+        &lt;/CONVERSATION HISTORY&gt;
+       
+        
+    "#
+}
+</code></pre>
+
+<p>BAML will generate a type-safe Python function where you can pass <code class="language-plaintext highlighter-rouge">message_history</code> as input and <code class="language-plaintext highlighter-rouge">AgentResponse</code> as output.</p>
+
+<p><strong>Example:</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">baml_client</span> <span class="kn">import</span> <span class="n">b</span>
+
+<span class="c1"># Example of using the BAML-generated MathChat function
+</span><span class="n">message_history</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="sh">"</span><span class="s">{</span><span class="sh">'</span><span class="s">role</span><span class="sh">'</span><span class="s">: </span><span class="sh">'</span><span class="s">user</span><span class="sh">'</span><span class="s">, </span><span class="sh">'</span><span class="s">msg</span><span class="sh">'</span><span class="s">: </span><span class="sh">'</span><span class="s">Solve the quadratic equation: x^2 + 5*x + 6 = 0</span><span class="sh">'</span><span class="s">}</span><span class="sh">"</span>
+<span class="p">]</span>
+
+<span class="c1"># Call the BAML-generated function
+</span><span class="n">agent_response</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="nc">MathChat</span><span class="p">(</span><span class="n">message_history</span><span class="p">)</span>
+
+<span class="c1"># The agent_response will contain a tool call, which could be:
+# - QuadraticSolver: To solve the equation
+# - QuadraticDerivative: To find the derivative
+# - QuadraticEvaluator: To evaluate the equation at a specific value
+# - MessageToUser: To respond directly to the user
+</span></code></pre></div></div>
+
+<p>The AI response could be a tool call or a response to the user. The AI responds based on the feedback obtained from the external system. All the interactions are stored in <code class="language-plaintext highlighter-rouge">message_history</code> and used as context to decide the flow of the conversation.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">chat</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">user_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># Add user message to history
+</span>    <span class="n">self</span><span class="p">.</span><span class="n">message_history</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+        <span class="sh">'</span><span class="s">role</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">user</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">msg</span><span class="sh">'</span><span class="p">:</span> <span class="n">user_message</span>
+    <span class="p">})</span>
+    
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="c1"># Get response from BAML MathChat
+</span>        <span class="n">agent_response</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="nc">MathChat</span><span class="p">([</span><span class="nf">str</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">message_history</span><span class="p">])</span>
+        
+        <span class="c1"># Use the tool and get the response
+</span>        <span class="n">tool_response</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">use_tool</span><span class="p">(</span><span class="n">agent_response</span><span class="p">)</span>
+               
+        <span class="c1"># If it's a direct message to the user, return it
+</span>        <span class="k">if</span> <span class="n">tool_response</span><span class="p">[</span><span class="sh">'</span><span class="s">role</span><span class="sh">'</span><span class="p">]</span> <span class="o">==</span> <span class="sh">'</span><span class="s">assistant</span><span class="sh">'</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tool_response</span><span class="p">[</span><span class="sh">'</span><span class="s">msg</span><span class="sh">'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="example-message-history">Example Message History</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User: Solve the quadratic equation: x² + 5x + 6 = 0  
+Assistant (PROCESSING): I need to solve this quadratic equation. [Calling `quadratic_solver`]  
+Tool: Solved equation: x² + 5x + 6 = 0. Roots: [-3, -2]  
+Assistant (COMPLETED): The roots of the quadratic equation x² + 5x + 6 = 0 are x = -3 and x = -2.  
+
+User: Find the derivative of: 2x² + 4x − 6  
+Assistant (PROCESSING): I need to find the derivative of this quadratic equation. [Calling `quadratic_derivative`]  
+Tool: Derivative of equation: 2x² + 4x − 6. Result: 4x + 4  
+Assistant (COMPLETED): The derivative of the quadratic equation 2x² + 4x − 6 is 4x + 4.  
+</code></pre></div></div>
+<hr />
+
+<h2 id="pruning-the-context">Pruning the Context</h2>
+
+<p>The interaction between tool and AI is not always needed to answer future user questions. Since the AI response already encapsulates the context in its response, tool-related messages can be removed when irrelevant.</p>
+
+<p>However, we can’t always prune immediately. The AI might still be clarifying missing information before solving. Intermediate tool-related messages should be removed <strong>only when not relevant anymore</strong>.</p>
+
+<h2 id="clarifying-conversation-example">Clarifying Conversation Example</h2>
+
+<p>Sometimes the AI must clarify before solving. Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User: Integrate this equation  
+Assistant (PROCESSING): Sure! Could you provide the equation you want me to integrate?  
+
+User: x² + 3x  
+Assistant (PROCESSING): I need to integrate this equation. [Calling `integral_solver`]  
+Tool: Equation received: x² + 3x. Integration requires clarification: definite or indefinite?  
+Assistant (PROCESSING): Do you want me to compute the definite integral (with limits) or the indefinite integral of x² + 3x?  
+
+User: Indefinite integral  
+Assistant (PROCESSING): I need to compute the indefinite integral of x² + 3x. [Calling `integral_solver`]  
+Tool: Result of ∫(x² + 3x) dx = (x³)/3 + (3x²)/2 + C  
+Assistant (COMPLETED): The indefinite integral of x² + 3x is (x³)/3 + (3x²)/2 + C. 
+</code></pre></div></div>
+<hr />
+
+<h2 id="task-status">Task Status</h2>
+
+<p>When to prune context will be decided based on the current phase of the Agent. It could be in <strong>PROCESSING</strong> phase or <strong>COMPLETED</strong> phase. We’ll let the LLM itself tell us by adding the <code class="language-plaintext highlighter-rouge">task_status</code> flag to <code class="language-plaintext highlighter-rouge">message_to_user</code> tool calls.</p>
+
+<pre><code class="language-baml">enum TaskStatus {
+    COMPLETED 
+    PROCESSING
+}
+
+class MessageToUser {
+    type "message_to_user" @description(#"
+        DESCRIPTION: MessageToUser is used to respond to the user
+    "#)
+
+    response string @description(#"
+        The assistant response to the user
+    "#)
+
+    task_status TaskStatus
+}
+</code></pre>
+
+<p><strong>Example pruning logic:</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">context_trimming</span> <span class="ow">and</span> <span class="n">tools</span><span class="p">.</span><span class="n">task_status</span> <span class="o">==</span> <span class="sh">"</span><span class="s">COMPLETED</span><span class="sh">"</span><span class="p">:</span>
+                
+    <span class="c1"># Convert message history to string list for BAML function
+</span>    <span class="n">message_history_str</span> <span class="o">=</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">message_history</span><span class="p">]</span>
+                
+    <span class="c1"># Call SummarizeContext BAML function
+</span>    <span class="n">summarized_context</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="nc">SummarizeContext</span><span class="p">(</span><span class="n">message_history_str</span><span class="p">)</span>
+                
+    <span class="c1"># Replace message history with summarized context
+</span>    <span class="n">self</span><span class="p">.</span><span class="n">message_history</span> <span class="o">=</span> <span class="n">summarized_context</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="summarization">Summarization</h2>
+
+<p>The pruning logic could be as simple as removing all tool calls, or we can use an LLM to <strong>summarize the context</strong> for us.</p>
+
+<pre><code class="language-baml">function SummarizeContext(message_history: string[]) -&gt; string []{
+    client OpenRouter
+    prompt #"
+         Your job is to summarize the user conversation to reduce the token length.
+         Ideas to summarize:
+         - remove intermediate tool calls and tool responses 
+         - summarize the user question and response in concise form
+
+         &lt;EXAMPLE INPUT&gt;
+           {'role': 'user', 'msg': 'solve x^2 - 5*x + 6 =0 and find derivative'}  
+           {'role': 'assistant', 'msg': 'I need to solve this quadratic equation', 'tool_name': 'quadratic_solver', 'tool_args': {'equation': 'x^2 - 5*x + 6 = 0'}}  
+           {'role': 'tool', 'msg': 'Solved equation: x^2 - 5*x + 6 = 0. Roots: [2, 3]', 'tool_name': 'quadratic_solver', 'metadata': {'equation': 'x^2 - 5*x + 6 = 0', 'result': '[2, 3]'}}  
+           {'role': 'assistant', 'msg': 'I need to find the derivative of this quadratic equation', 'tool_name': 'quadratic_derivative', 'tool_args': {'equation': 'x^2 - 5*x + 6 = 0'}}  
+           {'role': 'tool', 'msg': 'Derivative of equation: x^2 - 5*x + 6 = 0. Result: 2*x - 5', 'tool_name': 'quadratic_derivative', 'metadata': {'equation': 'x^2 - 5*x + 6 = 0', 'result': '2*x - 5'}}
+           {'role': 'assistant', 'msg': 'The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5. If you want me to evaluate the equation or the derivative at a specific x value, please let me know.', 'tool_name': 'message_to_user'}    
+         &lt;/EXAMPLE INPUT&gt;
+
+        &lt;EXAMPLE OUTPUT&gt;
+           {'role': 'user', 'msg': 'solve x^2 - 5*x + 6 =0 and find derivative'}  
+           {'role': 'assistant', 'msg': 'The roots of the equation x^2 - 5*x + 6 = 0 are 2 and 3. The derivative of the equation is 2*x - 5.', 'tool_name': 'message_to_user'}    
+        &lt;/EXAMPLE OUTPUT&gt;
+
+        &lt;BAD OUTPUT&gt;
+          "User asked to solve x^2 - 5*x + 6 = 0, find its derivative, and the squares of the roots; assistant provided roots (2, 3), derivative (2*x - 5), and squares (4, 9)."
+        &lt;/BAD OUTPUT&gt;
+
+        &lt;GOOD OUTPUT&gt;
+        {'role': 'user', 'msg': 'solve x^2 - 5*x + 6 =0 and find derivative'}
+        {'role': 'assistant', 'msg': 'roots (2, 3), derivative (2*x - 5)', 'tool_name': 'message_to_user'} 
+        &lt;/GOOD OUTPUT&gt;
+        
+        &lt;INPUT&gt;
+        
+        &lt;/INPUT&gt;
+        
+    "#
+} 
+</code></pre>
+
+<hr />
+
+<h2 id="token-usage-comparison">Token Usage Comparison</h2>
+
+<p>Let’s <a href="https://github.com/poonai/context-trimming-sample/blob/main/benchmark.py">measure</a> the token usage with context pruning and without context pruning.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Agent Type</th>
+      <th>Input Tokens</th>
+      <th>Output Tokens</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Smart Agent (with context pruning)</strong></td>
+      <td>2333</td>
+      <td>309</td>
+    </tr>
+    <tr>
+      <td><strong>Agent (without context pruning)</strong></td>
+      <td>4883</td>
+      <td>368</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The lower value is better. We reduced token usage by <strong>47%</strong> while getting the same output by pruning unnecessary context.</p>
+
+<p>Lesser token has the following advatages:</p>
+<ul>
+  <li>less hallucination</li>
+  <li>less cost</li>
+  <li>less response time</li>
+</ul>
+
+
+  </div><a class="u-url" href="/ai/context-engineering/llm/context-pruning/2025/09/08/context-pruning-in-conversational-agents.html" hidden></a>
+</article>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Poonai&#39;s space</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Poonai&#39;s space</li><li><a class="u-email" href="mailto:rbalajis25@gmail.com">rbalajis25@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/poonai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">poonai</span></a></li><li><a href="https://www.twitter.com/poonai_"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">poonai_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Place to express my learnings</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
