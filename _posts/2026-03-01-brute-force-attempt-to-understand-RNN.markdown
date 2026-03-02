@@ -157,27 +157,7 @@ h_2 =
 \end{bmatrix}
 $$
 
-- coordinate around the line $$x_0=x_1$$:
-
-$$
-\text{Input} =
-\begin{bmatrix}
-x_0 \\
-x_1
-\end{bmatrix} = 
-\begin{bmatrix}
-4.9 \\
-5.1
-\end{bmatrix}
-\qquad
-h_2 =
-\begin{bmatrix}
-5.3 \\
-2.6
-\end{bmatrix}
-$$
-
-If the output of the different coordinate sparked any insight in you, then you are in the right track. In then second case of $$h_2$$, first neuron is always greater than second neuron when $$x_0>x_1$$ and inversely when $$x_0<x_1$$. But also an error state, for the coordinate along the line $$x_0=x_1$$, where model doesn't know how to predict. 
+If the output of the different coordinate sparked any insight in you, then you are in the right track. In then second case of $$h_2$$, first neuron is always greater than second neuron when $$x_0>x_1$$ and inversely when $$x_0<x_1$$. 
 
 ## Conclusion
 From the discussed cases of $$h_2$$, we can say that model is dividing the space into the region, where it can say which of the entry is greater/smaller among the input sequence. I did this experiment to deeply understand the method which was described in the post by the ARC. As I invested more time on this, I was intrigued by several questions and each of the question itself a separate research direction. I'm glad that I did this experiment and also feeling thankful to the ARC team for releasing the toy model. Otherwise, I wouldn't have had opportunity to work on this experiment. The current brute force method will not work for slightly bigger model. Next, I'm on to learn other mathematical tools like torus to study bigger models!!
