@@ -4,6 +4,8 @@ title: About
 permalink: /about/
 ---
 
-I’m a software developer and like to play with shiny things in the town. My core skill is system programming, but I’ve worked with different area that intersect with my personality like databases,crypto,math and startups.
+Dear Stranger, 
+
+I'm certain that life is precious. My experience with life and about other is bit of mixed feeling, like social media. It inspired me to look up to incredible beings, yet it include contents that is primarly written to engage/steal time. disappointments in certain aspect of life forced me to find my comfort zone. That is how I discovered programming. Fortunately, that same disappointment turned into curiosity and the tech turned into science.
 
 
